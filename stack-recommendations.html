@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stack Recommendations — UtilityBenefits.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+<style>
+  body{background:#fff}
+  .doc{max-width:820px;margin:0 auto;padding:48px 24px 80px}
+  .doc h1{font-size:2.4rem;margin-bottom:8px}
+  .doc .lede{color:var(--muted);font-size:1.1rem;margin-bottom:32px;border-bottom:1px solid var(--border);padding-bottom:24px}
+  .doc h2{margin-top:48px;border-top:1px solid var(--border);padding-top:32px}
+  .doc h2:first-of-type{border-top:0;padding-top:0}
+  .doc h3{margin-top:24px}
+  .doc p, .doc li{font-size:1.02rem;line-height:1.65}
+  .doc ul, .doc ol{padding-left:22px}
+  .doc table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.95rem}
+  .doc th, .doc td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+  .doc th{background:var(--cream);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  .pick{background:var(--paper);border:1px solid var(--border);border-left:4px solid var(--forest);border-radius:0 10px 10px 0;padding:18px 22px;margin:16px 0}
+  .pick .label{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--forest);margin-bottom:6px}
+  .pick .name{font-family:'Source Serif 4',serif;font-size:1.4rem;font-weight:700;color:var(--teal-deep);margin-bottom:6px}
+  .pick .sub{color:var(--muted);font-size:.9rem;margin-bottom:10px}
+  .pick .why{font-size:.95rem}
+  .pick .cost{font-family:'Source Serif 4',serif;color:var(--teal);font-weight:600;margin-top:8px;display:inline-block}
+  .alt{font-size:.88rem;color:var(--muted);margin-top:8px}
+  .doc .summary{background:linear-gradient(180deg,#FFFBF3,#fff);border:1px solid var(--border);border-radius:12px;padding:24px;margin:24px 0}
+  .doc .summary h3{margin-top:0;color:var(--teal-deep);font-size:1.15rem}
+  .doc nav.toc-nav{background:var(--cream);border-radius:10px;padding:18px 22px;margin-bottom:32px}
+  .doc nav.toc-nav h4{font-family:'Inter',sans-serif;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 8px}
+  .doc nav.toc-nav ol{margin:0;padding-left:18px}
+  .doc nav.toc-nav li{font-size:.92rem;padding:2px 0}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <span class="verified">Stack recommendations · v1.0 · May 3, 2026</span>
+    <span><a href="index.html">← Back to prototype</a></span>
+  </div>
+</div>
+
+<div class="doc">
+
+<h1>UtilityBenefits.com — Recommended Stack</h1>
+<p class="lede">Defensible picks against every open item in Section 22 of the master spec, with rationale and rough cost. Optimized for the call-first, content-led, two-surface (calculator + paid funnel) build described in the brief.</p>
+
+<nav class="toc-nav">
+  <h4>Contents</h4>
+  <ol>
+    <li><a href="#hosting">Hosting &amp; redirect layer</a></li>
+    <li><a href="#frontend">Frontend framework</a></li>
+    <li><a href="#cms">CMS</a></li>
+    <li><a href="#crm">CRM &amp; call center</a></li>
+    <li><a href="#dni">Dynamic number insertion</a></li>
+    <li><a href="#ab">A/B testing</a></li>
+    <li><a href="#analytics">Analytics</a></li>
+    <li><a href="#seo">SEO &amp; migration tooling</a></li>
+    <li><a href="#tcpa">TCPA-experienced counsel</a></li>
+    <li><a href="#consent">Consent record storage</a></li>
+    <li><a href="#summary">Total cost &amp; staffing</a></li>
+  </ol>
+</nav>
+
+<div class="summary">
+  <h3>The shortlist (everything below in one breath)</h3>
+  <p><strong>Vercel + Next.js + Sanity + HubSpot Service Hub (with custom call routing) + CallRail + Vercel Edge A/B + GA4 + Heap + Ahrefs + Screaming Frog.</strong> Total tooling cost ~$1,200/mo at MVP, scaling toward ~$3,500/mo by Phase 3 as call volume grows. Engage Klein Moynihan Turco or Eckert Seamans for TCPA review at $20–40K for a launch-ready review.</p>
+</div>
+
+<h2 id="hosting">1. Hosting &amp; redirect layer</h2>
+<div class="pick">
+  <div class="label">Pick</div>
+  <div class="name">Vercel (Pro plan)</div>
+  <div class="sub">Pairs with Next.js · edge redirects native · global CDN</div>
+  <div class="why">Vercel is the right call here for three concrete reasons: (1) backlink migration redirects can live in <code>vercel.json</code> as 301s with no extra infrastructure, which is the single biggest equity preservation lever per Section 4 of the spec; (2) edge-rendered Next.js gives sub-2s LCP on 3G mobile (Section 18 performance target); (3) Vercel Edge Config supports A/B testing without a third-party dependency, removing one vendor entirely.</div>
+  <div class="cost">~$20–80/mo per seat at MVP, scaling with bandwidth</div>
+  <div class="alt"><strong>Considered:</strong> Cloudflare Pages (cheaper, but Workers complicate CMS data-fetch patterns); Netlify (similar but smaller Next.js community); AWS Amplify (overkill for a content site).</div>
+</div>
+
+<h2 id="frontend">2. Frontend framework</h2>
+<div class="pick">
+  <div class="label">Pick</div>
+  <div class="name">Next.js 15 with App Router</div>
+  <div class="sub">SSR-first React · ISR for state/city pages · server actions for the calculator</div>
+  <div class="why">Next.js is the de-facto choice for a content-led SEO site that needs both static rendering (state pages, articles) and a dynamic surface (calculator, funnel). ISR (incremental static regeneration) lets you regenerate the FPL/SMI-driven state pages annually when HHS publishes new poverty thresholds without a full rebuild. Server actions handle the calculator <code>POST /api/eligibility/calculate</code> endpoint without separate API infrastructure.</div>
+  <div class="cost">Open source · runs on Vercel Pro pricing above</div>
+</div>
+
+<h2 id="cms">3. CMS</h2>
+<div class="pick">
+  <div class="label">Pick</div>
+  <div class="name">Sanity</div>
+  <div class="sub">Headless · structured content · GROQ for query flexibility</div>
+  <div class="why">Sanity wins on three things specific to this build: (1) structured fields handle the per-page-type schemas (Article + FAQPage + GovernmentService) cleanly, including the per-data-point "last verified" CMS field the spec calls for; (2) the data model in Section 15 (states_data, FPL/SMI tables, eligibility rules-as-data) maps directly to Sanity document types — eligibility logic stays as config, not code, exactly as the spec requires; (3) Portable Text gives writers a real-time-collaborative editor that doesn't break the schema on a missed paste.</div>
+  <div class="cost">Free for &lt;3 users · $99/mo for Growth · $949/mo at scale</div>
+  <div class="alt"><strong>Considered:</strong> Contentful (more expensive, less flexible queries); Payload (great but self-hosted means more ops); WordPress (no, this is a YMYL site and structured content is non-negotiable).</div>
+</div>
+
+<h2 id="crm">4. CRM &amp; call center routing</h2>
+<div class="pick">
+  <div class="label">Pick</div>
+  <div class="name">HubSpot Service Hub Pro + custom queue logic via webhooks</div>
+  <div class="sub">Native lead capture · disposition-aware reporting · Twilio Flex for the actual phone routing</div>
+  <div class="why">The spec explicitly flags CRM as the biggest open dependency. HubSpot is the right starting point because: (1) the lead schema (UTM + click ID + landing variant + quiz path + consent record) maps to HubSpot custom properties without engineering work; (2) attribution and source rollup come built-in, hitting the Section 19 dashboard requirements without a Looker build; (3) the ecosystem of pre-built TCPA-compliance integrations (e.g., Convoso, PhoneBurner) makes it easy to swap in a dedicated dialer when call volume justifies it.</div>
+  <div class="why" style="margin-top:8px">For the actual phone routing — priority/standard/specialist/crisis queues — pair HubSpot with <strong>Twilio Flex</strong> for the call control plane (queue logic, IVR, agent UI) and webhook lead-payload to it. This separates "lead system of record" from "call routing engine," which lets you change either independently.</div>
+  <div class="cost">HubSpot Service Hub Pro: $450/mo · Twilio Flex: $1/active hour per agent</div>
+  <div class="alt"><strong>Considered:</strong> Five9 (mature but heavy and slow to integrate); CallTools (good for basic dialing, weak on attribution); custom build (defer until volume justifies it — at least 12 months out).</div>
+</div>
+
+<h2 id="dni">5. Dynamic number insertion (DNI)</h2>
+<div class="pick">
+  <div class="label">Pick</div>
+  <div class="name">CallRail</div>
+  <div class="sub">Per-source / per-campaign / per-CTA-placement number insertion</div>
+  <div class="why">CallRail is the call-tracking incumbent for content-led lead-gen and integrates natively with HubSpot, GA4, Google Ads, and Meta CAPI. The spec calls for DNI at four levels of granularity (source, campaign/keyword, landing variant, CTA placement) — CallRail supports all four out of the box with no engineering. Its Conversation Intelligence (transcription + scoring) becomes useful in Phase 2 for testing call-to-conversion correlations across content types.</div>
+  <div class="cost">Starting $50/mo · scales to $300+/mo at high call volume (most of cost is per-minute)</div>
+  <div class="alt"><strong>Considered:</strong> Invoca (more expensive, better at enterprise integrations — overkill at MVP); Twilio-built (more flexible but 10× the engineering investment to ship the same attribution).</div>
+</div>
+
+<h2 id="ab">6. A/B testing</h2>
+<div class="pick">
+  <div class="label">Pick</div>
+  <div class="name">Vercel Edge Config + Statsig (free tier)</div>
+  <div class="sub">Edge-rendered variants · zero client flicker · sequential testing</div>
+  <div class="why">A/B testing on the funnel page must be edge-rendered, not client-side, because the conversion event (click-to-call) often fires before client JS hydrates. Vercel Edge Config + Statsig solves this without paying Optimizely or VWO prices. Statsig also gives you sequential testing (you can stop a test as soon as significance is reached, not at a pre-set date) which matters for the spec's 2-week-minimum testing discipline.</div>
+  <div class="cost">Free at 1M events/mo · ~$200/mo at typical paid-funnel scale</div>
+  <div class="alt"><strong>Considered:</strong> Optimizely ($1,000+/mo, enterprise); VWO ($300+/mo, weaker on edge testing); GrowthBook (good but more setup).</div>
+</div>
+
+<h2 id="analytics">7. Analytics stack</h2>
+<div class="pick">
+  <div class="label">Pick</div>
+  <div class="name">GA4 (free) + Heap (Pro)</div>
+  <div class="sub">GA4 for source attribution · Heap for behavioral analysis</div>
+  <div class="why">GA4 alone is insufficient for the event taxonomy in Section 19 (per-step abandonment, time-on-step, per-CTA-placement segmentation) — the cardinality of custom dimensions hits limits fast. Heap handles the autocaptured behavioral side without instrumentation tax: every quiz step, every click, every form-field abandonment is tracked by default. You then send a small set of canonical conversion events (qualified, lead_submitted, call_connected) to GA4 for paid-channel attribution. This split keeps GA4 clean for Google Ads optimization while giving the team real product analytics.</div>
+  <div class="cost">GA4: free · Heap: $0 free tier, ~$3,600/yr at meaningful volume</div>
+  <div class="alt"><strong>Considered:</strong> Mixpanel (similar to Heap, slightly weaker autocapture); Amplitude (great but enterprise-priced); just GA4 (will hit limits within Phase 2).</div>
+</div>
+
+<h2 id="seo">8. SEO &amp; backlink migration tooling</h2>
+<table>
+<thead><tr><th>Tool</th><th>Use</th><th>Cost</th></tr></thead>
+<tbody>
+<tr><td><strong>Ahrefs</strong></td><td>Backlink audit, profile monitoring, anchor text analysis, ranking tracking, SERP analysis</td><td>$199/mo (Lite)</td></tr>
+<tr><td><strong>Screaming Frog</strong></td><td>Crawl audits, internal link analysis, redirect chain detection, anchor text distribution monitoring</td><td>$259/yr</td></tr>
+<tr><td><strong>Google Search Console + Bing Webmaster</strong></td><td>Index coverage, post-redirect equity flow, query data</td><td>Free</td></tr>
+<tr><td><strong>Httpstatus.io</strong></td><td>Bulk redirect testing during migration</td><td>Free</td></tr>
+<tr><td><strong>Wayback Machine + manual</strong></td><td>Historical content review for topical alignment assessment</td><td>Free</td></tr>
+</tbody>
+</table>
+<p>The spec calls out Ahrefs OR Semrush — pick Ahrefs because its API is better for the Section 19 monitoring dashboards. Don't run both.</p>
+
+<h2 id="tcpa">9. TCPA-experienced legal counsel</h2>
+<div class="pick">
+  <div class="label">Recommended firms (any of three)</div>
+  <div class="name">Klein Moynihan Turco · Eckert Seamans · ZwillGen</div>
+  <div class="sub">All three have done TCPA work for performance marketers and lead-gen sites at scale</div>
+  <div class="why">For a TCPA-heavy lead-gen site, you want a firm that has actually litigated TCPA class actions, not just a tech-friendly general-counsel-of-record. Klein Moynihan Turco is the deepest in this niche; Eckert Seamans handles a lot of insurance/financial lead-gen TCPA; ZwillGen is the better choice if you also want their privacy/data-protection bench (CCPA, CPRA, GPC). Florida Mini-TCPA review is a separate engagement — anyone of the three handles it but ask explicitly.</div>
+  <div class="cost">$20–40K for a launch-ready review (TCPA + Mini-TCPA + FTC disclaimers + consent record requirements). Quarterly retainer thereafter at $3–8K depending on activity.</div>
+</div>
+
+<h2 id="consent">10. Consent record storage &amp; retention</h2>
+<div class="pick">
+  <div class="label">Pick</div>
+  <div class="name">PostgreSQL on Vercel Postgres + 7-year retention policy</div>
+  <div class="sub">Append-only consent log · queryable by phone, IP, timestamp · backed up to S3</div>
+  <div class="why">Consent records (timestamp, IP, UA, exact consent language version, page URL) are TCPA litigation insurance — the FCC and plaintiffs' attorneys both expect immediate retrieval. Storing in Postgres alongside leads keeps everything in one place; a 7-year retention policy covers the standard TCPA statute-of-limitations (4 years) plus a safety margin. Version the consent language as a separate table and reference it by ID in each consent record so language changes are auditable.</div>
+  <div class="cost">~$25/mo at MVP volume; ~$200/mo by Phase 3</div>
+</div>
+
+<h2 id="summary">11. Total cost &amp; staffing</h2>
+
+<h3>Tooling — monthly recurring</h3>
+<table>
+<thead><tr><th>Tool</th><th>MVP</th><th>Phase 3</th></tr></thead>
+<tbody>
+<tr><td>Vercel Pro</td><td>$80</td><td>$300</td></tr>
+<tr><td>Sanity</td><td>$0</td><td>$99</td></tr>
+<tr><td>HubSpot Service Hub</td><td>$450</td><td>$450</td></tr>
+<tr><td>Twilio Flex</td><td>$200</td><td>$2,000</td></tr>
+<tr><td>CallRail</td><td>$50</td><td>$300</td></tr>
+<tr><td>Statsig</td><td>$0</td><td>$200</td></tr>
+<tr><td>Heap</td><td>$0</td><td>$300</td></tr>
+<tr><td>Ahrefs</td><td>$199</td><td>$199</td></tr>
+<tr><td>Postgres + S3</td><td>$25</td><td>$200</td></tr>
+<tr><td><strong>Total / month</strong></td><td><strong>~$1,000</strong></td><td><strong>~$4,000</strong></td></tr>
+</tbody>
+</table>
+
+<h3>One-time costs (pre-launch)</h3>
+<ul>
+  <li>TCPA legal review: $20–40K</li>
+  <li>Backlink audit + URL mapping engagement: $5–15K (or in-house with Ahrefs)</li>
+  <li>Brand identity + author bio photography: $5–10K</li>
+  <li>Initial content production (Phase 1: 12–15 articles + 6 state pages): $15–25K at $0.40/word and standard SEO fees, less with internal writers</li>
+</ul>
+
+<h3>Staffing (minimum viable)</h3>
+<table>
+<thead><tr><th>Role</th><th>Time commitment</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>SEO / migration owner</td><td>0.5 FTE pre-launch · 0.25 FTE ongoing</td><td>Internal hire, agency, or freelancer per Section 22. Pre-launch lead time is 2–4 weeks.</td></tr>
+<tr><td>Editor / content lead</td><td>1 FTE</td><td>Owns annual data refresh, byline reputation, vertical roadmap, fact-checking discipline.</td></tr>
+<tr><td>Frontend engineer</td><td>1 FTE through Phase 2</td><td>Next.js + Sanity + integrations. Drops to 0.5 FTE after Phase 2.</td></tr>
+<tr><td>Performance marketer</td><td>0.5 FTE at MVP · 1 FTE Phase 2+</td><td>Owns paid funnel, A/B testing, channel mix.</td></tr>
+<tr><td>Call center ops</td><td>Outsourced or internal</td><td>Decision driven by volume — start outsourced, internalize at 1,000+ calls/mo.</td></tr>
+</tbody>
+</table>
+
+<h2>What's NOT decided</h2>
+<p>Three open items the spec calls out that I'm flagging rather than deciding because they're business calls, not technical:</p>
+<ol>
+  <li><strong>Spanish at MVP vs week 8.</strong> Spanish is essential for CA/TX/FL traffic but doubles compliance review cost. Recommendation: ship English MVP, target Spanish at week 6–8 once consent language and disclaimers have been pressure-tested in English first. This is a regret-minimization call the founders should make explicitly.</li>
+  <li><strong>Email capture: yes for nurture, or phone-only model?</strong> Recommendation: <em>optional</em> email field on the lead form, never required. Don't add an email-only nurture funnel until Phase 3 — call-first is the brand and email-nurture changes the funnel math.</li>
+  <li><strong>Call center hours.</strong> Recommendation: M-F 8a–8p ET + Sat 9a–5p ET to start; expand to 24/7 crisis line in Phase 2 once volume data justifies. Until then, after-hours users get scheduled-callback flow with SMS confirmation.</li>
+</ol>
+
+<p style="color:var(--muted);font-size:.88rem;margin-top:48px;border-top:1px solid var(--border);padding-top:20px">
+<em>This document is a starting position, not a final architecture. Every recommendation should survive a 60-minute pressure test with the eventual hire who'll own it. The migration owner will likely have opinions on tooling; let them. The TCPA counsel will likely have opinions on consent storage; let them. The point of this doc is to make the build start tomorrow rather than 30 days from tomorrow.</em>
+</p>
+
+</div>
+
+</body>
+</html>

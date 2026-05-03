@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UtilityBenefits.com — Save on Utility Bills, Get Assistance</title>
+<meta name="description" content="Lower your electric, gas, internet, phone, water, and home security bills. Find out which assistance programs you qualify for in 60 seconds." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+<style>
+  /* Hero */
+  .hero{padding:64px 0 56px;background:linear-gradient(180deg,#fff 0%,var(--cream) 100%)}
+  .hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:64px;align-items:center}
+  @media(max-width:880px){.hero-grid{grid-template-columns:1fr;gap:32px}}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:#EBF1F2;color:var(--teal);border-radius:999px;font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:18px}
+  .hero p.lede{font-size:1.18rem;color:var(--muted);max-width:540px;margin-bottom:28px}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+  .trust-row{display:flex;gap:24px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);align-items:center}
+  .trust-row strong{color:var(--ink);font-weight:600}
+  .trust-row .dot{width:4px;height:4px;background:var(--border-strong);border-radius:50%}
+
+  /* Hero card */
+  .hero-card{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:var(--shadow-lg)}
+  .hero-card h3{font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .hero-card .price-row{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px dashed var(--border)}
+  .hero-card .price-row:last-of-type{border-bottom:0}
+  .hero-card .price-row .label{font-weight:500;color:var(--ink)}
+  .hero-card .price-row .amount{font-family:'Source Serif 4',serif;font-weight:600;color:var(--teal-deep);font-size:1.05rem;font-variant-numeric:tabular-nums}
+  .hero-card .total{margin-top:14px;padding-top:14px;border-top:2px solid var(--teal-deep);display:flex;justify-content:space-between;align-items:baseline}
+  .hero-card .total .amount{color:var(--forest);font-size:1.5rem}
+  .hero-card .footnote{font-size:.78rem;color:var(--muted);margin:14px 0 0}
+
+  /* Section */
+  section{padding:80px 0}
+  section.tight{padding:48px 0}
+  .section-head{max-width:680px;margin:0 auto 48px;text-align:center}
+  .section-head .eyebrow{margin-bottom:14px}
+  .section-head p{color:var(--muted);font-size:1.08rem}
+
+  /* Vertical grid */
+  .vert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:880px){.vert-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.vert-grid{grid-template-columns:1fr}}
+  .vert-card{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:26px;display:flex;flex-direction:column;gap:14px;transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;color:var(--ink)}
+  .vert-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:var(--shadow-md);text-decoration:none}
+  .vert-card .icon{width:44px;height:44px;border-radius:10px;background:#EBF1F2;color:var(--teal);display:flex;align-items:center;justify-content:center}
+  .vert-card h3{margin:0;font-size:1.2rem}
+  .vert-card .body{color:var(--muted);font-size:.93rem;flex:1}
+  .vert-card .tracks{display:flex;gap:8px;font-size:.78rem}
+  .vert-card .track{padding:3px 10px;border-radius:999px;font-weight:500}
+  .vert-card .track.savings{background:#FFF3E0;color:#9C5510}
+  .vert-card .track.assist{background:#E5F0EA;color:#1F5535}
+  .vert-card .arrow{display:inline-flex;align-items:center;gap:6px;color:var(--teal);font-weight:600;font-size:.9rem}
+  .vert-card.coming{opacity:.55;pointer-events:none}
+  .vert-card.coming::after{content:"Coming Phase 4";font-size:.7rem;background:var(--cream);padding:2px 8px;border-radius:4px;color:var(--muted);font-weight:500}
+
+  /* Dual track section */
+  .dual{background:var(--paper);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .dual-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+  @media(max-width:880px){.dual-grid{grid-template-columns:1fr}}
+  .track-card{padding:32px;border-radius:14px;border:1px solid var(--border)}
+  .track-card.savings{background:linear-gradient(180deg,#FFFBF3,#fff)}
+  .track-card.assist{background:linear-gradient(180deg,#F3F8F4,#fff)}
+  .track-card .label{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+  .track-card.savings .label{color:#9C5510}
+  .track-card.assist .label{color:#1F5535}
+  .track-card h3{font-size:1.5rem;margin-bottom:12px}
+  .track-card ul{list-style:none;padding:0;margin:0 0 16px}
+  .track-card li{padding:8px 0;border-bottom:1px dashed var(--border);font-size:.95rem;display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
+  .track-card li:last-child{border-bottom:0}
+  .track-card li .meta{color:var(--muted);font-size:.82rem;font-weight:500}
+
+  /* Calculator embed */
+  .calc-embed{background:var(--teal-deep);color:#fff;padding:64px 0;background-image:radial-gradient(at 80% 20%,rgba(244,162,97,.12),transparent 50%)}
+  .calc-embed h2{color:#fff}
+  .calc-embed .container-narrow{text-align:center}
+  .calc-embed p{color:#a9bdc4;font-size:1.08rem;max-width:560px;margin:0 auto 28px}
+  .calc-features{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-bottom:32px;color:#cbd6dc;font-size:.9rem}
+  .calc-features span::before{content:"✓";color:var(--amber);margin-right:8px;font-weight:700}
+
+  /* Stats strip */
+  .stats{padding:32px 0;background:var(--paper);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+  @media(max-width:680px){.stats-grid{grid-template-columns:1fr 1fr}}
+  .stat .num{font-family:'Source Serif 4',serif;font-size:2.2rem;font-weight:700;color:var(--teal-deep);line-height:1}
+  .stat .label{font-size:.85rem;color:var(--muted);margin-top:6px}
+
+  /* Footer */
+  footer.site{background:var(--teal-deep);color:#a9bdc4;padding:64px 0 24px;font-size:.9rem}
+  footer.site h4{color:#fff;font-family:'Inter',sans-serif;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin:0 0 14px}
+  footer.site a{color:#cbd6dc;display:block;padding:4px 0}
+  footer.site a:hover{color:#fff}
+  .foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;gap:32px;margin-bottom:48px}
+  @media(max-width:880px){.foot-grid{grid-template-columns:1fr 1fr;gap:32px}}
+  .foot-brand p{color:#a9bdc4;margin-top:12px;max-width:320px}
+  .foot-disclaimer{padding:20px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid rgba(255,255,255,.08);margin-bottom:32px;font-size:.82rem;color:#cbd6dc}
+  .foot-disclaimer strong{color:#fff}
+  .foot-bar{padding-top:20px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;font-size:.82rem;color:#7e8f97}
+
+  /* Crisis banner */
+  .crisis-banner{background:var(--crisis);color:#fff;padding:14px 0;font-size:.92rem;text-align:center}
+  .crisis-banner a{color:#fff;font-weight:700;text-decoration:underline}
+
+  /* Utility */
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#EBF1F2;color:var(--teal);border-radius:999px;font-size:.78rem;font-weight:600}
+  .icon-svg{width:22px;height:22px;stroke-width:1.8}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <span class="verified">Information last verified May 3, 2026 by our editorial team</span>
+    <span>Need help right now? <a href="tel:18005551234">Call (800) 555-1234</a></span>
+  </div>
+</div>
+
+<header class="site">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <span class="mark">UB</span>
+      UtilityBenefits<span style="color:var(--muted);font-weight:400">.com</span>
+    </a>
+    <nav class="primary">
+      <ul>
+        <li><a href="electricity/index.html">Electricity</a></li>
+        <li><a href="#" style="color:var(--muted)">Gas</a></li>
+        <li><a href="internet/index.html">Internet</a></li>
+        <li><a href="#" style="color:var(--muted)">Cell phone</a></li>
+        <li><a href="#" style="color:var(--muted)">Water</a></li>
+        <li><a href="#" style="color:var(--muted)">Security</a></li>
+      </ul>
+    </nav>
+    <div class="header-cta">
+      <a href="qualify/index.html" class="btn btn-ghost">Check eligibility</a>
+      <a href="tel:18005551234" class="btn btn-call">📞 (800) 555-1234</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Save Money · Get Assistance</span>
+        <h1>Lower your utility bills — or qualify for help paying them.</h1>
+        <p class="lede">UtilityBenefits.com is the one place that covers both: switching providers and saving on your bill, plus the federal, state, and utility programs you may qualify for. Six verticals. All 50 states. One 60-second eligibility check.</p>
+        <div class="hero-ctas">
+          <a href="qualify/index.html" class="btn btn-primary btn-lg">Check what I qualify for →</a>
+          <a href="electricity/index.html" class="btn btn-ghost btn-lg">Browse by utility</a>
+        </div>
+        <div class="trust-row">
+          <span><strong>$400–$1,500</strong> typical LIHEAP benefit</span>
+          <span class="dot"></span>
+          <span><strong>13M+</strong> households served by federal utility programs each year</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>What a typical assistance stack saves</h3>
+        <div class="price-row"><span class="label">LIHEAP heating benefit</span><span class="amount">$650 / yr</span></div>
+        <div class="price-row"><span class="label">Lifeline phone discount</span><span class="amount">$111 / yr</span></div>
+        <div class="price-row"><span class="label">CARE / state utility discount</span><span class="amount">$420 / yr</span></div>
+        <div class="price-row"><span class="label">Weatherization (avg.)</span><span class="amount">$372 / yr</span></div>
+        <div class="total"><span class="label" style="font-weight:600">Annual savings</span><span class="amount">$1,553</span></div>
+        <p class="footnote">Illustrative example for a 4-person CA household at 130% FPL. Actual benefits depend on your state, household size, and income.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat"><div class="num">6</div><div class="label">Utility verticals covered</div></div>
+      <div class="stat"><div class="num">50</div><div class="label">States with LIHEAP coverage</div></div>
+      <div class="stat"><div class="num">12+</div><div class="label">Programs checked per call</div></div>
+      <div class="stat"><div class="num">60s</div><div class="label">Eligibility check time</div></div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Pick a Utility</span>
+      <h2>Six verticals, two tracks each</h2>
+      <p>Every vertical covers savings (switching, comparing, lowering bills) and assistance (federal, state, and utility-specific programs). Start where your bill hurts most.</p>
+    </div>
+    <div class="vert-grid">
+
+      <a href="electricity/index.html" class="vert-card">
+        <div class="icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2 3 14h7l-1 8 11-13h-7l1-7Z" stroke-linejoin="round"/></svg></div>
+        <h3>Electricity</h3>
+        <div class="tracks"><span class="track savings">Savings</span><span class="track assist">Assistance</span></div>
+        <p class="body">Compare retail providers in deregulated states, switch plans, and find LIHEAP, PIPP, CARE, senior, and shutoff-prevention programs.</p>
+        <span class="arrow">Explore electricity →</span>
+      </a>
+
+      <a class="vert-card coming">
+        <div class="icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v6m0 0a4 4 0 0 1 4 4v8H8v-8a4 4 0 0 1 4-4Z" stroke-linejoin="round"/></svg></div>
+        <h3>Natural gas</h3>
+        <div class="tracks"><span class="track savings">Savings</span><span class="track assist">Assistance</span></div>
+        <p class="body">Why your winter bill spiked, switch in deregulated states, LIHEAP for gas/oil/propane, winter shutoff moratoriums.</p>
+      </a>
+
+      <a href="internet/index.html" class="vert-card">
+        <div class="icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12.5a10 10 0 0 1 14 0M8 16a6 6 0 0 1 8 0M12 19.5h0" stroke-linecap="round"/></svg></div>
+        <h3>Home internet</h3>
+        <div class="tracks"><span class="track savings">Savings</span><span class="track assist">Assistance</span></div>
+        <p class="body">What replaced ACP? Lifeline, Comcast Internet Essentials, AT&T Access, ISP-specific low-cost plans, and provider switching.</p>
+        <span class="arrow">Explore internet →</span>
+      </a>
+
+      <a class="vert-card coming">
+        <div class="icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+        <h3>Cell phone</h3>
+        <div class="tracks"><span class="track savings">Savings</span><span class="track assist">Assistance</span></div>
+        <p class="body">Free government phone (Lifeline), MVNO comparisons, senior plans, military and veteran discounts, switching guides.</p>
+      </a>
+
+      <a class="vert-card coming">
+        <div class="icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10c4-6 14-6 18 0v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z"/><path d="M9 14h6"/></svg></div>
+        <h3>Home security</h3>
+        <div class="tracks"><span class="track savings">Savings</span><span class="track assist">Assistance</span></div>
+        <p class="body">Best DIY and pro systems compared, medical alert PERS coverage through Medicaid and VA, insurance discounts.</p>
+      </a>
+
+      <a class="vert-card coming">
+        <div class="icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3s7 8 7 12a7 7 0 1 1-14 0c0-4 7-12 7-12Z"/></svg></div>
+        <h3>Water / sewer</h3>
+        <div class="tracks"><span class="track savings">Savings</span><span class="track assist">Assistance</span></div>
+        <p class="body">Why your bill is high (usually a leak), city utility assistance programs, conservation rebates, lead-pipe replacement.</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section class="dual">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">The dual-track angle</span>
+      <h2>Most sites cover one side. We cover both.</h2>
+      <p>Whether you're trying to lower your bill or you need help paying it, the answer for your household usually involves a stack of both. Here's the menu.</p>
+    </div>
+    <div class="dual-grid">
+      <div class="track-card savings">
+        <div class="label">Savings track</div>
+        <h3>Lower your bill</h3>
+        <ul>
+          <li>Switch retail electricity providers <span class="meta">14 deregulated states</span></li>
+          <li>Negotiate your internet bill <span class="meta">avg. $20/mo savings</span></li>
+          <li>Time-of-use vs fixed-rate plans <span class="meta">why winter spikes hit</span></li>
+          <li>Find a cheaper cell carrier <span class="meta">MVNO comparisons</span></li>
+          <li>Energy-efficiency rebates <span class="meta">heat pump · IRA tax credit</span></li>
+        </ul>
+        <a href="electricity/index.html" class="btn btn-ghost">See savings guides →</a>
+      </div>
+      <div class="track-card assist">
+        <div class="label">Assistance track</div>
+        <h3>Get help paying</h3>
+        <ul>
+          <li>LIHEAP federal heating/cooling assistance <span class="meta">$400–$1,500/yr</span></li>
+          <li>Lifeline phone or internet discount <span class="meta">$9.25/mo · MVNO free phone</span></li>
+          <li>State programs: CARE, PIPP, USF, CAP <span class="meta">often bigger than LIHEAP</span></li>
+          <li>Senior, veteran, disability discounts <span class="meta">all six verticals</span></li>
+          <li>Crisis &amp; shutoff prevention <span class="meta">year-round in most states</span></li>
+        </ul>
+        <a href="electricity/assistance/index.html" class="btn btn-ghost">See assistance programs →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="calc-embed">
+  <div class="container-narrow">
+    <span class="eyebrow" style="background:rgba(244,162,97,.15);color:var(--amber)">Eligibility Calculator</span>
+    <h2>See what you qualify for in 60 seconds</h2>
+    <p>Tell us your state, household size, and rough income — we'll show you which federal, state, and utility programs you may qualify for. No payment info, no spam.</p>
+    <div class="calc-features">
+      <span>Checks LIHEAP, Lifeline, CARE, PIPP &amp; more</span>
+      <span>Crisis fast-track if you have a shutoff notice</span>
+      <span>Anonymous — only call us if you want to</span>
+    </div>
+    <a href="qualify/index.html" class="btn btn-primary btn-lg">Start eligibility check →</a>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo" style="color:#fff">
+          <span class="mark">UB</span>
+          UtilityBenefits<span style="color:#7e8f97;font-weight:400">.com</span>
+        </div>
+        <p>The single resource for lowering your utility bills and finding the assistance programs you may qualify for — across electricity, gas, internet, phone, water, and home security.</p>
+      </div>
+      <div>
+        <h4>Verticals</h4>
+        <a href="electricity/index.html">Electricity</a>
+        <a>Natural gas</a>
+        <a>Home internet</a>
+        <a>Cell phone</a>
+        <a>Home security</a>
+        <a>Water &amp; sewer</a>
+      </div>
+      <div>
+        <h4>Assistance</h4>
+        <a href="electricity/assistance/liheap/index.html">LIHEAP</a>
+        <a>Lifeline</a>
+        <a>State programs</a>
+        <a>Senior discounts</a>
+        <a>Veteran discounts</a>
+        <a>Crisis help</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a>About us</a>
+        <a>Editorial standards</a>
+        <a>How we make money</a>
+        <a>Our authors</a>
+        <a>Methodology</a>
+        <a>Contact</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a>Privacy policy</a>
+        <a>Terms of service</a>
+        <a>TCPA disclosure</a>
+        <a>Marketing partners</a>
+        <a>Do not sell my info</a>
+        <a>Accessibility</a>
+      </div>
+    </div>
+    <div class="foot-disclaimer">
+      <strong>Not a government website.</strong> UtilityBenefits.com is a private company and is not affiliated with, endorsed by, or funded by any government agency. Information about government programs is provided as a public service. To apply directly with a program, visit the official agency website.
+    </div>
+    <div class="foot-bar">
+      <span>© 2026 UtilityBenefits.com · All rights reserved</span>
+      <span>Information last verified May 3, 2026</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

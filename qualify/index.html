@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Eligibility Check — UtilityBenefits.com</title>
+<meta name="description" content="60-second check across LIHEAP, Lifeline, state programs (CARE/PIPP/USF), and utility hardship funds. State-aware rules, no payment info required." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/styles.css" />
+<style>
+  body{background:linear-gradient(180deg,#fff 0%,var(--cream) 60%)}
+  .calc-shell{max-width:720px;margin:0 auto;padding:32px 24px 80px}
+  .progress{height:6px;background:var(--border);border-radius:999px;overflow:hidden;margin:20px 0 32px}
+  .progress .bar{height:100%;background:var(--teal);width:0;transition:width .3s ease}
+  .step{display:none}
+  .step.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)}}
+  .step h2{font-family:'Source Serif 4',serif;font-size:1.8rem;color:var(--teal-deep);margin:0 0 8px}
+  .step .sub{color:var(--muted);margin:0 0 24px;font-size:1rem}
+  .options{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .options.cols-1{grid-template-columns:1fr}
+  .options.cols-3{grid-template-columns:repeat(3,1fr)}
+  .options.cols-5{grid-template-columns:repeat(5,1fr)}
+  @media(max-width:560px){.options.cols-3,.options.cols-5{grid-template-columns:repeat(2,1fr)}}
+  .option{background:var(--paper);border:1.5px solid var(--border);border-radius:10px;padding:18px 16px;cursor:pointer;text-align:center;font-weight:500;font-size:1rem;color:var(--ink);transition:all .12s ease;position:relative;display:flex;align-items:center;justify-content:center;gap:8px;min-height:62px}
+  .option:hover{border-color:var(--teal);background:#F4FAFB}
+  .option.selected{border-color:var(--teal);background:#EBF5F7;color:var(--teal-deep);font-weight:600}
+  .option.selected::after{content:"✓";position:absolute;top:8px;right:10px;color:var(--teal);font-weight:700}
+  .option.crisis{border-color:#F4C7BD;background:#FFF5F3;color:var(--crisis)}
+  .option.crisis:hover{border-color:var(--crisis);background:#FBE9E7}
+  .step-actions{display:flex;justify-content:space-between;margin-top:24px;align-items:center;gap:12px}
+  .step-actions .back{background:transparent;border:0;color:var(--muted);font-size:.9rem;cursor:pointer;padding:8px 0}
+  .step-actions .back:hover{color:var(--teal)}
+  select.dropdown{width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:1rem;font-family:inherit;color:var(--ink);background:#fff;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23566476' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+  .help-text{font-size:.85rem;color:var(--muted);margin-top:14px;text-align:center}
+  .intro-card{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:32px;text-align:center;box-shadow:var(--shadow-md)}
+  .intro-card h1{font-family:'Source Serif 4',serif;font-size:2rem;color:var(--teal-deep);margin:0 0 12px}
+  .intro-card p{color:var(--muted);margin-bottom:20px;font-size:1.05rem}
+  .intro-features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0;text-align:left}
+  @media(max-width:560px){.intro-features{grid-template-columns:1fr}}
+  .feat{padding:14px;background:var(--cream);border-radius:8px;font-size:.85rem}
+  .feat strong{display:block;color:var(--teal-deep);font-weight:600;margin-bottom:4px}
+  .crisis-banner{background:var(--crisis);color:#fff;padding:24px 28px;border-radius:12px;margin-bottom:24px;text-align:center}
+  .crisis-banner h2{color:#fff;margin:0 0 8px;font-size:1.6rem}
+  .crisis-banner p{color:#FFD9D2;margin:0 0 16px}
+  .crisis-banner .num{font-family:'Source Serif 4',serif;font-size:2.4rem;font-weight:700;display:block;margin-bottom:12px;letter-spacing:-.01em}
+  .result{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:32px;box-shadow:var(--shadow-md)}
+  .result .badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+  .result .badge.A{background:#E5F0EA;color:#1F5535}
+  .result .badge.B{background:#EBF1F2;color:var(--teal)}
+  .result .badge.C{background:#FFF3E0;color:#9C5510}
+  .result h2{font-family:'Source Serif 4',serif;color:var(--teal-deep);margin:0 0 8px;font-size:1.7rem}
+  .result .lead{color:var(--muted);margin-bottom:20px}
+  .program-list{list-style:none;padding:0;margin:24px 0}
+  .program-list li{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--cream);border-radius:8px;margin-bottom:8px;gap:16px}
+  .program-list li .name{font-weight:600;color:var(--teal-deep)}
+  .program-list li .sub{font-size:.85rem;color:var(--muted)}
+  .program-list li .est{font-family:'Source Serif 4',serif;color:var(--forest);font-weight:600;font-variant-numeric:tabular-nums;text-align:right;font-size:1rem;white-space:nowrap}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+  @media(max-width:560px){.form-grid{grid-template-columns:1fr}}
+  .form-grid label{display:block;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+  .form-grid input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:1rem;font-family:inherit}
+  .form-grid input:focus{outline:none;border-color:var(--teal)}
+  .full{grid-column:1/-1}
+  .consent{display:flex;gap:12px;margin:18px 0;font-size:.82rem;color:var(--muted);align-items:flex-start;padding:14px;background:var(--cream);border-radius:8px}
+  .consent input{margin-top:3px;flex-shrink:0}
+  .consent label{font-size:.82rem;line-height:1.5}
+  .alt-call{margin-top:24px;padding-top:24px;border-top:1px solid var(--border);text-align:center}
+  .alt-call .num{font-family:'Source Serif 4',serif;font-size:1.8rem;color:var(--teal-deep);font-weight:700;font-variant-numeric:tabular-nums}
+  .alt-call p{color:var(--muted);margin:4px 0 14px;font-size:.9rem}
+  .calc-header{margin-bottom:16px}
+  .calc-header a.home{color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <span class="verified">Information last verified May 3, 2026</span>
+    <span>Need help right now? <a href="tel:18005551234">Call (800) 555-1234</a></span>
+  </div>
+</div>
+
+<header class="site">
+  <div class="container">
+    <a href="../index.html" class="logo"><span class="mark">UB</span>UtilityBenefits<span style="color:var(--muted);font-weight:400">.com</span></a>
+    <nav class="primary">
+      <ul>
+        <li><a href="../electricity/index.html">Electricity</a></li>
+        <li><a href="#" style="color:var(--muted)">Gas</a></li>
+        <li><a href="../internet/index.html">Internet</a></li>
+        <li><a href="#" style="color:var(--muted)">Cell phone</a></li>
+        <li><a href="#" style="color:var(--muted)">Water</a></li>
+        <li><a href="#" style="color:var(--muted)">Security</a></li>
+      </ul>
+    </nav>
+    <div class="header-cta">
+      <a href="tel:18005551234" class="btn btn-call">📞 (800) 555-1234</a>
+    </div>
+  </div>
+</header>
+
+<div class="calc-shell">
+
+  <div class="calc-header">
+    <a href="../index.html" class="home">← Back to home</a>
+  </div>
+
+  <div class="progress" id="progress" style="display:none"><div class="bar" id="bar"></div></div>
+
+  <!-- INTRO -->
+  <div class="step active" data-step="intro">
+    <div class="intro-card">
+      <span class="eyebrow">60-Second Eligibility Check</span>
+      <h1 style="margin-top:14px">See which utility programs you may qualify for</h1>
+      <p>Tell us your state, household size, and rough income. We'll check LIHEAP, your state programs, Lifeline, and utility hardship funds at once. Anonymous — only call if you want to.</p>
+      <div class="intro-features">
+        <div class="feat"><strong>Anonymous</strong>No SSN, no payment info, no signup.</div>
+        <div class="feat"><strong>State-aware</strong>Uses your state's exact rules and program names.</div>
+        <div class="feat"><strong>Crisis fast-track</strong>Shutoff notice? You skip ahead.</div>
+      </div>
+      <button class="btn btn-primary btn-lg btn-block" onclick="startCalc()">Start the check →</button>
+      <p class="help-text">By starting, you agree to our <a href="#">privacy policy</a>. We do not sell or share data without your explicit consent.</p>
+    </div>
+  </div>
+
+  <!-- STEP 1: STATE -->
+  <div class="step" data-step="1">
+    <h2>What state do you live in?</h2>
+    <p class="sub">Programs and income limits vary by state.</p>
+    <select class="dropdown" id="state-select" onchange="selectState(this.value)">
+      <option value="">Choose your state…</option>
+      <option value="tx">Texas</option>
+      <option value="ca">California</option>
+      <option value="ny">New York</option>
+      <option value="pa">Pennsylvania</option>
+      <option value="oh">Ohio</option>
+      <option value="fl">Florida</option>
+      <option value="nj">New Jersey</option>
+      <option value="il">Illinois</option>
+      <option value="mi">Michigan</option>
+      <option value="ma">Massachusetts</option>
+      <option value="other">Other state (limited preview)</option>
+    </select>
+    <p class="help-text">Don't see yours? We launch all 50 states in Phase 2 — preview rules will be approximate.</p>
+    <div class="step-actions">
+      <button class="back" onclick="goStep('intro')">← Back</button>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- STEP 2: HOUSEHOLD SIZE -->
+  <div class="step" data-step="2">
+    <h2>How many people live in your household?</h2>
+    <p class="sub">Include yourself, kids, and any adults you share income/expenses with.</p>
+    <div class="options cols-5">
+      <div class="option" onclick="selectHH(1)">1</div>
+      <div class="option" onclick="selectHH(2)">2</div>
+      <div class="option" onclick="selectHH(3)">3</div>
+      <div class="option" onclick="selectHH(4)">4</div>
+      <div class="option" onclick="selectHH(5)">5</div>
+      <div class="option" onclick="selectHH(6)">6</div>
+      <div class="option" onclick="selectHH(7)">7</div>
+      <div class="option" onclick="selectHH(8)">8</div>
+      <div class="option" onclick="selectHH(9)">9</div>
+      <div class="option" onclick="selectHH(10)">10+</div>
+    </div>
+    <div class="step-actions">
+      <button class="back" onclick="goStep(1)">← Back</button>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- STEP 3: CATEGORICAL -->
+  <div class="step" data-step="3">
+    <h2>Does anyone in your household get any of these?</h2>
+    <p class="sub">Receiving any of these often qualifies you automatically — you skip the income paperwork.</p>
+    <div class="options" id="cat-options">
+      <div class="option" data-cat="snap" onclick="toggleCat('snap')">SNAP / Food Stamps</div>
+      <div class="option" data-cat="medicaid" onclick="toggleCat('medicaid')">Medicaid</div>
+      <div class="option" data-cat="ssi" onclick="toggleCat('ssi')">SSI</div>
+      <div class="option" data-cat="tanf" onclick="toggleCat('tanf')">TANF</div>
+      <div class="option" data-cat="vetpens" onclick="toggleCat('vetpens')">Veterans Pension</div>
+      <div class="option" data-cat="pubhouse" onclick="toggleCat('pubhouse')">Federal Public Housing</div>
+      <div class="option" data-cat="none" onclick="toggleCat('none')">None of these</div>
+    </div>
+    <div class="step-actions">
+      <button class="back" onclick="goStep(2)">← Back</button>
+      <button class="btn btn-primary" onclick="afterCategorical()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: INCOME (only if no categorical) -->
+  <div class="step" data-step="4">
+    <h2>What's your household's monthly income?</h2>
+    <p class="sub">Pre-tax, before deductions. Estimate is fine.</p>
+    <div class="options cols-1" id="income-options">
+      <!-- populated dynamically based on household size -->
+    </div>
+    <div class="step-actions">
+      <button class="back" onclick="goStep(3)">← Back</button>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- STEP 5: SITUATION -->
+  <div class="step" data-step="5">
+    <h2>What best describes your situation?</h2>
+    <p class="sub">This determines whether you go on the standard or crisis path.</p>
+    <div class="options cols-1">
+      <div class="option" onclick="selectSit('worried')">Worried about a high bill</div>
+      <div class="option" onclick="selectSit('ongoing')">Just looking for ongoing help</div>
+      <div class="option crisis" onclick="selectSit('notice')">⚠ I have a shutoff notice</div>
+      <div class="option crisis" onclick="selectSit('off')">⚠ My utility is already shut off</div>
+    </div>
+    <div class="step-actions">
+      <button class="back" onclick="goBackToIncome()">← Back</button>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- STEP 6: DEMOGRAPHICS -->
+  <div class="step" data-step="6">
+    <h2>Anything else we should know? <span style="color:var(--muted);font-weight:400">(optional)</span></h2>
+    <p class="sub">These can unlock additional programs you may qualify for.</p>
+    <div class="options" id="demo-options">
+      <div class="option" data-demo="senior" onclick="toggleDemo('senior')">Someone is 60+</div>
+      <div class="option" data-demo="veteran" onclick="toggleDemo('veteran')">Veteran in household</div>
+      <div class="option" data-demo="disability" onclick="toggleDemo('disability')">Someone has a disability</div>
+      <div class="option" data-demo="kids" onclick="toggleDemo('kids')">Pregnant or kids under 5</div>
+      <div class="option" data-demo="medequip" onclick="toggleDemo('medequip')">Medical equipment at home</div>
+      <div class="option" data-demo="none" onclick="toggleDemo('none')">None apply / Skip</div>
+    </div>
+    <div class="step-actions">
+      <button class="back" onclick="goStep(5)">← Back</button>
+      <button class="btn btn-primary" onclick="computeResult()">See my results →</button>
+    </div>
+  </div>
+
+  <!-- CRISIS RESULT (path D) -->
+  <div class="step" data-step="crisis">
+    <div class="crisis-banner">
+      <h2>Time-sensitive — call us now</h2>
+      <p>Most states have crisis funds available year-round, and many utilities can stop a shutoff within 24 hours. A specialist can engage your state's program and your utility's hardship line at the same time.</p>
+      <span class="num">(800) 555-1234</span>
+      <a href="tel:18005551234" class="btn btn-lg" style="background:#fff;color:var(--crisis)">Call now — open 24/7 for crisis</a>
+    </div>
+    <div class="result">
+      <p>While you have us on the line, we'll check:</p>
+      <ul style="padding-left:22px">
+        <li><strong>Your state's LIHEAP Crisis component</strong> — most states process within 18–48 hours</li>
+        <li><strong>Your utility's hardship program</strong> — can pause disconnection while LIHEAP is pending</li>
+        <li><strong>Salvation Army &amp; Dollar Energy Fund</strong> in your area</li>
+        <li><strong>211</strong> referrals for last-resort options</li>
+      </ul>
+      <button class="back" onclick="goStep(5)" style="margin-top:18px">← Back to questions</button>
+    </div>
+  </div>
+
+  <!-- RESULT (paths A/B/C) -->
+  <div class="step" data-step="result">
+    <div class="result" id="result-card">
+      <!-- populated dynamically -->
+    </div>
+  </div>
+
+</div>
+
+<footer class="site">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo" style="color:#fff"><span class="mark">UB</span>UtilityBenefits<span style="color:#7e8f97;font-weight:400">.com</span></div>
+        <p>The single resource for lowering your utility bills and finding assistance you may qualify for.</p>
+      </div>
+      <div><h4>Verticals</h4><a href="../electricity/index.html">Electricity</a><a>Gas</a><a>Internet</a><a>Cell phone</a></div>
+      <div><h4>Assistance</h4><a href="../electricity/assistance/liheap/index.html">LIHEAP</a><a>Lifeline</a><a>State programs</a></div>
+      <div><h4>Resources</h4><a>About</a><a>Editorial</a><a>How we make money</a></div>
+      <div><h4>Legal</h4><a>Privacy</a><a>Terms</a><a>TCPA</a></div>
+    </div>
+    <div class="foot-disclaimer"><strong>Not a government website.</strong> UtilityBenefits.com is a private company and is not affiliated with, endorsed by, or funded by any government agency.</div>
+    <div class="foot-bar"><span>© 2026 UtilityBenefits.com</span><span>Last verified May 3, 2026</span></div>
+  </div>
+</footer>
+
+<script>
+  // ============ DATA MODEL ============
+
+  // 2026 Federal Poverty Level (48 states + DC)
+  // Annual income at 100% FPL by household size
+  const FPL_100 = {
+    1: 15060, 2: 20440, 3: 25820, 4: 31200, 5: 36580,
+    6: 41960, 7: 47340, 8: 52720
+  };
+  const FPL_PER_ADD = 5380;
+
+  function fplAt(pct, hhSize) {
+    const base = hhSize <= 8 ? FPL_100[hhSize] : FPL_100[8] + (hhSize - 8) * FPL_PER_ADD;
+    return Math.round(base * pct / 100);
+  }
+
+  // State configurations (Phase 1: TX, CA, NY, PA, OH, FL + a few more)
+  const STATES = {
+    tx: {
+      name: "Texas", liheap: "CEAP",
+      fplPct: 150, smiPct: 60,
+      categorical: ["snap","tanf","ssi"],
+      stateProgram: { name: "CEAP (TX LIHEAP)", est: "$400–$1,200/yr" },
+      utilityPrograms: ["Reliant CARE", "TXU Energy Aid", "CenterPoint Care"],
+      crisis: "Year-round; cooling crisis prioritized in summer"
+    },
+    ca: {
+      name: "California", liheap: "CA LIHEAP",
+      fplPct: 200, smiPct: 60,
+      categorical: ["snap","ssi","medicaid","tanf"],
+      stateProgram: { name: "CARE / FERA + LIHEAP", est: "$1,000–$2,500/yr stacked" },
+      utilityPrograms: ["PG&E REACH", "SCE EAPR", "SDG&E Care"],
+      crisis: "Year-round; medical baseline available"
+    },
+    ny: {
+      name: "New York", liheap: "HEAP",
+      fplPct: 150, smiPct: 60,
+      categorical: ["snap","ssi","tanf","medicaid"],
+      stateProgram: { name: "HEAP (NY LIHEAP)", est: "$500–$1,500/yr" },
+      utilityPrograms: ["Con Ed EAP", "National Grid CARE", "NYSEG Empower"],
+      crisis: "Heating-season focused; emergency component year-round"
+    },
+    pa: {
+      name: "Pennsylvania", liheap: "LIHEAP",
+      fplPct: 150, smiPct: 60,
+      categorical: ["snap","ssi","tanf"],
+      stateProgram: { name: "LIHEAP + CRISIS + LIURP + CAP", est: "$500–$1,500/yr" },
+      utilityPrograms: ["PECO CAP", "PPL OnTrack", "Duquesne Light Smart Comfort", "Dollar Energy Fund"],
+      crisis: "LIHEAP Crisis + utility CAP rates"
+    },
+    oh: {
+      name: "Ohio", liheap: "LIHEAP",
+      fplPct: 175, smiPct: 60,
+      categorical: ["snap","ssi","tanf"],
+      stateProgram: { name: "PIPP Plus + LIHEAP", est: "$800–$2,400/yr stacked" },
+      utilityPrograms: ["AEP Neighbor to Neighbor", "Duke Share the Light", "Columbia Gas WarmChoice"],
+      crisis: "PIPP Plus caps bill at 6% of income; HEAP crisis layered"
+    },
+    fl: {
+      name: "Florida", liheap: "LIHEAP-FL",
+      fplPct: 150, smiPct: 60,
+      categorical: ["snap","ssi","tanf"],
+      stateProgram: { name: "LIHEAP-FL", est: "$400–$1,000/yr" },
+      utilityPrograms: ["FPL Care to Share", "Duke Share the Light"],
+      crisis: "Cooling crisis year-round"
+    },
+    nj: {
+      name: "New Jersey", liheap: "LIHEA + USF",
+      fplPct: 200, smiPct: 60,
+      categorical: ["snap","ssi","tanf","medicaid"],
+      stateProgram: { name: "USF + LIHEA", est: "$700–$1,800/yr stacked" },
+      utilityPrograms: ["PSE&G Comfort Partners", "JCP&L NJ Comfort"],
+      crisis: "USF is monthly credit; LIHEA crisis layered"
+    },
+    il: {
+      name: "Illinois", liheap: "LIHEAP",
+      fplPct: 200, smiPct: 60,
+      categorical: ["snap","ssi","tanf"],
+      stateProgram: { name: "LIHEAP + PIPP", est: "$500–$1,800/yr" },
+      utilityPrograms: ["ComEd CHAMP", "Ameren Warm Neighbors Cool Friends"],
+      crisis: "PIPP for ComEd customers; LIHEAP crisis"
+    },
+    mi: {
+      name: "Michigan", liheap: "MEAP",
+      fplPct: 150, smiPct: 60,
+      categorical: ["snap","ssi","tanf"],
+      stateProgram: { name: "MEAP + State Emergency Relief", est: "$400–$1,500/yr" },
+      utilityPrograms: ["DTE Low Income Self-Sufficiency Plan", "Consumers Affordable Resource for Energy"],
+      crisis: "MEAP Crisis + State Emergency Relief"
+    },
+    ma: {
+      name: "Massachusetts", liheap: "Fuel Assistance",
+      fplPct: 60, smiPct: 60,  // MA uses 60% SMI as primary
+      categorical: ["snap","ssi","tanf"],
+      stateProgram: { name: "MA Fuel Assistance", est: "$700–$1,800/yr" },
+      utilityPrograms: ["Eversource New Start", "National Grid Arrearage Forgiveness"],
+      crisis: "Heating-season focused"
+    },
+    other: {
+      name: "Your state", liheap: "LIHEAP",
+      fplPct: 150, smiPct: 60,
+      categorical: ["snap","ssi","tanf"],
+      stateProgram: { name: "Federal LIHEAP", est: "$400–$1,500/yr" },
+      utilityPrograms: ["Local utility hardship programs"],
+      crisis: "Crisis component year-round in most states"
+    }
+  };
+
+  // ============ STATE ============
+  const data = {
+    state: null,
+    hh: null,
+    cats: [],
+    income: null,        // monthly
+    incomeBucket: null,  // human label
+    sit: null,
+    demos: []
+  };
+
+  let history = ['intro'];
+  const stepOrder = ['intro', 1, 2, 3, 4, 5, 6, 'result'];
+
+  // ============ NAVIGATION ============
+
+  function startCalc(){
+    document.getElementById('progress').style.display = 'block';
+    goStep(1);
+  }
+
+  function goStep(s){
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    const target = document.querySelector(`.step[data-step="${s}"]`);
+    if(target) target.classList.add('active');
+    if(history[history.length-1] !== s) history.push(s);
+    updateProgress(s);
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function updateProgress(s){
+    const numericSteps = [1,2,3,4,5,6];
+    let pct = 0;
+    if(numericSteps.includes(s)) pct = (numericSteps.indexOf(s)+1) / 7 * 100;
+    if(s === 'result' || s === 'crisis') pct = 100;
+    document.getElementById('bar').style.width = pct + '%';
+  }
+
+  // ============ STEP HANDLERS ============
+
+  function selectState(code){
+    if(!code) return;
+    data.state = code;
+    setTimeout(()=>goStep(2), 180);
+  }
+
+  function selectHH(n){
+    data.hh = n;
+    document.querySelectorAll('.step[data-step="2"] .option').forEach(o => o.classList.remove('selected'));
+    event.target.classList.add('selected');
+    setTimeout(()=>goStep(3), 240);
+  }
+
+  function toggleCat(c){
+    if(c === 'none'){
+      data.cats = ['none'];
+      document.querySelectorAll('#cat-options .option').forEach(o => o.classList.remove('selected'));
+      event.target.classList.add('selected');
+      return;
+    }
+    // remove "none" if other selected
+    data.cats = data.cats.filter(x => x !== 'none');
+    document.querySelector('#cat-options .option[data-cat="none"]').classList.remove('selected');
+    if(data.cats.includes(c)){
+      data.cats = data.cats.filter(x => x !== c);
+      event.target.classList.remove('selected');
+    } else {
+      data.cats.push(c);
+      event.target.classList.add('selected');
+    }
+  }
+
+  function afterCategorical(){
+    if(data.cats.length === 0){
+      alert('Please select at least one option, or choose "None of these".');
+      return;
+    }
+    const hasReal = data.cats.some(c => c !== 'none');
+    // If categorical, skip income; else show income step
+    if(hasReal){
+      data.income = null;
+      data.incomeBucket = 'Categorical eligibility';
+      goStep(5);
+    } else {
+      buildIncomeOptions();
+      goStep(4);
+    }
+  }
+
+  function buildIncomeOptions(){
+    const hh = data.hh || 1;
+    const fpl150_monthly = Math.round(fplAt(150, hh) / 12);
+    const fpl200_monthly = Math.round(fplAt(200, hh) / 12);
+    const buckets = [
+      { label: `Under $${(fpl150_monthly*0.5).toLocaleString()}/mo`, max: Math.round(fpl150_monthly*0.5) },
+      { label: `$${(fpl150_monthly*0.5).toLocaleString()}–$${fpl150_monthly.toLocaleString()}/mo`, max: fpl150_monthly },
+      { label: `$${fpl150_monthly.toLocaleString()}–$${fpl200_monthly.toLocaleString()}/mo`, max: fpl200_monthly },
+      { label: `$${fpl200_monthly.toLocaleString()}–$${(fpl200_monthly*1.5).toLocaleString()}/mo`, max: Math.round(fpl200_monthly*1.5) },
+      { label: `Over $${(fpl200_monthly*1.5).toLocaleString()}/mo`, max: 99999 }
+    ];
+    const opts = document.getElementById('income-options');
+    opts.innerHTML = '';
+    buckets.forEach(b => {
+      const el = document.createElement('div');
+      el.className = 'option';
+      el.textContent = b.label;
+      el.onclick = ()=>{
+        data.income = b.max;
+        data.incomeBucket = b.label;
+        document.querySelectorAll('#income-options .option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        setTimeout(()=>goStep(5), 240);
+      };
+      opts.appendChild(el);
+    });
+  }
+
+  function goBackToIncome(){
+    const hasReal = data.cats.some(c => c !== 'none');
+    if(hasReal) goStep(3);
+    else goStep(4);
+  }
+
+  function selectSit(s){
+    data.sit = s;
+    if(s === 'notice' || s === 'off'){
+      goStep('crisis');
+    } else {
+      document.querySelectorAll('.step[data-step="5"] .option').forEach(o => o.classList.remove('selected'));
+      event.target.classList.add('selected');
+      setTimeout(()=>goStep(6), 240);
+    }
+  }
+
+  function toggleDemo(d){
+    if(d === 'none'){
+      data.demos = ['none'];
+      document.querySelectorAll('#demo-options .option').forEach(o => o.classList.remove('selected'));
+      event.target.classList.add('selected');
+      return;
+    }
+    data.demos = data.demos.filter(x => x !== 'none');
+    document.querySelector('#demo-options .option[data-demo="none"]').classList.remove('selected');
+    if(data.demos.includes(d)){
+      data.demos = data.demos.filter(x => x !== d);
+      event.target.classList.remove('selected');
+    } else {
+      data.demos.push(d);
+      event.target.classList.add('selected');
+    }
+  }
+
+  // ============ COMPUTE ELIGIBILITY ============
+
+  function computeResult(){
+    const st = STATES[data.state] || STATES.other;
+    const hh = data.hh;
+    const hasReal = data.cats.some(c => c !== 'none');
+
+    // Determine LIHEAP qualification
+    // Rule: income <= statePct of FPL, OR has matching categorical
+    let liheap = 'no';
+    let liheapReason = '';
+    let categoricalMatch = false;
+
+    if(hasReal){
+      // Check if any user categorical matches state's accepted list
+      const matches = data.cats.filter(c => st.categorical.includes(c));
+      if(matches.length > 0){
+        liheap = 'yes';
+        categoricalMatch = true;
+        liheapReason = 'Categorical eligibility — receiving ' + matches.map(catLabel).join(', ');
+      } else {
+        liheap = 'maybe';
+        liheapReason = `Receives ${data.cats.map(catLabel).join(', ')}, which doesn't directly qualify in ${st.name} but indicates likely income eligibility.`;
+      }
+    } else if(data.income){
+      const annualIncome = data.income * 12;
+      const threshold = fplAt(st.fplPct, hh);
+      if(annualIncome <= threshold){
+        liheap = 'yes';
+        liheapReason = `Income ~$${data.income.toLocaleString()}/mo is at or below ${st.fplPct}% FPL for a household of ${hh} ($${threshold.toLocaleString()}/yr).`;
+      } else if(annualIncome <= threshold * 1.25){
+        liheap = 'maybe';
+        liheapReason = `Income is just above the LIHEAP threshold but several state programs have higher cutoffs.`;
+      } else {
+        liheap = 'no';
+        liheapReason = `Income is above the typical LIHEAP threshold. State programs and savings options still apply.`;
+      }
+    }
+
+    // Determine result path
+    let path;
+    if(liheap === 'yes') path = 'A';
+    else if(liheap === 'maybe') path = 'B';
+    else path = 'C';
+
+    renderResult(path, st, liheapReason);
+    goStep('result');
+  }
+
+  function catLabel(c){
+    return ({snap:'SNAP',medicaid:'Medicaid',ssi:'SSI',tanf:'TANF',vetpens:'Veterans Pension',pubhouse:'Federal Public Housing'})[c] || c;
+  }
+
+  function renderResult(path, st, reason){
+    const hh = data.hh;
+    const card = document.getElementById('result-card');
+    const stateName = st.name;
+    const liheapLabel = st.liheap;
+
+    let badge, headline, lead, programs = [];
+
+    if(path === 'A'){
+      badge = `<span class="badge A">Likely qualified</span>`;
+      headline = `You may qualify for ${liheapLabel} in ${stateName}.`;
+      lead = reason;
+      programs.push({name: liheapLabel + ' (federal LIHEAP)', sub: 'Annual benefit', est: '$400–$1,500/yr'});
+      programs.push({name: st.stateProgram.name, sub: 'State program · stacks with LIHEAP', est: st.stateProgram.est});
+      if(data.demos.includes('senior')) programs.push({name: 'Senior utility discounts', sub: '60+ household member', est: 'Varies'});
+      if(data.demos.includes('veteran')) programs.push({name: 'Veteran utility benefits', sub: 'VA + state veteran funds', est: 'Varies'});
+      if(data.demos.includes('disability')) programs.push({name: 'Disability assistance + Medical Baseline', sub: 'Where available in your state', est: 'Varies'});
+      programs.push({name: 'Lifeline (phone or internet)', sub: 'Federal — independent of LIHEAP', est: '$9.25/mo + free phone'});
+    } else if(path === 'B'){
+      badge = `<span class="badge B">Some programs may fit</span>`;
+      headline = `Some ${stateName} programs likely fit your situation.`;
+      lead = reason + ' A specialist can verify which programs you qualify for and apply on your behalf.';
+      programs.push({name: st.stateProgram.name, sub: 'Often higher income cutoff than LIHEAP', est: st.stateProgram.est});
+      programs.push({name: 'Utility hardship programs', sub: st.utilityPrograms.slice(0,2).join(', '), est: 'Varies'});
+      programs.push({name: 'Lifeline (phone or internet)', sub: 'Federal — typically 135% FPL', est: '$9.25/mo + free phone'});
+      if(data.demos.includes('senior')) programs.push({name: 'Senior discounts', sub: 'Most utilities offer; usually requires opt-in', est: 'Varies'});
+    } else {
+      badge = `<span class="badge C">Programs above the standard income cutoffs</span>`;
+      headline = `Standard programs don't fit, but the savings track and demographic-specific programs likely do.`;
+      lead = `For your household, switching to a cheaper plan or qualifying for senior, veteran, or efficiency-rebate programs is usually the better path.`;
+      programs.push({name: 'Switch electricity providers', sub: 'In deregulated states (TX, PA, OH, NY, etc.)', est: 'Save 10–30%'});
+      programs.push({name: 'Federal IRA tax credits', sub: 'Heat pumps, electric appliances, efficiency', est: 'Up to $14,000'});
+      if(data.demos.includes('senior')) programs.push({name: 'Senior utility discounts', sub: 'No income test in many cases', est: 'Varies'});
+      if(data.demos.includes('veteran')) programs.push({name: 'Veteran-specific programs', sub: 'VA + state veteran utility funds', est: 'Varies'});
+    }
+
+    card.innerHTML = `
+      ${badge}
+      <h2>${headline}</h2>
+      <p class="lead">${lead}</p>
+
+      <h3 style="font-family:'Source Serif 4',serif;color:var(--teal-deep);margin-top:24px;font-size:1.15rem">Programs to apply for</h3>
+      <ul class="program-list">
+        ${programs.map(p => `
+          <li>
+            <div><div class="name">${p.name}</div><div class="sub">${p.sub}</div></div>
+            <div class="est">${p.est}</div>
+          </li>
+        `).join('')}
+      </ul>
+
+      <div class="alt-call">
+        <p style="font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600">Talk to a benefits specialist</p>
+        <div class="num">(800) 555-1234</div>
+        <p>Specialists check 12+ programs at once and apply on your behalf where possible.</p>
+        <a href="tel:18005551234" class="btn btn-primary btn-lg btn-block">Call now</a>
+      </div>
+
+      <div style="margin:32px 0 0;padding-top:24px;border-top:1px solid var(--border)">
+        <h3 style="font-family:'Source Serif 4',serif;color:var(--teal-deep);font-size:1.15rem">Or have us call you</h3>
+        <p style="color:var(--muted);font-size:.92rem">A specialist will reach out within 5 minutes during business hours.</p>
+        <div class="form-grid">
+          <div><label>First name</label><input type="text" placeholder="Your first name" /></div>
+          <div><label>Phone</label><input type="tel" placeholder="(555) 555-5555" /></div>
+          <div class="full"><label>ZIP code</label><input type="text" placeholder="ZIP" maxlength="5" value=""/></div>
+        </div>
+        <div class="consent">
+          <input type="checkbox" id="tcpa" />
+          <label for="tcpa">By checking this box and clicking "Get my callback," I consent to receive calls and texts at the number provided from UtilityBenefits.com and its marketing partners regarding utility assistance and savings programs, including via automated technology. Consent is not a condition of any service. Message and data rates may apply. I can opt out anytime by replying STOP.</label>
+        </div>
+        <button class="btn btn-secondary btn-lg btn-block" onclick="alert('Form submission is stubbed in this prototype — a real lead would be written to CRM with timestamp, IP, UA, consent language version, and page URL per the spec.')">Get my callback →</button>
+      </div>
+
+      <div style="margin-top:24px;text-align:center">
+        <button class="back" onclick="goStep(6)">← Refine my answers</button>
+      </div>
+    `;
+  }
+
+  // Read URL params for state/program pre-fill
+  (function(){
+    const params = new URLSearchParams(window.location.search);
+    if(params.get('state')){
+      data.state = params.get('state').toLowerCase();
+      const sel = document.getElementById('state-select');
+      if(sel) sel.value = data.state;
+    }
+  })();
+</script>
+</body>
+</html>

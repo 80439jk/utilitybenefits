@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UtilityBenefits.com — Prototype Tour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+<style>
+  body{background:#fff}
+  .tour{max-width:960px;margin:0 auto;padding:48px 24px}
+  .tour h1{font-size:2.6rem;margin-bottom:8px}
+  .tour > .lede{color:var(--muted);font-size:1.15rem;margin-bottom:8px;max-width:640px}
+  .tour > .meta{color:var(--muted);font-size:.88rem;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+  .tile-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:36px}
+  @media(max-width:680px){.tile-grid{grid-template-columns:1fr}}
+  .tile{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:10px;transition:border-color .15s, transform .15s, box-shadow .15s;color:var(--ink)}
+  .tile:hover{border-color:var(--teal);text-decoration:none;transform:translateY(-2px);box-shadow:var(--shadow-md)}
+  .tile .num{font-family:'Source Serif 4',serif;font-size:.85rem;font-weight:600;color:var(--amber-dark);letter-spacing:.04em;text-transform:uppercase}
+  .tile h3{margin:0;font-size:1.2rem;color:var(--teal-deep)}
+  .tile p{font-size:.92rem;color:var(--muted);margin:0;line-height:1.55}
+  .tile .url{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--teal);background:var(--cream);padding:3px 8px;border-radius:4px;align-self:flex-start;margin-top:6px}
+  .tile.priority{border-color:var(--amber);background:linear-gradient(180deg,#FFFBF3,#fff)}
+  .tile.priority .num{color:var(--amber-dark)}
+  .legend{background:var(--cream);border-radius:10px;padding:20px 24px;margin-bottom:36px;font-size:.92rem;color:var(--ink)}
+  .legend h4{margin:0 0 8px;color:var(--teal-deep);font-family:'Inter',sans-serif;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em}
+  .legend ul{margin:6px 0 0;padding-left:18px}
+  .legend li{padding:3px 0}
+  .legend li code{background:#fff;padding:1px 6px;border-radius:4px;font-size:.85rem}
+  .next-steps{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:28px;margin-top:24px}
+  .next-steps h2{margin:0 0 16px}
+  .next-steps ol{padding-left:22px;margin:0}
+  .next-steps li{padding:6px 0;font-size:.98rem}
+  h2.section-h{margin:36px 0 16px;font-size:1.4rem;color:var(--teal-deep)}
+</style>
+</head>
+<body>
+
+<div class="tour">
+
+  <span class="eyebrow">Prototype · v1.1 · May 3, 2026</span>
+  <h1 style="margin-top:14px">UtilityBenefits.com — clickable prototype</h1>
+  <p class="lede">Design system + electricity and internet verticals fully wired (pillar → assistance → key cluster pages), interactive eligibility calculator, stack recommendations.</p>
+  <p class="meta">Built against Master Spec v1.7. v1.1 adds the internet vertical including the strategic "What replaced ACP?" page.</p>
+
+  <div class="legend">
+    <h4>How to use</h4>
+    <p>Click any tile below to open that page. Some pages link to others — full nav works between them. The recommended walkthrough order is numbered.</p>
+    <ul>
+      <li><strong>Recommended walkthrough:</strong> 1 (homepage) → 2 (electricity pillar) → 8 ("What replaced ACP?" — the strategic page) → 10 (calculator) → 11 (stack doc)</li>
+      <li><strong>Calculator URL params work:</strong> e.g. <code>qualify/index.html?state=tx</code> pre-fills Texas</li>
+      <li>Crisis path in calculator: pick "I have a shutoff notice" at step 5 to see path D</li>
+      <li>Try the household size + categorical eligibility shortcut: any of SNAP/SSI/TANF/Medicaid skips the income step</li>
+    </ul>
+  </div>
+
+  <h2 class="section-h">Site structure</h2>
+  <div class="tile-grid">
+
+    <a href="index.html" class="tile priority">
+      <span class="num">01 · Homepage</span>
+      <h3>Homepage with 6-vertical grid</h3>
+      <p>Hero with dual-track positioning, illustrative savings stack, 6-vertical card grid (electricity live; others marked "Phase 4"), dual-track section, calculator embed, full footer with compliance disclaimer.</p>
+      <span class="url">/index.html</span>
+    </a>
+
+    <a href="electricity/index.html" class="tile">
+      <span class="num">02 · Pillar</span>
+      <h3>/electricity/ — vertical pillar page</h3>
+      <p>Quick-answer block (Speakable schema marker), byline + reviewer + last-verified, 4 sub-pillar hub cards, FAQ, sources block, sidebar with sticky calc CTA + call CTA + TOC.</p>
+      <span class="url">/electricity/</span>
+    </a>
+
+    <a href="electricity/assistance/index.html" class="tile">
+      <span class="num">03 · Sub-pillar</span>
+      <h3>/electricity/assistance/ — assistance hub</h3>
+      <p>Federal programs, state programs, demographic targeting, crisis &amp; shutoff (with red urgency CTA), utility-specific hardship programs table. The lead-magnet hub of the spec.</p>
+      <span class="url">/electricity/assistance/</span>
+    </a>
+
+    <a href="electricity/assistance/liheap/index.html" class="tile">
+      <span class="num">04 · Pillar</span>
+      <h3>/electricity/assistance/liheap/ — LIHEAP guide</h3>
+      <p>The full 13-section LIHEAP pillar from the spec: what it is, what it covers, eligibility (with FPL table), how to apply (HowTo schema), documents, when to apply, by-state grid, related programs, "what if I don't qualify," 12-question FAQ.</p>
+      <span class="url">/electricity/assistance/liheap/</span>
+    </a>
+
+    <a href="electricity/assistance/liheap/texas/index.html" class="tile">
+      <span class="num">05 · State page</span>
+      <h3>/electricity/assistance/liheap/texas/ — Texas worked example</h3>
+      <p>The SEO workhorse template per spec: dark TX hero, quick-facts box (10 rows), CEAP-vs-LIHEAP explainer, eligibility table, how to apply, crisis, benefit ranges, find-your-local-office regional table, Texas REP hardship programs, 8-question Texas-specific FAQ.</p>
+      <span class="url">/electricity/assistance/liheap/texas/</span>
+    </a>
+
+    <a href="internet/index.html" class="tile">
+      <span class="num">06 · Pillar</span>
+      <h3>/internet/ — internet vertical pillar</h3>
+      <p>Quick-answer block, 3 sub-pillar cards (savings/providers/assistance), why-bills-go-up section (promo cliff, hidden fees, bundles), post-ACP intro, provider landscape table, speed guidance, FAQ.</p>
+      <span class="url">/internet/</span>
+    </a>
+
+    <a href="internet/assistance/index.html" class="tile">
+      <span class="num">07 · Sub-pillar</span>
+      <h3>/internet/assistance/ — internet assistance hub</h3>
+      <p>Federal programs, ISP-specific table (Internet Essentials, AT&amp;T Access, Spectrum Assist, etc.), demographic targeting, state programs (NY ConnectALL, CA, MA), rural and tribal options.</p>
+      <span class="url">/internet/assistance/</span>
+    </a>
+
+    <a href="internet/assistance/what-replaced-acp/index.html" class="tile priority">
+      <span class="num">08 · Strategic page</span>
+      <h3>"What replaced ACP?" — the spec's #1 page</h3>
+      <p>Direct, declarative honest answer (nothing federal). Dark hero with quick-answer block. Timeline of ACP wind-down, the three categories of partial replacements (Lifeline, ISP-specific, state), who was affected, what to do, will it come back, FAQ. Optimized for LLM citation per spec.</p>
+      <span class="url">/internet/assistance/what-replaced-acp/</span>
+    </a>
+
+    <a href="internet/assistance/lifeline/index.html" class="tile">
+      <span class="num">09 · Pillar</span>
+      <h3>/internet/assistance/lifeline/ — Lifeline pillar</h3>
+      <p>Canonical Lifeline page (cell phone vertical will cross-link here). 11-section structure: what it is, $9.25/$34.25 tribal benefits, eligibility (135% FPL or categorical), how to apply via National Verifier, documents, participating providers, state variations, phone-vs-internet decision, related programs, FAQ.</p>
+      <span class="url">/internet/assistance/lifeline/</span>
+    </a>
+
+    <a href="qualify/index.html" class="tile priority">
+      <span class="num">10 · Calculator</span>
+      <h3>/qualify/ — eligibility calculator</h3>
+      <p>Working 7-step interactive flow. Real LIHEAP rule (150% FPL or 60% SMI or categorical), state config for 10 states, all 4 result paths (qualified/possible/alternative/crisis), TCPA-compliant lead form. Crisis path skips ahead. Categorical eligibility skips income step.</p>
+      <span class="url">/qualify/</span>
+    </a>
+
+    <a href="stack-recommendations.html" class="tile">
+      <span class="num">11 · Strategy doc</span>
+      <h3>Stack recommendations</h3>
+      <p>Defensible picks for every Section 22 open item: Vercel + Next.js + Sanity + HubSpot/Twilio Flex + CallRail + Statsig + Heap + Ahrefs. With rationale, costs (~$1K/mo MVP, ~$4K/mo Phase 3), staffing matrix, and three founder-level decisions left flagged not made.</p>
+      <span class="url">/stack-recommendations.html</span>
+    </a>
+
+    <div class="tile" style="background:var(--cream);border-style:dashed;color:var(--muted)">
+      <span class="num">— Not yet built</span>
+      <h3>What's still ahead</h3>
+      <p>Cell phone, gas, security, water vertical pillars; ISP review pages (Xfinity, Spectrum, AT&amp;T); more LIHEAP state pages (CA, NY, OH); paid landing funnel; trust pages (About, Editorial, How We Make Money, author bios); Spanish translation; full schema/CMS; backlink migration. Phase 1–4 work per spec.</p>
+    </div>
+
+  </div>
+
+  <div class="next-steps">
+    <h2>Suggested next sessions</h2>
+    <ol>
+      <li><strong>Stack pressure-test.</strong> Walk the recommendations doc with whoever will own dev hiring. Pick the picks that survive; replace the rest.</li>
+      <li><strong>Backlink migration kickoff.</strong> Pull the Wayback Machine snapshot for the previous owner of the domain, run an Ahrefs audit, draft URL mapping spreadsheet. Section 4 of the spec has the playbook.</li>
+      <li><strong>TCPA counsel engagement.</strong> $20–40K, 2-week turnaround. Block here before any lead-capture form goes live.</li>
+      <li><strong>CMS data model.</strong> Sketch the Sanity schemas for state config, FPL tables, programs, articles. The eligibility calculator's data model is the right starting point.</li>
+      <li><strong>Editorial style guide.</strong> Open item from Section 22. Tone, voice, byline standards, "last verified" cadence.</li>
+      <li><strong>Second vertical.</strong> Internet first per spec (post-ACP freshness window). Pillar + assistance hub + Lifeline + 1–2 ISP review pages.</li>
+    </ol>
+  </div>
+
+</div>
+
+</body>
+</html>
