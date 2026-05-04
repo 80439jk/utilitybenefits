@@ -58,6 +58,11 @@ Disallow: /preview/
 Disallow: /_tour
 Disallow: /_tour.html
 
+# Block /lp/ — paid landing-page funnels.
+# These are noindexed at the page level too, but Disallow keeps crawlers
+# from wasting budget on them and from surfacing them in organic search.
+Disallow: /lp/
+
 # Block legacy and stub paths
 Disallow: /tmp/
 Disallow: /test/

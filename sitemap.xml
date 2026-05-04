@@ -619,6 +619,36 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://utilitybenefits.vercel.app/legal/</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://utilitybenefits.vercel.app/legal/do-not-sell/</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://utilitybenefits.vercel.app/legal/privacy/</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://utilitybenefits.vercel.app/legal/tcpa/</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://utilitybenefits.vercel.app/legal/terms/</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://utilitybenefits.vercel.app/qualify/</loc>
     <lastmod>2026-05-04</lastmod>
     <changefreq>monthly</changefreq>
