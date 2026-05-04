@@ -11,137 +11,168 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/lp/_shared.css" />
 <style>
-  /* Thank-you page specific */
-  body{background:var(--cream)}
-  .ty-success-band{
-    background:linear-gradient(180deg,#E5F0EA 0%,#fff 100%);
-    padding:48px 0 24px;text-align:center;border-bottom:1px solid var(--border);
-  }
-  .ty-check{
-    width:74px;height:74px;border-radius:50%;background:var(--forest);
-    display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;
-    box-shadow:0 8px 24px rgba(63,125,88,.25);
-  }
-  .ty-check svg{width:38px;height:38px;color:#fff}
-  .ty-success-band h1{margin-bottom:6px;font-size:2.2rem}
-  .ty-success-band .sub{color:var(--muted);font-size:1.1rem;margin-bottom:18px;max-width:560px;margin-left:auto;margin-right:auto}
-  .ty-progress{
-    display:inline-flex;gap:0;align-items:center;background:#fff;border:1px solid var(--border);
-    padding:6px;border-radius:999px;font-size:.78rem;font-weight:600;color:var(--muted);
-    text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;
-  }
-  .ty-progress span{padding:6px 14px;border-radius:999px}
-  .ty-progress span.done{background:var(--forest);color:#fff}
-  .ty-progress span.now{background:var(--amber);color:var(--teal-deep)}
-  .ty-progress span.next{color:var(--muted)}
-  .ty-progress .arrow{padding:0 6px;color:var(--border-strong)}
+  body{background:#fff}
 
-  /* Case number */
-  .ty-case{
-    background:#fff;border:2px solid var(--teal);border-radius:14px;
-    padding:24px;margin:24px auto 0;max-width:480px;text-align:center;
-    box-shadow:0 6px 24px rgba(15,76,92,.08);
+  /* ========================================================
+     Above-the-fold hero — one tight band that holds it all:
+     success badge, h1, case number, phone CTA, availability
+     ======================================================== */
+  .ty-hero{
+    background:linear-gradient(180deg,#E5F0EA 0%,#F4FAF6 70%,#fff 100%);
+    border-bottom:1px solid var(--border);
+    padding:24px 0 32px;
+    text-align:center;
   }
-  .ty-case .label{
-    font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-    color:var(--muted);margin-bottom:6px;
-  }
-  .ty-case .number{
-    font-family:'Source Serif 4',serif;font-size:1.85rem;font-weight:700;
-    color:var(--teal-deep);font-variant-numeric:tabular-nums;letter-spacing:.04em;
-  }
-  .ty-case .meta{
-    font-size:.82rem;color:var(--muted);margin-top:8px;
-  }
-  .ty-case .meta strong{color:var(--ink)}
 
-  /* Big call CTA section */
-  .ty-call-section{
-    padding:48px 0 56px;text-align:center;background:#fff;
+  /* compact success badge (replaces tall checkmark) */
+  .ty-success{
+    display:inline-flex;align-items:center;gap:10px;
+    background:#fff;border:1px solid #C9E1CF;
+    padding:6px 14px 6px 8px;border-radius:999px;
+    font-size:.82rem;font-weight:600;color:var(--forest);
+    margin-bottom:14px;box-shadow:0 2px 8px rgba(63,125,88,.08);
   }
+  .ty-success .check{
+    width:22px;height:22px;border-radius:50%;background:var(--forest);
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+  .ty-success .check svg{width:13px;height:13px;color:#fff}
+
+  .ty-hero h1{font-size:1.85rem;margin-bottom:6px;line-height:1.1}
+  @media(max-width:560px){.ty-hero h1{font-size:1.5rem}}
+  .ty-hero .sub{
+    color:var(--muted);font-size:.98rem;margin:0 auto 18px;max-width:540px;
+  }
+  .ty-hero .sub strong{color:var(--ink);font-weight:600}
+
+  /* Case number — inline horizontal pill (compact) */
+  .ty-case-bar{
+    display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;
+    background:#fff;border:1.5px solid var(--teal);border-radius:10px;
+    padding:9px 16px;margin-bottom:18px;
+    font-size:.92rem;
+  }
+  .ty-case-bar .lbl{
+    color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+  .ty-case-bar .num{
+    font-family:'Source Serif 4',serif;font-size:1.15rem;font-weight:700;
+    color:var(--teal-deep);font-variant-numeric:tabular-nums;letter-spacing:.03em;
+  }
+  .ty-case-bar .meta{
+    color:var(--muted);font-size:.82rem;border-left:1px solid var(--border);
+    padding-left:10px;
+  }
+  .ty-case-bar .meta strong{color:var(--ink);font-weight:600}
+  @media(max-width:520px){
+    .ty-case-bar{flex-direction:column;gap:4px;padding:10px 14px}
+    .ty-case-bar .meta{border-left:0;padding-left:0}
+  }
+
+  /* Call action eyebrow */
   .ty-call-eyebrow{
     display:inline-block;background:#FFEFEA;color:#C44536;
-    font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-    padding:6px 14px;border-radius:999px;margin-bottom:14px;
+    font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:5px 12px;border-radius:999px;margin-bottom:10px;
   }
   .ty-call-eyebrow .pulse{
-    display:inline-block;width:8px;height:8px;background:#C44536;border-radius:50%;
+    display:inline-block;width:7px;height:7px;background:#C44536;border-radius:50%;
     margin-right:6px;animation:pulse 1.4s infinite;
   }
   @keyframes pulse{
     0%,100%{opacity:1;transform:scale(1)}
     50%{opacity:.45;transform:scale(.85)}
   }
-  .ty-call-section h2{font-size:1.8rem;margin-bottom:12px}
-  .ty-call-section .lede{
-    color:var(--muted);font-size:1.05rem;margin-bottom:28px;
-    max-width:580px;margin-left:auto;margin-right:auto;
+
+  .ty-action-line{
+    font-family:'Source Serif 4',serif;font-weight:600;font-size:1.1rem;
+    color:var(--teal-deep);margin-bottom:14px;
   }
+  @media(max-width:560px){.ty-action-line{font-size:.98rem}}
+
+  /* The big phone button — the dominant element above the fold */
   .ty-phone-button{
     display:inline-flex;flex-direction:column;align-items:center;
     background:var(--amber);color:var(--teal-deep);
-    padding:18px 40px 16px;border-radius:14px;
+    padding:14px 36px 12px;border-radius:14px;
     font-family:'Source Serif 4',serif;font-weight:700;
     text-decoration:none;
-    box-shadow:0 8px 32px rgba(244,162,97,.4);
+    box-shadow:0 8px 28px rgba(244,162,97,.45);
     transition:background .15s,transform .1s;
     font-variant-numeric:tabular-nums;
+    margin-bottom:14px;
   }
   .ty-phone-button:hover{background:var(--amber-dark);text-decoration:none}
   .ty-phone-button:active{transform:translateY(1px)}
   .ty-phone-button .label{
-    font-family:'Inter',sans-serif;font-size:.78rem;font-weight:700;
-    text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;opacity:.8;
+    font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;opacity:.78;
   }
-  .ty-phone-button .num{font-size:2.4rem;line-height:1}
-  @media(max-width:560px){.ty-phone-button .num{font-size:1.9rem}}
+  .ty-phone-button .num{font-size:2.2rem;line-height:1}
+  @media(max-width:560px){.ty-phone-button .num{font-size:1.85rem}}
 
+  /* Availability strip — single line */
   .ty-availability{
-    margin-top:20px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;
-    color:var(--muted);font-size:.92rem;
+    display:inline-flex;gap:16px;flex-wrap:wrap;justify-content:center;
+    color:var(--muted);font-size:.86rem;
   }
   .ty-availability strong{color:var(--ink);font-weight:600}
   .ty-availability .live-dot{
-    display:inline-block;width:8px;height:8px;background:var(--forest);
-    border-radius:50%;margin-right:6px;animation:pulse 2s infinite;
+    display:inline-block;width:7px;height:7px;background:var(--forest);
+    border-radius:50%;margin-right:6px;animation:pulse 2s infinite;vertical-align:1px;
   }
+  .ty-availability .sep{color:var(--border-strong)}
+  @media(max-width:520px){.ty-availability{font-size:.82rem;gap:10px}}
 
-  /* What your case manager will do */
-  .ty-helps{padding:48px 0;background:var(--cream);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-  .ty-helps h2{font-size:1.4rem;margin-bottom:24px;text-align:center}
+  /* ========================================================
+     Below-the-fold: secondary content
+     ======================================================== */
+  .ty-helps{
+    padding:36px 0;background:var(--cream);
+    border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  }
+  .ty-helps h2{font-size:1.25rem;margin-bottom:20px;text-align:center}
   .ty-helps-list{
     max-width:680px;margin:0 auto;background:#fff;border:1px solid var(--border);
-    border-radius:12px;padding:8px 0;
+    border-radius:12px;padding:6px 0;
   }
   .ty-helps-list .item{
-    display:flex;gap:14px;padding:16px 24px;border-bottom:1px solid var(--border);
+    display:flex;gap:14px;padding:14px 22px;border-bottom:1px solid var(--border);
   }
   .ty-helps-list .item:last-child{border-bottom:0}
   .ty-helps-list .icon{
-    flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#E5F0EA;
+    flex-shrink:0;width:28px;height:28px;border-radius:50%;background:#E5F0EA;
     color:var(--forest);display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:.85rem;
+    font-weight:700;font-size:.82rem;
   }
-  .ty-helps-list .text{font-size:.97rem;line-height:1.5}
+  .ty-helps-list .text{font-size:.94rem;line-height:1.5}
   .ty-helps-list .text strong{color:var(--teal-deep);display:block;margin-bottom:2px}
 
-  /* Callback alt */
-  .ty-callback{padding:36px 0;text-align:center;background:#fff}
-  .ty-callback p{color:var(--muted);font-size:.95rem;margin-bottom:8px}
-  .ty-callback a{font-weight:600}
-  .ty-callback .small{font-size:.82rem;color:var(--muted);margin-top:6px}
+  /* Mid-page secondary CTA so users who scroll have another path */
+  .ty-secondary-cta{
+    padding:28px 0;text-align:center;background:#fff;
+    border-bottom:1px solid var(--border);
+  }
+  .ty-secondary-cta p{color:var(--muted);font-size:.95rem;margin-bottom:8px}
+  .ty-secondary-cta a{font-weight:600}
+  .ty-secondary-cta .small{font-size:.8rem;color:var(--muted);margin-top:6px}
 
-  /* Trust strip recycled */
-  .ty-trust{padding:32px 0;background:var(--cream);border-top:1px solid var(--border)}
-  .ty-trust-row{display:flex;justify-content:space-around;flex-wrap:wrap;gap:18px;text-align:center}
+  .ty-trust{padding:24px 0;background:var(--cream);border-top:1px solid var(--border)}
+  .ty-trust-row{
+    display:flex;justify-content:space-around;flex-wrap:wrap;gap:18px;text-align:center;
+  }
   .ty-trust-row .item{flex:1;min-width:140px}
-  .ty-trust-row .num{font-family:'Source Serif 4',serif;font-size:1.3rem;font-weight:700;color:var(--teal-deep);display:block}
-  .ty-trust-row .lbl{color:var(--muted);font-size:.82rem;display:block;margin-top:2px}
+  .ty-trust-row .num{
+    font-family:'Source Serif 4',serif;font-size:1.15rem;font-weight:700;
+    color:var(--teal-deep);display:block;
+  }
+  .ty-trust-row .lbl{color:var(--muted);font-size:.78rem;display:block;margin-top:2px}
 </style>
 </head>
 <body>
 
-<!-- Stripped header -->
+<!-- Compact header -->
 <header class="lp-header">
   <div class="container">
     <a href="/" class="lp-logo"><span class="mark">UB</span> UtilityBenefits</a>
@@ -149,56 +180,52 @@
   </div>
 </header>
 
-<!-- Success band -->
-<section class="ty-success-band">
+<!-- ============================================================
+     ABOVE-THE-FOLD HERO
+     Order: success badge → h1 → case# bar → phone CTA → hours
+     ============================================================ -->
+<section class="ty-hero">
   <div class="container-narrow">
-    <div class="ty-progress">
-      <span class="done">Step 1 — Submitted</span>
-      <span class="arrow">&rsaquo;</span>
-      <span class="now">Step 2 — Speak with case manager</span>
-      <span class="arrow">&rsaquo;</span>
-      <span class="next">Step 3 — Enrollment</span>
-    </div>
-    <div class="ty-check">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 6L9 17l-5-5"/>
-      </svg>
-    </div>
-    <h1>Application Received</h1>
-    <p class="sub">A benefits case manager has been assigned to walk you through your eligibility and complete enrollment. <strong id="ty-state-line"></strong></p>
 
-    <!-- Case number -->
-    <div class="ty-case">
-      <div class="label">Your Case Number</div>
-      <div class="number" id="ty-case-number">UB-2026-0000000</div>
-      <div class="meta">Filed <strong id="ty-filed-time">today</strong> &middot; Expires in 48 hours</div>
+    <span class="ty-success">
+      <span class="check">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </span>
+      Application Received
+    </span>
+
+    <h1>Call now to complete your enrollment</h1>
+    <p class="sub">A benefits case manager has been assigned to your file. <strong id="ty-state-line">They'll confirm what you qualify for and walk you through the application live.</strong></p>
+
+    <!-- Compact horizontal case-number bar -->
+    <div class="ty-case-bar">
+      <span class="lbl">Case #</span>
+      <span class="num" id="ty-case-number">UB-2026-0000000</span>
+      <span class="meta">Filed <strong id="ty-filed-time">today</strong> &middot; Held 48 hrs</span>
     </div>
-  </div>
-</section>
 
-<!-- Big call CTA -->
-<section class="ty-call-section">
-  <div class="container-narrow">
-    <span class="ty-call-eyebrow"><span class="pulse"></span> Call now &mdash; agent waiting</span>
-    <h2>Speak with your case manager to complete enrollment</h2>
-    <p class="lede">
-      To finish your application and have your case manager confirm which programs you qualify for, please call the number below and reference your case number above. <strong>Your case is held for 48 hours.</strong>
-    </p>
-
-    <a href="tel:18335550143" class="ty-phone-button" id="ty-call-cta">
-      <span class="label">Call your case manager</span>
-      <span class="num">1-833-555-0143</span>
-    </a>
+    <!-- Action eyebrow + phone CTA -->
+    <div>
+      <span class="ty-call-eyebrow"><span class="pulse"></span> Agent waiting &mdash; call now</span>
+      <div class="ty-action-line">Reference your case number when you call:</div>
+      <a href="tel:18335550143" class="ty-phone-button" id="ty-call-cta">
+        <span class="label">Call your case manager</span>
+        <span class="num">1-833-555-0143</span>
+      </a>
+    </div>
 
     <div class="ty-availability">
       <span><span class="live-dot"></span><strong>Agents available now</strong></span>
-      <span><strong>Hours:</strong> 8am &ndash; 9pm ET, 7 days/week</span>
-      <span><strong>Average call:</strong> 4 minutes</span>
+      <span class="sep">|</span>
+      <span><strong>8am &ndash; 9pm ET, 7 days</strong></span>
+      <span class="sep">|</span>
+      <span><strong>~4 min</strong> avg call</span>
     </div>
+
   </div>
 </section>
 
-<!-- What your case manager will do -->
+<!-- What your case manager will help with -->
 <section class="ty-helps">
   <div class="container-narrow">
     <h2>What your case manager will help with</h2>
@@ -214,7 +241,7 @@
         <div class="icon">2</div>
         <div class="text">
           <strong>Walk you through the application</strong>
-          Whether the program needs a state-agency form, a utility hardship application, or a Lifeline carrier sign-up — your case manager handles the steps live with you on the phone.
+          Whether the program needs a state-agency form, a utility hardship application, or a Lifeline carrier sign-up &mdash; your case manager handles the steps live with you on the phone.
         </div>
       </div>
       <div class="item">
@@ -235,8 +262,8 @@
   </div>
 </section>
 
-<!-- Callback alt -->
-<section class="ty-callback">
+<!-- Secondary CTA -->
+<section class="ty-secondary-cta">
   <div class="container-narrow">
     <p>Can't call right now? <a href="tel:18335550143">Tap to call</a> when you're ready &mdash; reference case <strong id="ty-case-inline">UB-2026-0000000</strong>.</p>
     <p class="small">Your case is held for 48 hours. After that, you may need to re-submit the eligibility form.</p>
@@ -277,20 +304,14 @@
 </footer>
 
 <script>
-  // ============================================================
-  // Hydrate the page from URL params + sessionStorage:
-  //   ?case=UB-2026-XXXXXXX  (preferred, from form interceptor)
-  //   ?zip=NNNNN
-  //   ?lp=<slug>
-  // If no case param, generate a fresh one (so even direct hits look right).
-  // ============================================================
+  // Hydrate from URL params (case, zip, lp, v, utm_*).
+  // If no case param, generate one (so direct hits still look right).
   (function(){
     var params = new URLSearchParams(window.location.search);
 
-    // ------ Case number ------
+    // Case number
     var caseNum = params.get('case');
     if (!caseNum || !/^UB-2026-\d{7}$/.test(caseNum)) {
-      // Generate UB-2026-NNNNNNN (7 digits derived from time + random)
       var seed = Date.now() % 1000000;
       var rand = Math.floor(Math.random() * 9000) + 1000;
       var n = String(seed).padStart(4,'0') + String(rand).slice(-3);
@@ -300,17 +321,16 @@
     document.getElementById('ty-case-number').textContent = caseNum;
     document.getElementById('ty-case-inline').textContent = caseNum;
 
-    // ------ Filed time ------
+    // Filed time
     var now = new Date();
     var hh = now.getHours();
     var mm = String(now.getMinutes()).padStart(2,'0');
     var ampm = hh >= 12 ? 'PM' : 'AM';
     var hh12 = hh % 12 || 12;
     document.getElementById('ty-filed-time').textContent =
-      'today at ' + hh12 + ':' + mm + ' ' + ampm + ' ET';
+      hh12 + ':' + mm + ' ' + ampm + ' ET';
 
-    // ------ State personalization (from zip) ------
-    // Quick zip->state map for top-traffic states; expand later if needed
+    // State personalization (zip prefix → region)
     var ZIP_PREFIX_TO_STATE = {
       '0':'MA/NH/ME','1':'NY/PA','2':'VA/DC/MD','3':'FL/GA','4':'KY/IN/MI/OH',
       '5':'IA/MN/WI','6':'IL/KS/MO','7':'TX/LA','8':'CO/AZ/NM/UT','9':'CA/OR/WA'
@@ -324,7 +344,7 @@
       }
     }
 
-    // ------ GA4 / dataLayer ------
+    // GA4 / dataLayer
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       'event': 'lp_thank_you_view',
@@ -336,7 +356,7 @@
       'utm_campaign': params.get('utm_campaign') || ''
     });
 
-    // ------ Phone-click tracking ------
+    // Phone-click tracking
     document.querySelectorAll('a[href^="tel:"]').forEach(function(a){
       a.addEventListener('click', function(){
         window.dataLayer.push({
@@ -347,7 +367,6 @@
       });
     });
 
-    // ------ Persist case number for cross-page reference ------
     try { sessionStorage.setItem('ub_case', caseNum); } catch(e) {}
   })();
 </script>
