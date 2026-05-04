@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Application Received — Call Your Case Manager Now | UtilityBenefits</title>
+<meta name="description" content="Your benefits application has been received. Call your assigned case manager now to confirm eligibility and complete enrollment." />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700;8..60,800&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   V3 — "Editorial" / premium magazine feel
+   - Massive serif typography with tight tracking
+   - Deep teal + warm cream palette
+   - Hairline rules separate sections
+   - Single column, generous vertical rhythm
+   - Mobile: full-bleed bold typography
+   ============================================================ */
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:#FBF8F3;
+  color:#0E1A24;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+}
+
+a{color:inherit}
+.container{max-width:760px;margin:0 auto;padding:0 28px}
+@media(max-width:560px){.container{padding:0 22px}}
+
+/* ----------- Top hairline header ----------- */
+.ed-header{
+  border-bottom:1px solid #DDD3C0;
+  padding:18px 0;background:#FBF8F3;
+  position:sticky;top:0;z-index:20;
+}
+.ed-header .container{display:flex;align-items:center;justify-content:space-between}
+.ed-logo{
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.25rem;
+  color:#0E1A24;letter-spacing:-.01em;text-decoration:none;
+  display:flex;align-items:center;gap:9px;
+}
+.ed-logo .mark{
+  width:28px;height:28px;background:#0E1A24;color:#FBF8F3;
+  border-radius:6px;display:inline-flex;align-items:center;justify-content:center;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:0;
+}
+.ed-header .phone{
+  color:#0E1A24;font-weight:600;font-size:.92rem;
+  font-variant-numeric:tabular-nums;text-decoration:none;
+  border-bottom:2px solid #B8845A;padding-bottom:1px;
+}
+.ed-header .phone:hover{border-bottom-color:#0E1A24}
+
+/* ----------- Eyebrow line ----------- */
+.eyebrow-line{
+  border-bottom:1px solid #DDD3C0;padding:24px 0 22px;background:#FBF8F3;
+}
+.eyebrow-line .container{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  font-size:.74rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+}
+.eyebrow-line .left{color:#3F7D58;display:inline-flex;align-items:center;gap:8px}
+.eyebrow-line .left .check{
+  width:18px;height:18px;border-radius:50%;background:#3F7D58;color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.eyebrow-line .left .check svg{width:11px;height:11px}
+.eyebrow-line .right{color:#7A6E5A}
+
+/* ----------- Hero ----------- */
+.ed-hero{
+  padding:48px 0 28px;background:#FBF8F3;text-align:center;
+}
+@media(min-width:720px){.ed-hero{padding:64px 0 40px}}
+
+.ed-hero h1{
+  font-family:'Source Serif 4',serif;font-weight:700;
+  font-size:clamp(2rem, 6.5vw, 3.4rem);
+  line-height:1.05;letter-spacing:-.025em;color:#0E1A24;
+  margin:0 auto 18px;max-width:680px;
+}
+.ed-hero h1 em{
+  font-style:italic;font-weight:600;color:#B8845A;
+  font-feature-settings:"swsh" on, "salt" on;
+}
+.ed-hero .lede{
+  font-family:'Source Serif 4',serif;
+  font-size:clamp(1.05rem,2.6vw,1.18rem);font-weight:400;
+  color:#3F4855;max-width:520px;margin:0 auto;line-height:1.55;
+}
+.ed-hero .lede strong{color:#0E1A24;font-weight:600}
+
+/* ----------- Case number — oversized typographic display ----------- */
+.case-mono{
+  margin:36px 0 0;text-align:center;
+  border-top:1px solid #DDD3C0;border-bottom:1px solid #DDD3C0;
+  padding:24px 0 22px;background:#FBF8F3;
+}
+.case-mono .lbl{
+  font-size:.7rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:#7A6E5A;display:block;margin-bottom:6px;
+}
+.case-mono .num{
+  font-family:'Source Serif 4',serif;font-weight:600;
+  font-size:clamp(1.7rem,5.5vw,2.3rem);
+  color:#0E1A24;font-variant-numeric:tabular-nums;
+  letter-spacing:.02em;line-height:1;display:block;margin-bottom:8px;
+}
+.case-mono .meta{
+  font-size:.82rem;color:#7A6E5A;letter-spacing:.04em;
+}
+.case-mono .meta strong{color:#0E1A24;font-weight:600}
+
+/* ----------- Big call CTA ----------- */
+.call-block{
+  padding:40px 0 48px;text-align:center;background:#FBF8F3;
+}
+@media(min-width:720px){.call-block{padding:56px 0 64px}}
+.call-block .label{
+  font-size:.74rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:#B8845A;margin-bottom:14px;
+}
+.call-block .label .pulse{
+  display:inline-block;width:7px;height:7px;background:#3F7D58;border-radius:50%;
+  margin-right:8px;animation:pulse 1.6s infinite;vertical-align:1px;
+  box-shadow:0 0 0 0 rgba(63,125,88,.7);
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(63,125,88,.7)}
+  60%{box-shadow:0 0 0 9px rgba(63,125,88,0)}
+}
+
+/* The phone number is the typographic centerpiece */
+.phone-display{
+  display:inline-flex;flex-direction:column;align-items:center;
+  text-decoration:none;color:#0E1A24;
+  padding:14px 4px;
+  transition:opacity .15s ease;
+}
+.phone-display:hover{text-decoration:none;opacity:.85}
+.phone-display .num{
+  font-family:'Source Serif 4',serif;font-weight:700;
+  font-size:clamp(2.6rem,9vw,4.2rem);
+  letter-spacing:-.02em;line-height:1;color:#0E1A24;
+  font-variant-numeric:tabular-nums;
+  border-bottom:3px solid #B8845A;padding-bottom:6px;
+}
+.phone-display .ask{
+  font-family:'Inter',sans-serif;font-size:.86rem;
+  font-weight:500;color:#3F4855;margin-top:14px;letter-spacing:.01em;
+}
+.phone-display .ask strong{color:#0E1A24;font-weight:700}
+
+.call-block .hours{
+  margin-top:24px;font-size:.84rem;color:#7A6E5A;letter-spacing:.04em;
+}
+.call-block .hours strong{color:#0E1A24;font-weight:600}
+
+/* ----------- Below the fold: 4 columns ----------- */
+.help-block{
+  background:#fff;border-top:1px solid #DDD3C0;padding:48px 0;
+}
+@media(min-width:720px){.help-block{padding:64px 0}}
+.help-block h2{
+  font-family:'Source Serif 4',serif;font-weight:700;
+  font-size:clamp(1.4rem,3.4vw,1.7rem);
+  letter-spacing:-.015em;text-align:center;color:#0E1A24;margin:0 0 36px;
+}
+.help-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:32px 28px;
+}
+@media(max-width:560px){.help-grid{grid-template-columns:1fr;gap:28px}}
+.help-grid .item{padding-top:18px;border-top:1px solid #DDD3C0;position:relative}
+.help-grid .num{
+  font-family:'Source Serif 4',serif;font-weight:700;
+  font-size:.82rem;letter-spacing:.18em;color:#B8845A;
+  text-transform:uppercase;display:block;margin-bottom:8px;
+}
+.help-grid h3{
+  font-family:'Source Serif 4',serif;font-weight:700;
+  font-size:1.08rem;letter-spacing:-.01em;color:#0E1A24;margin:0 0 6px;
+}
+.help-grid p{
+  font-size:.94rem;color:#3F4855;line-height:1.55;margin:0;
+}
+
+/* ----------- Trust strip — minimal ----------- */
+.trust-row{
+  background:#FBF8F3;border-top:1px solid #DDD3C0;padding:28px 0;
+}
+.trust-row .container{
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;
+  align-items:center;
+}
+.trust-row .item{flex:1;min-width:140px;text-align:center}
+.trust-row .num{
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:1rem;color:#0E1A24;
+  display:block;
+}
+.trust-row .lbl{font-size:.76rem;color:#7A6E5A;display:block;margin-top:2px;letter-spacing:.04em}
+
+/* ----------- TCPA footer ----------- */
+.ed-footer{
+  background:#0E1A24;color:#9BA8B5;
+  padding:36px 0 32px;font-size:.78rem;line-height:1.5;
+}
+.ed-footer p{margin:0 0 10px}
+.ed-footer strong{color:#fff}
+.ed-footer a{color:#C9D2DB;text-decoration:underline}
+.ed-footer .copyright{
+  margin-top:14px;padding-top:12px;border-top:1px solid #1F2A38;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  color:#5C6A78;font-size:.72rem;
+}
+.ed-footer .copyright a{margin-left:14px;color:#9BA8B5}
+@media(max-width:520px){
+  .ed-footer .copyright{flex-direction:column}
+  .ed-footer .copyright a{margin:0 14px 0 0}
+}
+
+/* ----------- Mobile sticky bottom CTA ----------- */
+.sticky-bar{display:none}
+@media(max-width:760px){
+  .ed-hero,.call-block{padding-bottom:32px}
+  body{padding-bottom:0}
+  .ed-footer{padding-bottom:96px}    /* room for sticky bar */
+  .sticky-bar{
+    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:#0E1A24;color:#fff;
+    padding:10px 14px env(safe-area-inset-bottom,12px);
+    gap:10px;align-items:center;
+    box-shadow:0 -4px 20px rgba(0,0,0,.18);
+    border-top:1px solid #1F2A38;
+  }
+  .sticky-bar .case-mini{flex:1;min-width:0;color:#9BA8B5;font-size:.7rem;line-height:1.2}
+  .sticky-bar .case-mini strong{
+    display:block;color:#fff;font-family:'Source Serif 4',serif;
+    font-weight:700;font-size:.92rem;letter-spacing:.02em;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .sticky-bar a.btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#FBF8F3;color:#0E1A24;
+    padding:11px 18px;border-radius:6px;font-weight:700;
+    font-family:'Source Serif 4',serif;font-size:.96rem;
+    font-variant-numeric:tabular-nums;text-decoration:none;flex-shrink:0;
+  }
+  .sticky-bar a.btn svg{width:14px;height:14px}
+}
+
+/* ----------- Mobile-specific tightening ----------- */
+@media(max-width:560px){
+  .ed-header{padding:14px 0}
+  .ed-hero{padding:36px 0 22px}
+  .case-mono{padding:20px 0}
+  .call-block{padding:32px 0 36px}
+  .phone-display .num{border-bottom-width:2px;padding-bottom:4px}
+  .help-block{padding:36px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- Sticky logo header -->
+<header class="ed-header">
+  <div class="container">
+    <a href="/" class="ed-logo"><span class="mark">UB</span> UtilityBenefits</a>
+    <a href="tel:18335550143" class="phone">1-833-555-0143</a>
+  </div>
+</header>
+
+<!-- Eyebrow strip with success + meta -->
+<div class="eyebrow-line">
+  <div class="container">
+    <span class="left">
+      <span class="check">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </span>
+      Step 1 of 3 — Submitted
+    </span>
+    <span class="right" id="ty-eyebrow-meta">Filed today &middot; Held 48 hours</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     Hero — large editorial headline
+     ============================================================ -->
+<section class="ed-hero">
+  <div class="container">
+    <h1>Your application is in. <em>Now call your case manager.</em></h1>
+    <p class="lede">A specialist has been assigned to confirm what programs you qualify for and walk you through enrollment. <strong id="ty-state-line">It takes about four minutes.</strong></p>
+  </div>
+</section>
+
+<!-- Oversized case number block (between hero and CTA) -->
+<div class="container">
+  <div class="case-mono">
+    <span class="lbl">Your Case Number</span>
+    <span class="num" id="ty-case-number">UB-2026-0000000</span>
+    <span class="meta">Filed <strong id="ty-filed-time">today</strong> &middot; Held for 48 hours</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     Phone CTA — oversized typographic anchor
+     ============================================================ -->
+<section class="call-block">
+  <div class="container">
+    <div class="label"><span class="pulse"></span>Agents available now</div>
+    <a href="tel:18335550143" class="phone-display" id="ty-call-cta">
+      <span class="num">1&middot;833&middot;555&middot;0143</span>
+      <span class="ask">Tap to call &middot; reference case <strong id="ty-case-inline">UB-2026-0000000</strong></span>
+    </a>
+    <div class="hours">
+      <strong>8 am &ndash; 9 pm ET</strong>, 7 days a week &nbsp;&middot;&nbsp; <strong>~4 minute</strong> average call
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     What your case manager will help with — 4-cell editorial grid
+     ============================================================ -->
+<section class="help-block">
+  <div class="container">
+    <h2>What your case manager will help with</h2>
+    <div class="help-grid">
+      <div class="item">
+        <span class="num">No. 01</span>
+        <h3>Confirm what you qualify for</h3>
+        <p>Federal programs (Lifeline, LIHEAP, Medicaid waivers) plus state-specific supplements based on your household.</p>
+      </div>
+      <div class="item">
+        <span class="num">No. 02</span>
+        <h3>Walk you through enrollment</h3>
+        <p>State-agency forms, utility hardship apps, Lifeline carrier sign-up — handled live with you on the phone.</p>
+      </div>
+      <div class="item">
+        <span class="num">No. 03</span>
+        <h3>Coordinate with the right office</h3>
+        <p>We hand the file to whichever agency processes it. You don't have to chase paperwork across departments.</p>
+      </div>
+      <div class="item">
+        <span class="num">No. 04</span>
+        <h3>Email a copy for your records</h3>
+        <p>A written summary, your case manager's name, and what to do if anything needs follow-up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust strip -->
+<section class="trust-row">
+  <div class="container">
+    <div class="item"><span class="num">100%</span><span class="lbl">Free service</span></div>
+    <div class="item"><span class="num">Independent</span><span class="lbl">Not a government agency</span></div>
+    <div class="item"><span class="num">Encrypted</span><span class="lbl">Info stays secure</span></div>
+    <div class="item"><span class="num">No spam</span><span class="lbl">We don't resell your info</span></div>
+  </div>
+</section>
+
+<!-- TCPA footer -->
+<footer class="ed-footer">
+  <div class="container">
+    <p>
+      <strong>TCPA notice.</strong> By submitting your application, you consented to receive autodialed and pre-recorded calls and SMS from UtilityBenefits.com and its partner network at the phone number you provided, including for marketing purposes. Reply STOP to opt out. See our <a href="/legal/privacy/">Privacy Policy</a> and <a href="/legal/tcpa/">TCPA Notice</a>.
+    </p>
+    <p>
+      UtilityBenefits.com is an independent comparison and information service. We are not a government agency and not affiliated with the FCC, USAC, Lifeline, LIHEAP, or Medicaid. The "case number" above is an internal tracking reference; it is not a government file or claim number.
+    </p>
+    <div class="copyright">
+      <span>&copy; 2026 UtilityBenefits.com</span>
+      <span>
+        <a href="/legal/privacy/">Privacy</a>
+        <a href="/legal/terms/">Terms</a>
+        <a href="/legal/tcpa/">TCPA</a>
+        <a href="/legal/do-not-sell/">Do Not Sell</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile sticky bar -->
+<div class="sticky-bar">
+  <div class="case-mini">Case #<strong id="ty-case-sticky">UB-2026-0000000</strong></div>
+  <a href="tel:18335550143" class="btn" id="ty-call-sticky">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+    Call now
+  </a>
+</div>
+
+<script>
+  (function(){
+    var params = new URLSearchParams(window.location.search);
+
+    // Case number
+    var caseNum = params.get('case');
+    if (!caseNum || !/^UB-2026-\d{7}$/.test(caseNum)) {
+      var seed = Date.now() % 1000000;
+      var rand = Math.floor(Math.random() * 9000) + 1000;
+      var n = String(seed).padStart(4,'0') + String(rand).slice(-3);
+      caseNum = 'UB-2026-' + n.slice(-7);
+    }
+    ['ty-case-number','ty-case-inline','ty-case-sticky'].forEach(function(id){
+      var el = document.getElementById(id); if (el) el.textContent = caseNum;
+    });
+
+    // Filed time
+    var now = new Date();
+    var hh = now.getHours(); var mm = String(now.getMinutes()).padStart(2,'0');
+    var ampm = hh >= 12 ? 'PM' : 'AM'; var hh12 = hh % 12 || 12;
+    var t = hh12 + ':' + mm + ' ' + ampm + ' ET';
+    var ft = document.getElementById('ty-filed-time'); if (ft) ft.textContent = t;
+    var em = document.getElementById('ty-eyebrow-meta');
+    if (em) em.textContent = 'Filed ' + t + ' · Held 48 hours';
+
+    // State personalization
+    var ZIP_PREFIX_TO_STATE = {
+      '0':'MA/NH/ME','1':'NY/PA','2':'VA/DC/MD','3':'FL/GA','4':'KY/IN/MI/OH',
+      '5':'IA/MN/WI','6':'IL/KS/MO','7':'TX/LA','8':'CO/AZ/NM/UT','9':'CA/OR/WA'
+    };
+    var zip = params.get('zip') || '';
+    if (/^\d{5}$/.test(zip)) {
+      var region = ZIP_PREFIX_TO_STATE[zip[0]];
+      if (region) {
+        var sl = document.getElementById('ty-state-line');
+        if (sl) sl.textContent = 'A specialist familiar with ' + region + ' programs will be on the line.';
+      }
+    }
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'event':'lp_thank_you_view','design':'v3_editorial',
+      'case_number':caseNum,
+      'lp_slug':params.get('lp')||'',
+      'lp_variant':params.get('v')||sessionStorage.getItem('lp_v')||'A',
+      'utm_source':params.get('utm_source')||'',
+      'utm_medium':params.get('utm_medium')||'',
+      'utm_campaign':params.get('utm_campaign')||''
+    });
+    document.querySelectorAll('a[href^="tel:"]').forEach(function(a){
+      a.addEventListener('click', function(){
+        window.dataLayer.push({
+          'event':'lp_thank_you_call','design':'v3_editorial',
+          'case_number':caseNum,'cta_location':a.id||'header_or_footer'
+        });
+      });
+    });
+    try { sessionStorage.setItem('ub_case', caseNum); } catch(e) {}
+  })();
+</script>
+
+</body>
+</html>

@@ -28,6 +28,8 @@ Disallow: /qualify/submit
 Disallow: /qualify/submit/
 Disallow: /qualify/result
 Disallow: /qualify/thank-you/
+Disallow: /qualify/thank-you-v2/
+Disallow: /qualify/thank-you-v3/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /_next/

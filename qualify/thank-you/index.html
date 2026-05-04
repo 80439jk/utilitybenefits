@@ -168,6 +168,69 @@
     color:var(--teal-deep);display:block;
   }
   .ty-trust-row .lbl{color:var(--muted);font-size:.78rem;display:block;margin-top:2px}
+
+  /* ========================================================
+     Mobile-first fixes
+     ======================================================== */
+  @media(max-width:560px){
+    .lp-header{padding:10px 0}
+    .lp-header .container{padding:0 16px}
+    .lp-header .phone{font-size:.85rem}
+    .ty-hero{padding:18px 0 100px}    /* extra bottom for sticky bar */
+    .ty-hero .container-narrow{padding:0 16px}
+    .ty-success{font-size:.78rem;padding:5px 12px 5px 6px;margin-bottom:12px}
+    .ty-success .check{width:20px;height:20px}
+    .ty-hero h1{font-size:1.45rem;margin-bottom:8px}
+    .ty-hero .sub{font-size:.92rem;margin-bottom:14px}
+    .ty-case-bar{margin-bottom:14px;padding:10px 14px;width:100%;justify-content:center}
+    .ty-case-bar .num{font-size:1.05rem}
+    .ty-call-eyebrow{font-size:.7rem;padding:4px 10px}
+    .ty-action-line{font-size:.92rem;margin-bottom:10px}
+    .ty-phone-button{padding:12px 28px;width:100%;max-width:340px}
+    .ty-availability{font-size:.78rem;gap:8px;flex-direction:column}
+    .ty-availability .sep{display:none}
+    .ty-helps,.ty-secondary-cta,.ty-trust{padding:24px 0}
+    .ty-helps .container-narrow,.ty-secondary-cta .container-narrow,
+      .ty-trust .container-narrow{padding:0 16px}
+    .ty-helps-list .item{padding:12px 16px}
+    .ty-helps-list .text{font-size:.88rem}
+  }
+
+  /* Sticky bottom call bar — mobile only.
+     When the user scrolls past the hero, this keeps a one-tap call
+     button always reachable. Hidden on desktop where the hero CTA
+     stays in view. */
+  .ty-sticky-call{display:none}
+  @media(max-width:760px){
+    .ty-sticky-call{
+      display:flex;
+      position:fixed;left:0;right:0;bottom:0;z-index:100;
+      background:var(--paper);
+      border-top:1px solid var(--border);
+      box-shadow:0 -4px 20px rgba(8,43,54,.12);
+      padding:10px 14px env(safe-area-inset-bottom,10px);
+      gap:10px;align-items:center;
+    }
+    .ty-sticky-call .case-mini{
+      flex:1;min-width:0;font-size:.74rem;color:var(--muted);line-height:1.25;
+    }
+    .ty-sticky-call .case-mini strong{
+      display:block;color:var(--teal-deep);font-family:'Source Serif 4',serif;
+      font-size:.92rem;font-variant-numeric:tabular-nums;letter-spacing:.02em;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .ty-sticky-call a.call{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--amber);color:var(--teal-deep);
+      padding:12px 18px;border-radius:10px;font-weight:700;
+      font-family:'Source Serif 4',serif;font-size:1.02rem;
+      font-variant-numeric:tabular-nums;text-decoration:none;
+      box-shadow:0 4px 14px rgba(244,162,97,.4);
+      flex-shrink:0;white-space:nowrap;
+    }
+    .ty-sticky-call a.call:hover{background:var(--amber-dark);text-decoration:none}
+    .ty-sticky-call a.call svg{width:16px;height:16px;display:inline-block}
+  }
 </style>
 </head>
 <body>
@@ -282,6 +345,17 @@
   </div>
 </section>
 
+<!-- Mobile sticky bottom call bar -->
+<div class="ty-sticky-call" role="region" aria-label="Call your case manager">
+  <div class="case-mini">
+    Case #<strong id="ty-case-sticky">UB-2026-0000000</strong>
+  </div>
+  <a href="tel:18335550143" class="call" id="ty-call-sticky">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+    Call now
+  </a>
+</div>
+
 <!-- Stripped footer with TCPA -->
 <footer class="lp-footer">
   <div class="container">
@@ -320,6 +394,8 @@
     }
     document.getElementById('ty-case-number').textContent = caseNum;
     document.getElementById('ty-case-inline').textContent = caseNum;
+    var stickyEl = document.getElementById('ty-case-sticky');
+    if (stickyEl) stickyEl.textContent = caseNum;
 
     // Filed time
     var now = new Date();
