@@ -2,107 +2,177 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Eligibility Check — UtilityBenefits.com</title>
 <meta name="description" content="60-second check across LIHEAP, Lifeline, state programs (CARE/PIPP/USF), and utility hardship funds. State-aware rules, no payment info required." />
+<link rel="canonical" href="https://utilitybenefits.com/qualify/" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../assets/styles.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/styles-d.css" />
 <style>
-  body{background:linear-gradient(180deg,#fff 0%,var(--cream) 60%)}
+  /* /qualify/ — calculator-specific styles built on top of styles-d.css.
+     Maps the legacy teal palette onto Direction D's navy/emerald. */
+  body{background:linear-gradient(180deg,#fff 0%,var(--bg) 60%)}
   .calc-shell{max-width:720px;margin:0 auto;padding:32px 24px 80px}
-  .progress{height:6px;background:var(--border);border-radius:999px;overflow:hidden;margin:20px 0 32px}
-  .progress .bar{height:100%;background:var(--teal);width:0;transition:width .3s ease}
+
+  .progress{height:6px;background:var(--line);border-radius:999px;overflow:hidden;margin:20px 0 32px}
+  .progress .bar{height:100%;background:var(--emerald);width:0;transition:width .3s ease}
+
   .step{display:none}
   .step.active{display:block;animation:fade .25s ease}
   @keyframes fade{from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)}}
-  .step h2{font-family:'Source Serif 4',serif;font-size:1.8rem;color:var(--teal-deep);margin:0 0 8px}
-  .step .sub{color:var(--muted);margin:0 0 24px;font-size:1rem}
+  .step h2{font-family:'Source Serif 4',serif;font-size:1.7rem;color:var(--ink);margin:0 0 8px;letter-spacing:-.018em}
+  .step .sub{color:var(--ink-2);margin:0 0 24px;font-size:1rem}
+
   .options{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
   .options.cols-1{grid-template-columns:1fr}
   .options.cols-3{grid-template-columns:repeat(3,1fr)}
   .options.cols-5{grid-template-columns:repeat(5,1fr)}
   @media(max-width:560px){.options.cols-3,.options.cols-5{grid-template-columns:repeat(2,1fr)}}
-  .option{background:var(--paper);border:1.5px solid var(--border);border-radius:10px;padding:18px 16px;cursor:pointer;text-align:center;font-weight:500;font-size:1rem;color:var(--ink);transition:all .12s ease;position:relative;display:flex;align-items:center;justify-content:center;gap:8px;min-height:62px}
-  .option:hover{border-color:var(--teal);background:#F4FAFB}
-  .option.selected{border-color:var(--teal);background:#EBF5F7;color:var(--teal-deep);font-weight:600}
-  .option.selected::after{content:"✓";position:absolute;top:8px;right:10px;color:var(--teal);font-weight:700}
-  .option.crisis{border-color:#F4C7BD;background:#FFF5F3;color:var(--crisis)}
-  .option.crisis:hover{border-color:var(--crisis);background:#FBE9E7}
+
+  .option{
+    background:var(--paper);border:1.5px solid var(--line);border-radius:8px;
+    padding:18px 16px;cursor:pointer;text-align:center;font-weight:500;font-size:1rem;
+    color:var(--ink);transition:all .12s ease;position:relative;
+    display:flex;align-items:center;justify-content:center;gap:8px;min-height:62px;
+  }
+  .option:hover{border-color:var(--navy);background:#F4F8FB}
+  .option.selected{border-color:var(--emerald);background:var(--emerald-soft);color:var(--ink);font-weight:600}
+  .option.selected::after{content:"✓";position:absolute;top:8px;right:10px;color:var(--emerald);font-weight:700}
+  .option.crisis{border-color:#F4C7BD;background:#FFF5F3;color:var(--crimson)}
+  .option.crisis:hover{border-color:var(--crimson);background:#FBE9E7}
+
   .step-actions{display:flex;justify-content:space-between;margin-top:24px;align-items:center;gap:12px}
   .step-actions .back{background:transparent;border:0;color:var(--muted);font-size:.9rem;cursor:pointer;padding:8px 0}
-  .step-actions .back:hover{color:var(--teal)}
-  select.dropdown{width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:1rem;font-family:inherit;color:var(--ink);background:#fff;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23566476' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+  .step-actions .back:hover{color:var(--navy)}
+
+  select.dropdown{
+    width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:8px;
+    font-size:1rem;font-family:inherit;color:var(--ink);background:#fff;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 16px center;
+  }
+  select.dropdown:focus{outline:0;border-color:var(--navy);box-shadow:0 0 0 3px rgba(10,37,64,.1)}
+
   .help-text{font-size:.85rem;color:var(--muted);margin-top:14px;text-align:center}
-  .intro-card{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:32px;text-align:center;box-shadow:var(--shadow-md)}
-  .intro-card h1{font-family:'Source Serif 4',serif;font-size:2rem;color:var(--teal-deep);margin:0 0 12px}
-  .intro-card p{color:var(--muted);margin-bottom:20px;font-size:1.05rem}
+
+  .intro-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:12px;
+    padding:36px;text-align:center;box-shadow:var(--shadow-md);
+  }
+  .intro-card h1{font-family:'Source Serif 4',serif;font-size:2rem;color:var(--ink);margin:0 0 12px;letter-spacing:-.022em}
+  .intro-card p{color:var(--ink-2);margin-bottom:20px;font-size:1.05rem}
+  .intro-card .eyebrow{margin-bottom:0}
+
   .intro-features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0;text-align:left}
   @media(max-width:560px){.intro-features{grid-template-columns:1fr}}
-  .feat{padding:14px;background:var(--cream);border-radius:8px;font-size:.85rem}
-  .feat strong{display:block;color:var(--teal-deep);font-weight:600;margin-bottom:4px}
-  .crisis-banner{background:var(--crisis);color:#fff;padding:24px 28px;border-radius:12px;margin-bottom:24px;text-align:center}
-  .crisis-banner h2{color:#fff;margin:0 0 8px;font-size:1.6rem}
+  .feat{padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:8px;font-size:.85rem;color:var(--ink-2)}
+  .feat strong{display:block;color:var(--ink);font-weight:700;margin-bottom:4px}
+
+  .crisis-banner{
+    background:var(--crimson);color:#fff;padding:24px 28px;border-radius:8px;
+    margin-bottom:24px;text-align:center;
+  }
+  .crisis-banner h2{color:#fff;margin:0 0 8px;font-size:1.6rem;font-family:'Source Serif 4',serif;letter-spacing:-.018em}
   .crisis-banner p{color:#FFD9D2;margin:0 0 16px}
-  .crisis-banner .num{font-family:'Source Serif 4',serif;font-size:2.4rem;font-weight:700;display:block;margin-bottom:12px;letter-spacing:-.01em}
-  .result{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:32px;box-shadow:var(--shadow-md)}
-  .result .badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
-  .result .badge.A{background:#E5F0EA;color:#1F5535}
-  .result .badge.B{background:#EBF1F2;color:var(--teal)}
-  .result .badge.C{background:#FFF3E0;color:#9C5510}
-  .result h2{font-family:'Source Serif 4',serif;color:var(--teal-deep);margin:0 0 8px;font-size:1.7rem}
-  .result .lead{color:var(--muted);margin-bottom:20px}
-  .program-list{list-style:none;padding:0;margin:24px 0}
-  .program-list li{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--cream);border-radius:8px;margin-bottom:8px;gap:16px}
-  .program-list li .name{font-weight:600;color:var(--teal-deep)}
-  .program-list li .sub{font-size:.85rem;color:var(--muted)}
-  .program-list li .est{font-family:'Source Serif 4',serif;color:var(--forest);font-weight:600;font-variant-numeric:tabular-nums;text-align:right;font-size:1rem;white-space:nowrap}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
-  @media(max-width:560px){.form-grid{grid-template-columns:1fr}}
-  .form-grid label{display:block;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
-  .form-grid input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:1rem;font-family:inherit}
-  .form-grid input:focus{outline:none;border-color:var(--teal)}
-  .full{grid-column:1/-1}
-  .consent{display:flex;gap:12px;margin:18px 0;font-size:.82rem;color:var(--muted);align-items:flex-start;padding:14px;background:var(--cream);border-radius:8px}
-  .consent input{margin-top:3px;flex-shrink:0}
-  .consent label{font-size:.82rem;line-height:1.5}
-  .alt-call{margin-top:24px;padding-top:24px;border-top:1px solid var(--border);text-align:center}
-  .alt-call .num{font-family:'Source Serif 4',serif;font-size:1.8rem;color:var(--teal-deep);font-weight:700;font-variant-numeric:tabular-nums}
-  .alt-call p{color:var(--muted);margin:4px 0 14px;font-size:.9rem}
-  .calc-header{margin-bottom:16px}
-  .calc-header a.home{color:var(--muted);font-size:.9rem}
+  .crisis-banner .num{
+    font-family:'Source Serif 4',serif;font-size:2.4rem;font-weight:700;
+    display:block;margin-bottom:12px;letter-spacing:-.012em;font-variant-numeric:tabular-nums;
+  }
+
+  .result{
+    background:var(--paper);border:1px solid var(--line);border-radius:8px;
+    padding:32px;box-shadow:var(--shadow-sm);
+  }
+  .result .badge{
+    display:inline-block;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px;
+  }
+  .result .badge.A{background:var(--emerald-soft);color:#1F5535}
+  .result .badge.B{background:#FEF6E5;color:#9C5510}
+  .result .badge.C{background:#EDEFF3;color:var(--navy)}
+  .result h2{font-family:'Source Serif 4',serif;color:var(--ink);font-size:1.6rem;margin:0 0 12px;letter-spacing:-.018em}
+  .result h3{font-family:'Source Serif 4',serif;color:var(--ink);font-size:1.15rem;margin:24px 0 10px;font-weight:700}
+  .result .program-list{list-style:none;padding:0;margin:14px 0}
+  .result .program-list li{
+    padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:8px;
+    margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:14px;
+  }
+  .result .program-list li strong{color:var(--ink);font-weight:600}
+  .result .program-list li .est{
+    color:var(--emerald);font-weight:700;font-size:.9rem;
+    font-variant-numeric:tabular-nums;font-family:'Source Serif 4',serif;
+  }
+
+  .result .actions{
+    display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;
+    padding-top:24px;border-top:1px solid var(--line);
+  }
+  .result .actions .btn{flex:1;min-width:160px;justify-content:center}
+
+  /* eyebrow styling reuse from styles-d */
+  .eyebrow{margin-bottom:14px}
+
+  /* primary buttons inside the calculator */
+  .calc-shell .btn{font-family:inherit}
+  .calc-shell .btn-lg{padding:15px 26px;font-size:1.02rem}
+  .calc-shell .btn-block{width:100%;justify-content:center}
+
+  /* hero-like trust strip above the calculator */
+  .calc-trust{
+    display:flex;justify-content:center;flex-wrap:wrap;gap:14px;
+    font-size:.84rem;color:var(--muted);margin:14px 0 6px;
+  }
+  .calc-trust strong{color:var(--ink);font-weight:600}
+  .calc-trust .dot{width:3px;height:3px;background:var(--line-strong);border-radius:50%;align-self:center}
+
+  @media(max-width:560px){
+    .calc-shell{padding:24px 18px 60px}
+    .intro-card{padding:24px 20px}
+    .step h2{font-size:1.4rem}
+  }
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://utilitybenefits.vercel.app/#organization","name":"UtilityBenefits.com","url":"https://utilitybenefits.vercel.app","logo":{"@type":"ImageObject","url":"https://utilitybenefits.vercel.app/assets/logo.png"},"description":"The single resource for lowering your utility bills and finding assistance you may qualify for."},{"@type":"WebPage","@id":"https://utilitybenefits.vercel.app/qualify/#article","url":"https://utilitybenefits.vercel.app/qualify/","name":"Eligibility Check — UtilityBenefits.com","headline":"See which utility programs you may qualify for","description":"60-second check across LIHEAP, Lifeline, state programs (CARE/PIPP/USF), and utility hardship funds. State-aware rules, no payment info required.","datePublished":"2026-05-03","dateModified":"2026-05-03","isPartOf":{"@id":"https://utilitybenefits.vercel.app/#website"},"publisher":{"@id":"https://utilitybenefits.vercel.app/#organization"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","url":"https://utilitybenefits.com/qualify/","name":"Eligibility Check — UtilityBenefits.com","description":"60-second check across LIHEAP, Lifeline, state programs, and utility hardship funds.","reviewedBy":{"@type":"Person","name":"Lisa Chen","jobTitle":"Energy Policy Analyst"}}</script>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="container">
-    <span class="verified">Information last verified May 3, 2026</span>
-    <span>Need help right now? <a href="tel:18005551234">Call (800) 555-1234</a></span>
+<div class="utility-bar">
+  <div class="container row">
+    <span class="left"><strong>Live</strong> &mdash; rates &amp; programs updated daily</span>
+    <span class="right">Member NABA &middot; A+ BBB &middot; <a href="/editorial-standards/">Editorial standards</a></span>
   </div>
 </div>
 
 <header class="site">
-  <div class="container">
-    <a href="../index.html" class="logo"><span class="mark">UB</span>UtilityBenefits<span style="color:var(--muted);font-weight:400">.com</span></a>
+  <div class="container row">
+    <a href="/" class="logo">
+      <span class="mark">UB</span>
+      <span class="word">
+        <strong>UtilityBenefits</strong>
+        <span>Independent research &middot; est. 2024</span>
+      </span>
+    </a>
     <nav class="primary">
-      <ul>
-        <li><a href="../electricity/index.html">Electricity</a></li>
-        <li><a href="../gas/index.html">Gas</a></li>
-        <li><a href="../internet/index.html">Internet</a></li>
-        <li><a href="../cellphone/index.html">Cell phone</a></li>
-        <li><a href="../water/index.html">Water</a></li>
-        <li><a href="../security/index.html">Security</a></li>
-      </ul>
+      <a href="/savings/">Savings</a>
+      <a href="/assistance/">Assistance</a>
+      <a href="/electricity/savings/states/">By state</a>
+      <a href="/editorial-standards/">Methodology</a>
+      <a href="/qualify/" class="cta active">Check eligibility</a>
     </nav>
-    <div class="header-cta">
-      <a href="tel:18005551234" class="btn btn-call">📞 (800) 555-1234</a>
-    </div>
   </div>
 </header>
 
+<nav class="breadcrumbs">
+  <div class="container">
+    <a href="/">Home</a>
+    <span class="sep">/</span>
+    <span class="current">Eligibility check</span>
+  </div>
+</nav>
+
 <div class="calc-shell">
+
+
 
   <div class="calc-header">
     <a href="../index.html" class="home">← Back to home</a>
@@ -244,8 +314,8 @@
     <div class="crisis-banner">
       <h2>Time-sensitive — call us now</h2>
       <p>Most states have crisis funds available year-round, and many utilities can stop a shutoff within 24 hours. A specialist can engage your state's program and your utility's hardship line at the same time.</p>
-      <span class="num">(800) 555-1234</span>
-      <a href="tel:18005551234" class="btn btn-lg" style="background:#fff;color:var(--crisis)">Call now — open 24/7 for crisis</a>
+      <span class="num">1-833-555-0143</span>
+      <a href="tel:18335550143" class="btn btn-lg" style="background:#fff;color:var(--crisis)">Call now — open 24/7 for crisis</a>
     </div>
     <div class="result">
       <p>While you have us on the line, we'll check:</p>
@@ -264,24 +334,38 @@
     <div class="result" id="result-card">
       <!-- populated dynamically -->
     </div>
-  </div>
 
 </div>
 
 <footer class="site">
   <div class="container">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <div class="logo" style="color:#fff"><span class="mark">UB</span>UtilityBenefits<span style="color:#7e8f97;font-weight:400">.com</span></div>
-        <p>The single resource for lowering your utility bills and finding assistance you may qualify for.</p>
+    <div class="top">
+      <div>
+        <h4>Coverage</h4>
+        <a href="/electricity/">Electricity</a><a href="/gas/">Natural Gas</a><a href="/internet/">Internet</a><a href="/cellphone/">Cell Phone</a><a href="/security/">Home Security</a><a href="/water/">Water</a>
       </div>
-      <div><h4>Verticals</h4><a href="../electricity/index.html">Electricity</a><a>Gas</a><a>Internet</a><a>Cell phone</a></div>
-      <div><h4>Assistance</h4><a href="../electricity/assistance/liheap/index.html">LIHEAP</a><a>Lifeline</a><a>State programs</a></div>
-      <div><h4>Resources</h4><a>About</a><a>Editorial</a><a>How we make money</a></div>
-      <div><h4>Legal</h4><a>Privacy</a><a>Terms</a><a>TCPA</a></div>
+      <div>
+        <h4>Programs</h4>
+        <a href="/electricity/assistance/liheap/">LIHEAP by state</a><a href="/internet/assistance/lifeline/">Lifeline</a><a href="/security/medical-alert/">Medicaid PERS</a><a href="/gas/assistance/winter-shutoff-moratoriums/">Winter shutoff</a><a href="/assistance/">All assistance</a>
+      </div>
+      <div>
+        <h4>About</h4>
+        <a href="/authors/">Our team</a><a href="/editorial-standards/">Editorial standards</a><a href="/how-we-make-money/">How we make money</a><a href="/about/">About us</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="/legal/privacy/">Privacy</a><a href="/legal/terms/">Terms</a><a href="/legal/tcpa/">TCPA</a><a href="/legal/do-not-sell/">Do not sell my info</a>
+      </div>
     </div>
-    <div class="foot-disclaimer"><strong>Not a government website.</strong> UtilityBenefits.com is a private company and is not affiliated with, endorsed by, or funded by any government agency.</div>
-    <div class="foot-bar"><span>© 2026 UtilityBenefits.com</span><span>Last verified May 3, 2026</span></div>
+    <div class="legal">
+      <p><strong>UtilityBenefits.com</strong> is owned and operated by UtilityBenefits Research LLC, a Delaware-incorporated independent research and comparison service. We are not a government agency and not affiliated with the FCC, USAC, the Lifeline program, LIHEAP, Medicaid, or any other federal or state program described on this site. We earn referral fees from some partners; see <a href="/how-we-make-money/">How We Make Money</a>. Editorial content is independent of these relationships per our <a href="/editorial-standards/">Editorial Standards</a>.</p>
+      <div class="copy">
+        <span>&copy; 2026 UtilityBenefits Research LLC &middot; Member NABA &middot; A+ BBB rating</span>
+        <span>
+          <a href="/legal/privacy/">Privacy</a><a href="/legal/terms/">Terms</a><a href="/legal/tcpa/">TCPA</a><a href="/sitemap.xml">Sitemap</a>
+        </span>
+      </div>
+    </div>
   </div>
 </footer>
 
@@ -651,9 +735,9 @@
 
       <div class="alt-call">
         <p style="font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600">Talk to a benefits specialist</p>
-        <div class="num">(800) 555-1234</div>
+        <div class="num">1-833-555-0143</div>
         <p>Specialists check 12+ programs at once and apply on your behalf where possible.</p>
-        <a href="tel:18005551234" class="btn btn-primary btn-lg btn-block">Call now</a>
+        <a href="tel:18335550143" class="btn btn-primary btn-lg btn-block">Call now</a>
       </div>
 
       <div style="margin:32px 0 0;padding-top:24px;border-top:1px solid var(--border)">
@@ -687,5 +771,6 @@
     }
   })();
 </script>
+
 </body>
 </html>
