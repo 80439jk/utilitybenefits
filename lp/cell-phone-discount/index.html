@@ -106,7 +106,7 @@
       </div>
 
       <!-- Form card (single conversion path) -->
-      <form class="lp-form-card" id="lp-form" method="post" action="/qualify/submit" novalidate>
+      <form class="lp-form-card" id="lp-form" method="get" action="/qualify/thank-you/" novalidate>
         <span class="form-eyebrow">Free Plan Comparison</span>
         <h2>Find your lowest cell phone bill</h2>
         <p class="form-sub">We compare Lifeline, MVNO, and state programs — instantly.</p>
@@ -294,15 +294,65 @@
       'utm_content': params.get('utm_content') || ''
     });
 
-    // ---------- Form submit tracking ----------
+    // ---------- Form submit interceptor ----------
+    // Generate a case number, persist form data in sessionStorage, then
+    // navigate to /qualify/thank-you/?case=...&zip=...&lp=...&v=...
+    // This avoids hitting the 404 placeholder /qualify/submit endpoint
+    // until a real backend exists. Form data is preserved for later
+    // server-side processing.
     var form = document.getElementById('lp-form');
     if (form) {
-      form.addEventListener('submit', function(){
+      form.addEventListener('submit', function(e){
+        if (!form.checkValidity()) {
+          // Let the browser show its native validation UI
+          form.reportValidity();
+          e.preventDefault();
+          return;
+        }
+        e.preventDefault();
+
+        // Build a 7-digit case number: timestamp tail + 3-digit random
+        var seed = Date.now() % 10000;
+        var rand = Math.floor(Math.random() * 1000);
+        var caseDigits = (String(seed).padStart(4,'0') + String(rand).padStart(3,'0')).slice(-7);
+        var caseNum = 'UB-2026-' + caseDigits;
+
+        // Snapshot form data for later (when backend is wired)
+        var data = {};
+        new FormData(form).forEach(function(val,key){ data[key] = val; });
+        try {
+          sessionStorage.setItem('ub_lead', JSON.stringify({
+            case: caseNum,
+            ts: Date.now(),
+            lp_slug: document.body.getAttribute('data-lp'),
+            lp_variant: v,
+            utm_source: params.get('utm_source') || '',
+            utm_medium: params.get('utm_medium') || '',
+            utm_campaign: params.get('utm_campaign') || '',
+            data: data
+          }));
+        } catch(err) {}
+
         window.dataLayer.push({
           'event': 'lp_submit',
           'lp_slug': document.body.getAttribute('data-lp'),
-          'lp_variant': v
+          'lp_variant': v,
+          'case_number': caseNum
         });
+
+        // Redirect to thank-you with personalization params
+        var qs = new URLSearchParams({
+          'case': caseNum,
+          'zip':  data.zip || '',
+          'lp':   document.body.getAttribute('data-lp') || '',
+          'v':    v
+        });
+        // Carry UTMs through for attribution on thank-you / call connect
+        ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){
+          var val = params.get(k);
+          if (val) qs.set(k, val);
+        });
+        window.location.href = '/qualify/thank-you/?' + qs.toString();
       });
     }
 

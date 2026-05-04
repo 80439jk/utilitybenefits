@@ -25,7 +25,9 @@ Allow: /
 
 # Don't waste crawl budget on these:
 Disallow: /qualify/submit
+Disallow: /qualify/submit/
 Disallow: /qualify/result
+Disallow: /qualify/thank-you/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /_next/
