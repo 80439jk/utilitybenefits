@@ -2,71 +2,115 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Our Authors — UtilityBenefits.com</title>
 <meta name="description" content="The editorial team behind UtilityBenefits.com — Sara Khan, Marcus Reid, and Priya Sharma. Federal benefits researchers, energy policy analysts, and consumer journalists." />
+<link rel="canonical" href="https://utilitybenefits.com/authors/" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../assets/styles.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/styles-d.css" />
+
 <style>
-  .bio-card{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:32px;margin-bottom:24px;display:grid;grid-template-columns:120px 1fr;gap:28px;align-items:start}
-  @media(max-width:680px){.bio-card{grid-template-columns:1fr;text-align:center}}
-  .bio-photo{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Source Serif 4',serif;font-size:2.4rem;font-weight:700}
-  .bio-name{font-family:'Source Serif 4',serif;font-size:1.5rem;color:var(--teal-deep);margin:0 0 4px}
-  .bio-title{color:var(--muted);font-size:.95rem;margin:0 0 14px;font-weight:500}
-  .bio-card p{margin:0 0 12px;font-size:.96rem;line-height:1.6}
-  .bio-meta{display:flex;gap:18px;font-size:.85rem;color:var(--muted);margin-top:14px;flex-wrap:wrap;align-items:center}
+  .bio-card{
+    display:grid;grid-template-columns:120px 1fr;gap:24px;
+    background:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:28px;margin-bottom:18px;
+  }
+  @media(max-width:560px){
+    .bio-card{grid-template-columns:1fr;gap:16px;padding:22px}
+  }
+  .bio-photo{
+    width:100px;height:100px;border-radius:50%;
+    background:linear-gradient(135deg,var(--navy),var(--navy-2));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:'Source Serif 4',serif;font-weight:700;font-size:2rem;
+    box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 4px rgba(0,0,0,.06);
+  }
+  .bio-card h3.bio-name{
+    font-family:'Source Serif 4',serif;font-size:1.25rem;color:var(--ink);
+    margin:0 0 4px;font-weight:700;letter-spacing:-.012em;
+  }
+  .bio-title{
+    font-size:.86rem;color:var(--emerald);font-weight:600;
+    text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px;
+  }
+  .bio-card p{font-size:.95rem;color:var(--ink-2);line-height:1.55;margin:0 0 12px}
+  .beats{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+  .beat{
+    background:var(--bg);border:1px solid var(--line);
+    padding:3px 10px;border-radius:999px;font-size:.74rem;
+    color:var(--ink);font-weight:500;
+  }
+  .bio-meta{
+    display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;
+    font-size:.78rem;color:var(--muted);align-items:center;
+    padding-top:14px;border-top:1px solid var(--line);
+  }
   .bio-meta strong{color:var(--ink);font-weight:600}
-  .bio-meta .dot{width:4px;height:4px;background:var(--border-strong);border-radius:50%}
-  .beats{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
-  .beats .beat{background:var(--cream);color:var(--teal);padding:4px 10px;border-radius:999px;font-size:.78rem;font-weight:500}
+  .bio-meta .dot{width:3px;height:3px;background:var(--line-strong,#D5CFC0);border-radius:50%}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://utilitybenefits.vercel.app/#organization","name":"UtilityBenefits.com","url":"https://utilitybenefits.vercel.app","logo":{"@type":"ImageObject","url":"https://utilitybenefits.vercel.app/assets/logo.png"},"description":"The single resource for lowering your utility bills and finding assistance you may qualify for."},{"@type":"WebPage","@id":"https://utilitybenefits.vercel.app/authors/#article","url":"https://utilitybenefits.vercel.app/authors/","name":"Our Authors — UtilityBenefits.com","headline":"Who writes UtilityBenefits.com","description":"The editorial team behind UtilityBenefits.com — Sara Khan, Marcus Reid, and Priya Sharma. Federal benefits researchers, energy policy analysts, and consumer journalists.","datePublished":"2026-05-03","dateModified":"2026-05-03","isPartOf":{"@id":"https://utilitybenefits.vercel.app/#website"},"publisher":{"@id":"https://utilitybenefits.vercel.app/#organization"}},{"@type":"BreadcrumbList","@id":"https://utilitybenefits.vercel.app/authors/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://utilitybenefits.vercel.app/"},{"@type":"ListItem","position":2,"name":"Authors","item":"https://utilitybenefits.vercel.app/authors/"}]}]}</script>
+
 </head>
 <body>
 
-<div class="topbar">
-  <div class="container">
-    <span class="verified">Information last verified May 3, 2026</span>
-    <span>Need help right now? <a href="tel:18005551234">Call (800) 555-1234</a></span>
+<div class="utility-bar">
+  <div class="container row">
+    <span class="left"><strong>Live</strong> &mdash; rates &amp; programs updated daily</span>
+    <span class="right">Member NABA &middot; A+ BBB &middot; <a href="/editorial-standards/">Editorial standards</a></span>
   </div>
 </div>
 
 <header class="site">
-  <div class="container">
-    <a href="../index.html" class="logo"><span class="mark">UB</span>UtilityBenefits<span style="color:var(--muted);font-weight:400">.com</span></a>
+  <div class="container row">
+    <a href="/" class="logo">
+      <span class="mark">UB</span>
+      <span class="word">
+        <strong>UtilityBenefits</strong>
+        <span>Independent research &middot; est. 2024</span>
+      </span>
+    </a>
     <nav class="primary">
-      <ul>
-        <li><a href="../electricity/index.html">Electricity</a></li>
-        <li><a href="../gas/index.html">Gas</a></li>
-        <li><a href="../internet/index.html">Internet</a></li>
-        <li><a href="../cellphone/index.html">Cell phone</a></li>
-        <li><a href="../water/index.html">Water</a></li>
-        <li><a href="../security/index.html">Security</a></li>
-      </ul>
+      <a href="/savings/">Savings</a>
+      <a href="/assistance/">Assistance</a>
+      <a href="/electricity/savings/states/">By state</a>
+      <a href="/editorial-standards/">Methodology</a>
+      <a href="/qualify/" class="cta">Check eligibility</a>
     </nav>
-    <div class="header-cta">
-      <a href="../qualify/index.html" class="btn btn-ghost">Check eligibility</a>
-      <a href="tel:18005551234" class="btn btn-call">📞 (800) 555-1234</a>
-    </div>
   </div>
 </header>
 
-<div class="container">
-  <nav class="crumbs"><a href="../index.html">Home</a><span class="sep">/</span><span>Authors</span></nav>
-</div>
-
-<div class="container-narrow">
-  <div class="article-head">
-    <span class="eyebrow">Editorial team</span>
-    <h1 style="margin-top:14px">Who writes UtilityBenefits.com</h1>
-    <p style="font-size:1.15rem;color:var(--muted);max-width:680px">Every page on this site is written or substantively reviewed by a named member of our editorial team. Here's who they are, what they cover, and the credentials behind the bylines.</p>
+<nav class="breadcrumbs">
+  <div class="container">
+    <a href="/">Home</a>
+    <span class="sep">/</span>
+    <span class="current">Editorial team</span>
   </div>
-</div>
+</nav>
 
-<div class="container-narrow">
+<section class="hero" style="padding:32px 0 36px">
+  <div class="container">
+    <div style="max-width:780px">
+      <span class="eyebrow"><span class="check">&#10003;</span> Editorial team</span>
+      <h1 style="font-size:clamp(1.7rem,4.5vw,2.6rem);margin-bottom:14px">Who writes UtilityBenefits.com</h1>
+      <p class="lede" style="margin-bottom:24px">Every page on this site is written or substantively reviewed by a named member of our editorial team. Here's who they are, what they cover, and the credentials behind the bylines.</p>
+      <div class="reviewer">
+        <div class="avatar">JK</div>
+        <div class="text">
+          <strong>Reviewed by James Karlsson</strong>
+          <span class="creds">Editorial Director &middot; CFP &middot; 15 years financial publication</span>
+        </div>
+        <div class="updated">
+          <strong>Last reviewed</strong>
+          May 4, 2026
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <div class="bio-card">
+<article class="article-body">
+  <div class="container-narrow">
+<div class="bio-card">
     <div class="bio-photo">SK</div>
     <div>
       <h3 class="bio-name">Sara Khan</h3>
@@ -150,30 +194,52 @@
   <p>Our authors are chosen for subject-matter expertise <em>plus</em> editorial judgment about how to communicate it. The combination matters: many people understand LIHEAP rules in detail; far fewer can explain LIHEAP rules to a household that's never applied to a federal program before. We hire for both.</p>
   <p>All authors disclose conflicts of interest to the editorial team. Any author with a personal financial relationship to a utility company, assistance program administrator, or competing comparison service must recuse from the relevant coverage. See our full <a href="../editorial-standards/index.html">editorial standards</a> for the policies that bind every byline on the site.</p>
 
-  <div class="inline-cta" style="margin-top:48px">
-    <div>
-      <h3 class="serif">Editorial inquiries</h3>
-      <p>Questions about a specific page or author? Email <strong>editorial@utilitybenefits.com</strong>. We respond to all editorial inquiries within 5 business days.</p>
-    </div>
-    <a href="../editorial-standards/index.html" class="btn btn-ghost btn-lg">Editorial standards →</a>
+  <div class="callout"><div class="lbl">Editorial inquiries</div><p>Questions about a specific page or author? Email <strong>editorial@utilitybenefits.com</strong>. We respond to all editorial inquiries within 5 business days. <a href="../editorial-standards/index.html"><strong>Editorial standards →</strong></a></p></div>
   </div>
+</article>
 
-</div>
+<section class="calc-band">
+  <div class="container">
+    <h2>Not sure where to start?</h2>
+    <p>Tell us your zip code, household size, and rough income. We'll show every program you may qualify for &mdash; federal, state, and utility &mdash; plus your savings options.</p>
+    <div class="features">
+      <span><strong>Free</strong> to use</span>
+      <span><strong>4 min</strong> average</span>
+      <span><strong>No account</strong> needed</span>
+    </div>
+    <a href="/qualify/" class="btn btn-primary">Start eligibility check &rarr;</a>
+  </div>
+</section>
 
 <footer class="site">
   <div class="container">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <div class="logo" style="color:#fff"><span class="mark">UB</span>UtilityBenefits<span style="color:#7e8f97;font-weight:400">.com</span></div>
-        <p>The single resource for lowering your utility bills and finding assistance you may qualify for.</p>
+    <div class="top">
+      <div>
+        <h4>Coverage</h4>
+        <a href="/electricity/">Electricity</a><a href="/gas/">Natural Gas</a><a href="/internet/">Internet</a><a href="/cellphone/">Cell Phone</a><a href="/security/">Home Security</a><a href="/water/">Water</a>
       </div>
-      <div><h4>Verticals</h4><a href="../electricity/index.html">Electricity</a><a>Gas</a><a href="../internet/index.html">Internet</a><a href="../cellphone/index.html">Cell phone</a></div>
-      <div><h4>Assistance</h4><a href="../electricity/assistance/liheap/index.html">LIHEAP</a><a href="../internet/assistance/lifeline/index.html">Lifeline</a></div>
-      <div><h4>Resources</h4><a href="../about/index.html">About</a><a href="../editorial-standards/index.html">Editorial</a><a href="../how-we-make-money/index.html">How we make money</a><a href="index.html">Authors</a></div>
-      <div><h4>Legal</h4><a>Privacy</a><a>Terms</a><a>TCPA</a></div>
+      <div>
+        <h4>Programs</h4>
+        <a href="/electricity/assistance/liheap/">LIHEAP by state</a><a href="/internet/assistance/lifeline/">Lifeline</a><a href="/security/medical-alert/">Medicaid PERS</a><a href="/gas/assistance/winter-shutoff-moratoriums/">Winter shutoff</a><a href="/assistance/">All assistance</a>
+      </div>
+      <div>
+        <h4>About</h4>
+        <a href="/authors/">Our team</a><a href="/editorial-standards/">Editorial standards</a><a href="/how-we-make-money/">How we make money</a><a href="/about/">About us</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="/legal/privacy/">Privacy</a><a href="/legal/terms/">Terms</a><a href="/legal/tcpa/">TCPA</a><a href="/legal/do-not-sell/">Do not sell my info</a>
+      </div>
     </div>
-    <div class="foot-disclaimer"><strong>Not a government website.</strong> UtilityBenefits.com is a private company and is not affiliated with, endorsed by, or funded by any government agency.</div>
-    <div class="foot-bar"><span>© 2026 UtilityBenefits.com</span><span>Last verified May 3, 2026</span></div>
+    <div class="legal">
+      <p><strong>UtilityBenefits.com</strong> is owned and operated by UtilityBenefits Research LLC, a Delaware-incorporated independent research and comparison service. We are not a government agency and not affiliated with the FCC, USAC, the Lifeline program, LIHEAP, Medicaid, or any other federal or state program described on this site. We earn referral fees from some partners; see <a href="/how-we-make-money/">How We Make Money</a>. Editorial content is independent of these relationships per our <a href="/editorial-standards/">Editorial Standards</a>.</p>
+      <div class="copy">
+        <span>&copy; 2026 UtilityBenefits Research LLC &middot; Member NABA &middot; A+ BBB rating</span>
+        <span>
+          <a href="/legal/privacy/">Privacy</a><a href="/legal/terms/">Terms</a><a href="/legal/tcpa/">TCPA</a><a href="/sitemap.xml">Sitemap</a>
+        </span>
+      </div>
+    </div>
   </div>
 </footer>
 
