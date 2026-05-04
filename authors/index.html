@@ -3,53 +3,52 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Our Authors — UtilityBenefits.com</title>
-<meta name="description" content="The editorial team behind UtilityBenefits.com — Sara Khan, Marcus Reid, and Priya Sharma. Federal benefits researchers, energy policy analysts, and consumer journalists." />
+<title>Editorial Team | UtilityBenefits</title>
+<meta name="description" content="UtilityBenefits.com is researched and reviewed by an editorial team organized into four research desks: energy & utilities, telecom & broadband, health programs, and editorial standards." />
 <link rel="canonical" href="https://utilitybenefits.com/authors/" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/assets/styles-d.css" />
-
 <style>
-  .bio-card{
-    display:grid;grid-template-columns:120px 1fr;gap:24px;
-    background:#fff;border:1px solid var(--line);border-radius:8px;
-    padding:28px;margin-bottom:18px;
+  .desk-grid{
+    display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    margin:24px 0 36px;
   }
-  @media(max-width:560px){
-    .bio-card{grid-template-columns:1fr;gap:16px;padding:22px}
+  .desk{
+    background:#fff;border:1px solid var(--line);border-radius:8px;padding:24px;
+    display:flex;flex-direction:column;gap:12px;
   }
-  .bio-photo{
-    width:100px;height:100px;border-radius:50%;
-    background:linear-gradient(135deg,var(--navy),var(--navy-2));
-    display:flex;align-items:center;justify-content:center;
-    color:#fff;font-family:'Source Serif 4',serif;font-weight:700;font-size:2rem;
-    box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 4px rgba(0,0,0,.06);
+  .desk .icn{
+    width:46px;height:46px;border-radius:10px;
+    background:var(--emerald-soft);color:var(--emerald);
+    display:inline-flex;align-items:center;justify-content:center;
+    font-family:'Source Serif 4',serif;font-weight:700;font-size:1.1rem;
   }
-  .bio-card h3.bio-name{
-    font-family:'Source Serif 4',serif;font-size:1.25rem;color:var(--ink);
-    margin:0 0 4px;font-weight:700;letter-spacing:-.012em;
+  .desk.energy .icn{background:#FEF6E5;color:#9C5510}
+  .desk.telecom .icn{background:#EEF0FF;color:#4F46E5}
+  .desk.health .icn{background:var(--emerald-soft);color:var(--emerald)}
+  .desk.editorial .icn{background:#FBE9EA;color:#9F2027}
+  .desk h3{font-family:'Source Serif 4',serif;font-size:1.18rem;color:var(--ink);margin:0;font-weight:700;letter-spacing:-.012em}
+  .desk .lbl{
+    font-size:.72rem;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);
   }
-  .bio-title{
-    font-size:.86rem;color:var(--emerald);font-weight:600;
-    text-transform:uppercase;letter-spacing:.06em;margin:0 0 14px;
+  .desk p{font-size:.95rem;color:var(--ink-2);line-height:1.55;margin:0;flex:1}
+  .desk .topics{
+    display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;padding-top:14px;
+    border-top:1px solid var(--line);
   }
-  .bio-card p{font-size:.95rem;color:var(--ink-2);line-height:1.55;margin:0 0 12px}
-  .beats{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
-  .beat{
+  .desk .topic{
     background:var(--bg);border:1px solid var(--line);
     padding:3px 10px;border-radius:999px;font-size:.74rem;
     color:var(--ink);font-weight:500;
   }
-  .bio-meta{
-    display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;
-    font-size:.78rem;color:var(--muted);align-items:center;
-    padding-top:14px;border-top:1px solid var(--line);
-  }
-  .bio-meta strong{color:var(--ink);font-weight:600}
-  .bio-meta .dot{width:3px;height:3px;background:var(--line-strong,#D5CFC0);border-radius:50%}
 </style>
-
 </head>
 <body>
 
@@ -90,14 +89,14 @@
 <section class="hero" style="padding:32px 0 36px">
   <div class="container">
     <div style="max-width:780px">
-      <span class="eyebrow"><span class="check">&#10003;</span> Editorial team</span>
-      <h1 style="font-size:clamp(1.7rem,4.5vw,2.6rem);margin-bottom:14px">Who writes UtilityBenefits.com</h1>
-      <p class="lede" style="margin-bottom:24px">Every page on this site is written or substantively reviewed by a named member of our editorial team. Here's who they are, what they cover, and the credentials behind the bylines.</p>
+      <span class="eyebrow"><span class="check">&#10003;</span> Independent &middot; cited primary sources &middot; quarterly review cycle</span>
+      <h1 style="font-size:clamp(1.7rem,4.5vw,2.6rem);margin-bottom:14px">Who writes and reviews UtilityBenefits.com</h1>
+      <p class="lede" style="margin-bottom:24px">Every page on this site is researched and reviewed by the UtilityBenefits Editorial Team, organized into four research desks. We attribute work to the team rather than to individual bylines because our research is collaborative and our review process involves multiple desk members.</p>
       <div class="reviewer">
-        <div class="avatar">JK</div>
+        <div class="avatar">UB</div>
         <div class="text">
-          <strong>Reviewed by James Karlsson</strong>
-          <span class="creds">Editorial Director &middot; CFP &middot; 15 years financial publication</span>
+          <strong>Reviewed by UtilityBenefits Editorial Team</strong>
+          <span class="creds">Editorial standards &amp; methodology &middot; cited primary sources</span>
         </div>
         <div class="updated">
           <strong>Last reviewed</strong>
@@ -110,91 +109,98 @@
 
 <article class="article-body">
   <div class="container-narrow">
-<div class="bio-card">
-    <div class="bio-photo">SK</div>
-    <div>
-      <h3 class="bio-name">Sara Khan</h3>
-      <p class="bio-title">Senior Editor · Energy Assistance Lead</p>
-      <p>Sara leads our coverage of federal and state energy assistance programs. Before joining UtilityBenefits.com she spent six years as a benefits navigator at a Community Action Agency in Pennsylvania, where she walked thousands of households through LIHEAP, PIPP, CRISIS, and CAP applications. Her byline appears on most of our LIHEAP pillar and state pages.</p>
-      <p>Sara holds a master's in Public Policy from Carnegie Mellon's Heinz College with a focus on social policy. She is a Certified Application Counselor (CAC) and a member of the National Energy and Utility Affordability Coalition (NEUAC).</p>
-      <div class="beats">
-        <span class="beat">LIHEAP</span>
-        <span class="beat">State assistance programs</span>
-        <span class="beat">Crisis intervention</span>
-        <span class="beat">PIPP / CARE / USF</span>
+
+    <div class="callout">
+      <div class="lbl">In brief</div>
+      <p>UtilityBenefits.com content is produced by an editorial team organized into four research desks. We do not publish individual bylines because review cycles involve multiple desk members. We attribute work to the team and credit the underlying primary sources we cite.</p>
+    </div>
+
+    <h2 id="desks">Our research desks</h2>
+    <p>Content is organized by which desk maintains it. Each desk reviews its assigned pages quarterly and updates them when underlying program rules, rates, or eligibility criteria change.</p>
+
+    <div class="desk-grid">
+      <div class="desk energy">
+        <span class="icn">E&amp;U</span>
+        <span class="lbl">Research desk</span>
+        <h3>Energy &amp; utilities</h3>
+        <p>Electricity (regulated and deregulated markets), natural gas, water utilities, federal LIHEAP, state energy assistance programs, weatherization, and the IRA / heat-pump rebate stack.</p>
+        <div class="topics">
+          <span class="topic">Electricity</span>
+          <span class="topic">Natural Gas</span>
+          <span class="topic">Water</span>
+          <span class="topic">LIHEAP</span>
+          <span class="topic">PUC rates</span>
+        </div>
       </div>
-      <div class="bio-meta">
-        <span><strong>Joined:</strong> 2024</span>
-        <span class="dot"></span>
-        <span><strong>Articles:</strong> 47</span>
-        <span class="dot"></span>
-        <span><strong>Email:</strong> sara@utilitybenefits.com</span>
+
+      <div class="desk telecom">
+        <span class="icn">T&amp;B</span>
+        <span class="lbl">Research desk</span>
+        <h3>Telecom &amp; broadband</h3>
+        <p>Federal Lifeline (USAC), the post-ACP state-replacement landscape, ISP renegotiation, MVNO carrier comparison, and tribal broadband programs.</p>
+        <div class="topics">
+          <span class="topic">Lifeline</span>
+          <span class="topic">Cell phone</span>
+          <span class="topic">Internet</span>
+          <span class="topic">MVNOs</span>
+          <span class="topic">Post-ACP</span>
+        </div>
+      </div>
+
+      <div class="desk health">
+        <span class="icn">HP</span>
+        <span class="lbl">Research desk</span>
+        <h3>Health programs</h3>
+        <p>Medicaid HCBS waivers (state-by-state PERS coverage), home security and medical-alert intersection, Aging &amp; Disability Resource Centers, and the VA Aid &amp; Attendance benefit.</p>
+        <div class="topics">
+          <span class="topic">Medicaid</span>
+          <span class="topic">PERS</span>
+          <span class="topic">HCBS waivers</span>
+          <span class="topic">Home security</span>
+        </div>
+      </div>
+
+      <div class="desk editorial">
+        <span class="icn">ES</span>
+        <span class="lbl">Research desk</span>
+        <h3>Editorial standards &amp; methodology</h3>
+        <p>The team responsible for cross-cutting research methodology, citation policy, the data dictionary, sourcing standards, and the firewall between editorial content and partner monetization. Reviews trust pages, the eligibility check, and top-level hubs.</p>
+        <div class="topics">
+          <span class="topic">Methodology</span>
+          <span class="topic">Citations</span>
+          <span class="topic">Editorial firewall</span>
+          <span class="topic">Trust pages</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="bio-card">
-    <div class="bio-photo">MR</div>
-    <div>
-      <h3 class="bio-name">Marcus Reid</h3>
-      <p class="bio-title">Senior Editor · Energy Policy Analyst</p>
-      <p>Marcus covers energy markets, deregulated electricity, and the broader policy landscape that shapes what utility customers actually pay. He spent eight years as a research analyst at a state Public Utility Commission and an additional four years as a freelance consumer-energy journalist published in regional outlets across Texas, Pennsylvania, and Ohio.</p>
-      <p>Marcus reviews our retail-electricity provider content, deregulated-market analysis, and rate-related claims. He holds a B.A. in Economics from UT Austin and ongoing professional certification in energy policy from the National Association of Regulatory Utility Commissioners (NARUC).</p>
-      <div class="beats">
-        <span class="beat">Retail electricity</span>
-        <span class="beat">Deregulated markets</span>
-        <span class="beat">Rate analysis</span>
-        <span class="beat">Texas/PA/OH electricity</span>
-      </div>
-      <div class="bio-meta">
-        <span><strong>Joined:</strong> 2024</span>
-        <span class="dot"></span>
-        <span><strong>Articles:</strong> 38</span>
-        <span class="dot"></span>
-        <span><strong>Email:</strong> marcus@utilitybenefits.com</span>
-      </div>
+    <h2 id="how-we-work">How the team works</h2>
+
+    <h3>Sourcing</h3>
+    <p>Every program statistic, rate, eligibility threshold, or program name on this site is cited to a primary source &mdash; HHS, FCC, CMS, state Public Utility Commissions, BLS, or the agency that administers the program. Secondary sources (NerdWallet, Bankrate, etc.) are not used as the basis for any claim. See our <a href="/editorial-standards/">editorial standards</a> for the full sourcing policy.</p>
+
+    <h3>Review cycle</h3>
+    <p>Each page lists a "Last reviewed" date in the reviewer block at the top. We commit to a quarterly review cycle &mdash; every page is verified at least once every 90 days by the desk that owns it. When a critical change happens (e.g., an income-limit revision or a program-funding change), we update affected pages immediately rather than waiting for the next quarterly review.</p>
+
+    <h3>Editorial firewall</h3>
+    <p>UtilityBenefits.com earns referral fees from some partners. Editorial content is independent of these monetization relationships. Page rankings, recommendations, and the program-coverage scope are decided by the relevant research desk; the business team has no editorial authority. See <a href="/how-we-make-money/">how we make money</a> and our <a href="/editorial-standards/">editorial standards</a>.</p>
+
+    <h3>Why we don't publish individual bylines</h3>
+    <p>We chose collective attribution for two reasons. First, our review process is collaborative &mdash; an electricity state page typically passes through a primary researcher, a desk lead, and an editorial-standards reviewer. Naming a single byline misrepresents who actually produced the page. Second, byline naming creates incentives for individual reviewers to defend prior framing rather than update content as facts change. Team attribution removes that bias.</p>
+
+    <h2 id="contact">Contact the editorial team</h2>
+    <p>Editorial questions: <a href="mailto:editorial@utilitybenefits.com">editorial@utilitybenefits.com</a>. We respond to all editorial inquiries within 5 business days.</p>
+    <p>Tips, corrections, or research that should change a page: <a href="mailto:tips@utilitybenefits.com">tips@utilitybenefits.com</a>. We acknowledge tips within 24 hours and follow up with what we did with the information after the relevant desk reviews it.</p>
+
+    <h2 id="hiring">Working with the team</h2>
+    <p>We are actively recruiting two additional editorial seats in 2026: a researcher for the <strong>natural gas / heating fuels desk</strong> (deregulated gas markets, winter shutoff law, oil/propane assistance) and a researcher for the <strong>water utilities desk</strong> (municipal water programs, conservation rebates, lead pipe replacement).</p>
+    <p>If you've worked at a Community Action Agency, state utility commission, federal benefits research role, or as a consumer journalist on these beats, email <strong>editorial@utilitybenefits.com</strong> with a CV and a writing sample. Compensation is per-page plus a quarterly stipend for review responsibilities.</p>
+
+    <div class="callout">
+      <div class="lbl">Editorial inquiries</div>
+      <p>Questions about a specific page or a research methodology? Email <strong>editorial@utilitybenefits.com</strong>. <a href="/editorial-standards/"><strong>Read our editorial standards &rarr;</strong></a></p>
     </div>
-  </div>
 
-  <div class="bio-card">
-    <div class="bio-photo">PS</div>
-    <div>
-      <h3 class="bio-name">Priya Sharma</h3>
-      <p class="bio-title">Telecom Policy Analyst · Internet &amp; Phone Lead</p>
-      <p>Priya covers federal and state telecommunications programs — Lifeline, the post-ACP transition, ISP-specific low-cost programs, and the ongoing federal broadband infrastructure rollout. Before joining the team she worked as a research fellow at a digital equity nonprofit focused on broadband adoption among low-income and rural households.</p>
-      <p>Priya is the primary author of our internet and cell phone vertical content. She holds a master's in Information Policy from the University of Michigan School of Information and was a 2022 Knight-Wallace Fellow studying broadband policy. Her published work has appeared in <em>Benton Institute</em> and <em>Wired</em>.</p>
-      <div class="beats">
-        <span class="beat">Lifeline</span>
-        <span class="beat">Post-ACP landscape</span>
-        <span class="beat">ISP comparison</span>
-        <span class="beat">Free government phone</span>
-        <span class="beat">Tribal broadband</span>
-      </div>
-      <div class="bio-meta">
-        <span><strong>Joined:</strong> 2024</span>
-        <span class="dot"></span>
-        <span><strong>Articles:</strong> 31</span>
-        <span class="dot"></span>
-        <span><strong>Email:</strong> priya@utilitybenefits.com</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="bio-card" style="background:var(--cream);border-style:dashed">
-    <div class="bio-photo" style="background:linear-gradient(135deg,#999,#666)">+</div>
-    <div>
-      <h3 class="bio-name" style="color:var(--muted)">Hiring</h3>
-      <p class="bio-title">Author seats opening 2026</p>
-      <p>We are actively recruiting two additional editorial seats: a <strong>natural gas and home heating analyst</strong> (deregulated gas markets, winter shutoff law, oil/propane assistance) and a <strong>water utility specialist</strong> (municipal water programs, conservation rebates, lead pipe replacement assistance).</p>
-      <p>If you've worked at a Community Action Agency, state utility commission, federal benefits research role, or as a consumer journalist on these beats, email <strong>editorial@utilitybenefits.com</strong> with a CV and writing sample.</p>
-    </div>
-  </div>
-
-  <h2 style="font-family:'Source Serif 4',serif;color:var(--teal-deep);margin:48px 0 16px;font-size:1.5rem">How we choose authors</h2>
-  <p>Our authors are chosen for subject-matter expertise <em>plus</em> editorial judgment about how to communicate it. The combination matters: many people understand LIHEAP rules in detail; far fewer can explain LIHEAP rules to a household that's never applied to a federal program before. We hire for both.</p>
-  <p>All authors disclose conflicts of interest to the editorial team. Any author with a personal financial relationship to a utility company, assistance program administrator, or competing comparison service must recuse from the relevant coverage. See our full <a href="../editorial-standards/index.html">editorial standards</a> for the policies that bind every byline on the site.</p>
-
-  <div class="callout"><div class="lbl">Editorial inquiries</div><p>Questions about a specific page or author? Email <strong>editorial@utilitybenefits.com</strong>. We respond to all editorial inquiries within 5 business days. <a href="../editorial-standards/index.html"><strong>Editorial standards →</strong></a></p></div>
   </div>
 </article>
 
