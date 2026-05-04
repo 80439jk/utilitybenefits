@@ -281,41 +281,66 @@ nav.primary .cta:hover{background:var(--emerald-deep);text-decoration:none}
 .stats-card .source a{color:inherit;text-decoration:underline}
 
 /* ============================================================
-   Live data sources band (replaces press logos)
+   Live data sources band (compact one-line variant)
+   Five source chips fit on a single row at desktop; each is
+   icon-badge + short program name. Full agency names live in
+   the attribution line below to preserve clarity.
    ============================================================ */
 .sources-band{
-  background:#fff;border-bottom:1px solid var(--line);padding:32px 0;
+  background:#fff;border-bottom:1px solid var(--line);padding:28px 0;
 }
-.sources-band .container{display:flex;flex-direction:column;align-items:center;gap:18px}
+.sources-band .container{display:flex;flex-direction:column;align-items:center;gap:14px}
 .sources-band .label{
   font-size:.74rem;color:var(--muted);text-transform:uppercase;
   letter-spacing:.16em;font-weight:600;text-align:center;
 }
 .sources-band .label strong{color:var(--ink);font-weight:700}
+
+/* Compact one-line layout */
 .sources-band .sources{
-  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px 24px;
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:8px 14px;width:100%;
 }
 .sources-band .src{
-  display:inline-flex;align-items:center;gap:10px;
-  color:var(--ink);font-weight:600;font-size:.92rem;
+  display:inline-flex;align-items:center;gap:7px;
+  color:var(--ink);font-weight:600;font-size:.88rem;
+  white-space:nowrap;
 }
 .sources-band .src .icn{
-  width:34px;height:34px;border-radius:8px;
+  width:28px;height:28px;border-radius:6px;
   background:var(--bg);border:1px solid var(--line);
   display:inline-flex;align-items:center;justify-content:center;
-  font-family:'Inter',sans-serif;font-weight:800;font-size:.7rem;
+  font-family:'Inter',sans-serif;font-weight:800;font-size:.66rem;
   color:var(--ink);letter-spacing:.02em;flex-shrink:0;
 }
-.sources-band .src small{
-  display:block;font-size:.74rem;font-weight:500;color:var(--muted);margin-top:1px;
+.sources-band .src strong{font-weight:600;font-size:.88rem;line-height:1}
+.sources-band .src + .src::before{
+  content:"";display:inline-block;width:3px;height:3px;
+  background:var(--line-strong, #D5CFC0);border-radius:50%;
+  margin-right:7px;
 }
-.sources-band .src strong{display:block;line-height:1.1;font-weight:700;font-size:.92rem}
+
+/* attribution + footnote */
+.sources-band .attribution{
+  font-size:.74rem;color:var(--muted);text-align:center;line-height:1.5;
+  max-width:760px;margin:0;
+}
+.sources-band .attribution strong{color:var(--ink);font-weight:600}
 .sources-band .footnote{
   font-size:.78rem;color:var(--muted);text-align:center;
-  border-top:1px dashed var(--line);padding-top:14px;width:100%;max-width:700px;margin:0;
+  border-top:1px dashed var(--line);padding-top:12px;
+  width:100%;max-width:700px;margin:0;
 }
 .sources-band .footnote strong{color:var(--ink);font-weight:600}
 .sources-band .footnote a{color:var(--ink)}
+
+/* Mobile: chips wrap to multi-line; attribution stays compact */
+@media(max-width:760px){
+  .sources-band{padding:22px 0}
+  .sources-band .sources{gap:8px 10px}
+  .sources-band .src{font-size:.82rem}
+  .sources-band .src + .src::before{margin-right:0}
+}
 
 /* ============================================================
    Cited facts strip (dark navy band)
