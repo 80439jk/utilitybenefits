@@ -30,6 +30,9 @@ Disallow: /qualify/result
 Disallow: /qualify/thank-you/
 Disallow: /qualify/thank-you-v2/
 Disallow: /qualify/thank-you-v3/
+
+# Block /preview/ — internal homepage design previews
+Disallow: /preview/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /_next/

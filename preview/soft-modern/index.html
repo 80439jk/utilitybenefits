@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>UtilityBenefits — Save on bills, find assistance (Preview: Soft Modern)</title>
+<meta name="description" content="Lower your electric, gas, internet, phone, water, and home security bills. Find assistance programs you qualify for in 60 seconds." />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   PREVIEW A — Soft Modern (Linear/Vercel-influenced)
+   Mobile-first. Subtle gradients, generous whitespace,
+   indigo + warm cream + coral accent.
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+:root{
+  --bg:#FAFAFC; --paper:#FFFFFF;
+  --ink:#0F1226; --ink-2:#3F4467; --muted:#737899;
+  --line:#E8E7F0; --line-strong:#D6D5E1;
+  --indigo:#4F46E5; --indigo-deep:#3730A3; --indigo-soft:#EEF0FF;
+  --coral:#FF6B57; --coral-soft:#FFEFEB;
+  --emerald:#10B981; --emerald-soft:#E8F8F1;
+  --amber:#F59E0B; --amber-soft:#FEF6E5;
+}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;line-height:1.55;font-size:16px;
+}
+h1,h2,h3,h4{margin:0 0 .4em;letter-spacing:-.02em;line-height:1.1;color:var(--ink)}
+h1{font-size:clamp(2.1rem,7.5vw,4rem);font-weight:800;letter-spacing:-.035em}
+h2{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:700}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0 0 1em}
+.serif{font-family:'Instrument Serif',Georgia,serif;font-weight:400;letter-spacing:-.005em}
+a{color:var(--indigo);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+@media(max-width:560px){.container{padding:0 18px}}
+
+/* ----------- Header ----------- */
+header.site{
+  position:sticky;top:0;z-index:30;
+  background:rgba(250,250,252,.82);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  border-bottom:1px solid var(--line);
+}
+header.site .row{
+  display:flex;align-items:center;justify-content:space-between;padding:12px 0;
+}
+.logo{display:flex;align-items:center;gap:9px;color:var(--ink);font-weight:700;font-size:1.05rem}
+.logo .mark{
+  width:30px;height:30px;border-radius:9px;
+  background:linear-gradient(135deg,var(--indigo) 0%,var(--coral) 100%);
+  display:inline-flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:.82rem;
+  box-shadow:0 4px 14px rgba(79,70,229,.3);
+}
+nav.primary{display:flex;gap:6px;align-items:center}
+nav.primary a{
+  color:var(--ink-2);font-weight:500;font-size:.92rem;padding:8px 12px;border-radius:8px;
+}
+nav.primary a:hover{background:var(--indigo-soft);color:var(--indigo);text-decoration:none}
+nav.primary .cta{
+  background:var(--ink);color:#fff;padding:9px 16px;font-weight:600;
+}
+nav.primary .cta:hover{background:var(--indigo);color:#fff}
+@media(max-width:760px){
+  nav.primary a:not(.cta){display:none}
+}
+
+/* ----------- Hero ----------- */
+.hero{
+  position:relative;overflow:hidden;
+  padding:48px 0 64px;
+  background:radial-gradient(ellipse 80% 50% at 50% -10%, var(--indigo-soft), transparent 65%);
+}
+@media(min-width:760px){.hero{padding:80px 0 88px}}
+.hero .grid{display:grid;gap:40px;align-items:start}
+@media(min-width:880px){
+  .hero .grid{grid-template-columns:1.25fr 1fr;gap:64px;align-items:center}
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;border:1px solid var(--line-strong);
+  padding:5px 12px;border-radius:999px;
+  font-size:.78rem;font-weight:600;color:var(--ink-2);margin-bottom:18px;
+  box-shadow:0 1px 3px rgba(15,18,38,.04);
+}
+.eyebrow .pulse{
+  display:inline-block;width:6px;height:6px;background:var(--emerald);
+  border-radius:50%;animation:pulse 1.6s infinite;
+  box-shadow:0 0 0 0 rgba(16,185,129,.7);
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.7)}
+  60%{box-shadow:0 0 0 8px rgba(16,185,129,0)}
+}
+
+.hero h1 em.s{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  background:linear-gradient(135deg,var(--coral),var(--indigo));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:-.02em;
+}
+.hero p.lede{
+  font-size:clamp(1.05rem,2.4vw,1.2rem);color:var(--ink-2);margin:14px 0 28px;
+  max-width:560px;line-height:1.5;
+}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 22px;border-radius:12px;font-weight:600;font-size:1rem;
+  text-decoration:none;transition:transform .1s ease,box-shadow .15s ease;
+}
+.btn:hover{text-decoration:none}
+.btn-primary{
+  background:var(--ink);color:#fff;
+  box-shadow:0 8px 20px rgba(15,18,38,.18);
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(15,18,38,.24)}
+.btn-secondary{
+  background:#fff;color:var(--ink);border:1px solid var(--line-strong);
+}
+.btn-secondary:hover{border-color:var(--ink);transform:translateY(-1px)}
+.trust-line{
+  display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);align-items:center;
+}
+.trust-line strong{color:var(--ink);font-weight:600}
+.trust-line .dot{width:3px;height:3px;background:var(--line-strong);border-radius:50%}
+
+/* ----------- Hero side card (savings preview) ----------- */
+.hero-card{
+  background:var(--paper);border:1px solid var(--line);border-radius:20px;
+  padding:24px;box-shadow:0 24px 60px -16px rgba(15,18,38,.18),0 1px 0 rgba(255,255,255,.6) inset;
+  position:relative;overflow:hidden;
+}
+.hero-card::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 100% 0%, var(--coral-soft),transparent 50%);
+  pointer-events:none;
+}
+.hero-card .head{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:.78rem;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;
+  position:relative;z-index:2;
+}
+.hero-card .head .badge{
+  background:var(--emerald-soft);color:var(--emerald);padding:3px 9px;border-radius:6px;
+  font-size:.7rem;letter-spacing:.04em;
+}
+.hero-card .row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:11px 0;border-bottom:1px dashed var(--line);position:relative;z-index:2;
+}
+.hero-card .row:last-of-type{border-bottom:0}
+.hero-card .row .label{font-weight:500;color:var(--ink-2);font-size:.95rem}
+.hero-card .row .amount{
+  font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;font-size:1rem;
+}
+.hero-card .total{
+  margin-top:10px;padding:14px 0 4px;border-top:2px solid var(--ink);
+  display:flex;justify-content:space-between;align-items:baseline;position:relative;z-index:2;
+}
+.hero-card .total .amount{
+  font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;color:var(--coral);
+  letter-spacing:-.01em;
+}
+.hero-card .foot{
+  font-size:.78rem;color:var(--muted);margin-top:14px;position:relative;z-index:2;
+}
+
+/* ----------- Verticals grid ----------- */
+.section{padding:64px 0}
+@media(min-width:760px){.section{padding:96px 0}}
+.section-head{max-width:680px;margin-bottom:40px}
+.section-head .lbl{
+  font-size:.78rem;font-weight:600;color:var(--indigo);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:10px;
+}
+.section-head p{color:var(--ink-2);font-size:1.05rem;max-width:520px;margin-top:8px}
+
+.vert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.vert-card{
+  background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px;
+  display:flex;flex-direction:column;gap:14px;color:var(--ink);
+  transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+  position:relative;overflow:hidden;
+}
+.vert-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 32px -8px rgba(15,18,38,.12);
+  border-color:var(--ink);text-decoration:none;
+}
+.vert-card .icon{
+  width:42px;height:42px;border-radius:11px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+}
+.vert-card.electricity .icon{background:var(--amber-soft);color:var(--amber)}
+.vert-card.gas .icon       {background:var(--coral-soft);color:var(--coral)}
+.vert-card.internet .icon  {background:var(--indigo-soft);color:var(--indigo)}
+.vert-card.cellphone .icon {background:#F4ECFD;color:#8B5CF6}
+.vert-card.security .icon  {background:var(--emerald-soft);color:var(--emerald)}
+.vert-card.water .icon     {background:#E5F4FB;color:#0EA5E9}
+.vert-card h3{font-size:1.15rem;margin:0;font-weight:600}
+.vert-card p{color:var(--ink-2);font-size:.92rem;margin:0;flex:1;line-height:1.5}
+.vert-card .tracks{display:flex;gap:6px;font-size:.74rem;font-weight:500}
+.vert-card .track{padding:3px 9px;border-radius:6px}
+.vert-card .track.s{background:var(--amber-soft);color:#9C5510}
+.vert-card .track.a{background:var(--emerald-soft);color:#065F46}
+.vert-card .arrow{
+  margin-top:auto;display:inline-flex;align-items:center;gap:6px;
+  color:var(--indigo);font-weight:600;font-size:.9rem;
+}
+
+/* ----------- Dual track band ----------- */
+.dual{
+  background:linear-gradient(180deg,#fff 0%,var(--bg) 100%);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.dual-grid{display:grid;gap:24px}
+@media(min-width:880px){.dual-grid{grid-template-columns:1fr 1fr;gap:40px}}
+.track-card{
+  border-radius:20px;padding:28px;border:1px solid var(--line);
+  position:relative;overflow:hidden;
+}
+.track-card.savings{
+  background:linear-gradient(165deg,#FFF8F1 0%,#FFFFFF 60%);
+  border-color:#F8DEC2;
+}
+.track-card.assist{
+  background:linear-gradient(165deg,#F1FAF5 0%,#FFFFFF 60%);
+  border-color:#C8E9D7;
+}
+.track-card .label{
+  font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;
+}
+.track-card.savings .label{color:#C2410C}
+.track-card.assist .label{color:#047857}
+.track-card h3{font-size:1.4rem;margin-bottom:10px;font-weight:700}
+.track-card ul{list-style:none;padding:0;margin:0 0 16px}
+.track-card li{
+  padding:10px 0;border-bottom:1px solid rgba(0,0,0,.05);
+  font-size:.95rem;display:flex;justify-content:space-between;align-items:center;color:var(--ink);
+}
+.track-card li:last-child{border-bottom:0}
+.track-card li .meta{color:var(--muted);font-size:.82rem;font-weight:500}
+
+/* ----------- Calculator embed band ----------- */
+.calc{
+  background:var(--ink);color:#fff;
+  background-image:
+    radial-gradient(circle at 100% 0%, rgba(255,107,87,.18), transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(79,70,229,.22), transparent 50%);
+  text-align:center;
+}
+.calc h2{color:#fff}
+.calc p{color:#A6ADCC;font-size:1.05rem;max-width:520px;margin:14px auto 28px}
+.calc .features{
+  display:flex;gap:24px;justify-content:center;flex-wrap:wrap;
+  color:#7F87B4;font-size:.88rem;margin-bottom:28px;
+}
+.calc .features strong{color:#fff;font-weight:600}
+.calc .btn-primary{background:#fff;color:var(--ink)}
+.calc .btn-primary:hover{background:var(--coral);color:#fff;box-shadow:0 12px 28px rgba(255,107,87,.4)}
+
+/* ----------- Footer ----------- */
+footer.site{
+  background:#fff;border-top:1px solid var(--line);
+  padding:36px 0;color:var(--muted);font-size:.85rem;
+}
+footer.site .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+footer.site a{color:var(--muted);margin-left:14px}
+footer.site a:hover{color:var(--ink)}
+@media(max-width:560px){footer.site .row{flex-direction:column}footer.site a{margin:0 14px 0 0}}
+
+/* ----------- Mobile-specific ----------- */
+@media(max-width:560px){
+  .section{padding:48px 0}
+  .hero-card{padding:20px}
+  .hero-ctas .btn{width:100%;justify-content:center}
+  .section-head{margin-bottom:28px}
+  .vert-grid{grid-template-columns:1fr;gap:10px}
+  .vert-card{padding:18px}
+  .track-card{padding:22px}
+  .calc .features{flex-direction:column;gap:6px}
+}
+
+/* preview banner */
+.preview-banner{
+  background:var(--ink);color:#fff;font-size:.78rem;text-align:center;padding:7px 14px;
+}
+.preview-banner a{color:#fff;text-decoration:underline;margin-left:8px}
+</style>
+</head>
+<body>
+
+<div class="preview-banner">
+  Preview A &mdash; Soft Modern direction
+  <a href="/preview/">&larr; back to comparison</a>
+</div>
+
+<header class="site">
+  <div class="container row">
+    <a href="/preview/soft-modern/" class="logo"><span class="mark">UB</span> UtilityBenefits</a>
+    <nav class="primary">
+      <a href="#">Savings</a>
+      <a href="#">Assistance</a>
+      <a href="#">About</a>
+      <a href="#" class="cta">Check eligibility</a>
+    </nav>
+  </div>
+</header>
+
+<!-- =========== HERO =========== -->
+<section class="hero">
+  <div class="container grid">
+    <div>
+      <span class="eyebrow"><span class="pulse"></span> Helping 5.4M households a year</span>
+      <h1>Save on every utility, and find the <em class="s">help you qualify for</em>.</h1>
+      <p class="lede">Independent research on every U.S. assistance program plus live rates from your state's official utility marketplaces. Free, no fee, never resold.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-primary">Check eligibility &rarr;</a>
+        <a href="#" class="btn btn-secondary">Compare rates</a>
+      </div>
+      <div class="trust-line">
+        <strong>Free</strong> to use
+        <span class="dot"></span>
+        <strong>No spam</strong> &mdash; we don't resell
+        <span class="dot"></span>
+        <strong>4 min</strong> on average
+      </div>
+    </div>
+
+    <aside class="hero-card">
+      <div class="head"><span>Sample household savings</span><span class="badge">verified</span></div>
+      <div class="row"><span class="label">Electricity supplier swap</span><span class="amount">&minus;$28/mo</span></div>
+      <div class="row"><span class="label">Cell plan &rarr; MVNO</span><span class="amount">&minus;$45/mo</span></div>
+      <div class="row"><span class="label">Internet renegotiation</span><span class="amount">&minus;$22/mo</span></div>
+      <div class="row"><span class="label">LIHEAP heating credit</span><span class="amount">&minus;$420/yr</span></div>
+      <div class="total"><span class="label">Total annual</span><span class="amount">&minus;$1,560</span></div>
+      <p class="foot">Average from households who completed at least three checks in 2025.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- =========== VERTICALS =========== -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="lbl">Six verticals</div>
+      <h2>One site for every utility bill.</h2>
+      <p>Each vertical covers both tracks &mdash; how to lower the bill, and which assistance programs you qualify for.</p>
+    </div>
+    <div class="vert-grid">
+      <a href="#" class="vert-card electricity">
+        <div class="icon">&#9889;</div>
+        <h3>Electricity</h3>
+        <p>Switch suppliers in deregulated states, plus LIHEAP and state-by-state crisis programs.</p>
+        <div class="tracks"><span class="track s">Savings</span><span class="track a">Assistance</span></div>
+        <span class="arrow">Explore &rarr;</span>
+      </a>
+      <a href="#" class="vert-card gas">
+        <div class="icon">&#128293;</div>
+        <h3>Natural Gas</h3>
+        <p>Why winter bills spike, fixed-rate plans, and state shut-off moratoriums.</p>
+        <div class="tracks"><span class="track s">Savings</span><span class="track a">Assistance</span></div>
+        <span class="arrow">Explore &rarr;</span>
+      </a>
+      <a href="#" class="vert-card internet">
+        <div class="icon">&#127760;</div>
+        <h3>Internet</h3>
+        <p>Lifeline broadband, ACP-replacement state programs, and how to renegotiate any ISP bill.</p>
+        <div class="tracks"><span class="track s">Savings</span><span class="track a">Assistance</span></div>
+        <span class="arrow">Explore &rarr;</span>
+      </a>
+      <a href="#" class="vert-card cellphone">
+        <div class="icon">&#128241;</div>
+        <h3>Cell Phone</h3>
+        <p>Free Lifeline service, $5&ndash;$15 MVNO plans, and state discount programs.</p>
+        <div class="tracks"><span class="track s">Savings</span><span class="track a">Assistance</span></div>
+        <span class="arrow">Explore &rarr;</span>
+      </a>
+      <a href="#" class="vert-card security">
+        <div class="icon">&#128737;&#65039;</div>
+        <h3>Home Security &amp; Medical Alert</h3>
+        <p>Medicaid HCBS coverage in 47 states, plus DIY system pricing.</p>
+        <div class="tracks"><span class="track s">Savings</span><span class="track a">Assistance</span></div>
+        <span class="arrow">Explore &rarr;</span>
+      </a>
+      <a href="#" class="vert-card water">
+        <div class="icon">&#128167;</div>
+        <h3>Water</h3>
+        <p>Leak detection, post-LIHWAP assistance, and per-state utility hardship grants.</p>
+        <div class="tracks"><span class="track s">Savings</span><span class="track a">Assistance</span></div>
+        <span class="arrow">Explore &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =========== DUAL TRACK =========== -->
+<section class="dual section">
+  <div class="container">
+    <div class="section-head">
+      <div class="lbl">The two tracks</div>
+      <h2>Save money <em class="serif">or</em> get help &mdash; both are real.</h2>
+      <p>Most households qualify for both. We don't make you pick a lane on the homepage.</p>
+    </div>
+    <div class="dual-grid">
+      <div class="track-card savings">
+        <div class="label">Savings</div>
+        <h3>Lower the bill.</h3>
+        <ul>
+          <li>Switch electricity supplier <span class="meta">$200&ndash;$600/yr</span></li>
+          <li>Switch to MVNO cell plan <span class="meta">$400+/yr</span></li>
+          <li>Renegotiate internet <span class="meta">$240+/yr</span></li>
+          <li>Heat-pump replacement <span class="meta">up to $2,000 rebate</span></li>
+        </ul>
+        <a href="#" class="btn btn-secondary">All savings guides &rarr;</a>
+      </div>
+      <div class="track-card assist">
+        <div class="label">Assistance</div>
+        <h3>Get help paying.</h3>
+        <ul>
+          <li>LIHEAP heating credit <span class="meta">$200&ndash;$1,500</span></li>
+          <li>Lifeline cell/broadband <span class="meta">free service</span></li>
+          <li>Medicaid medical alert <span class="meta">$0/mo PERS</span></li>
+          <li>Winter shut-off moratorium <span class="meta">30+ states</span></li>
+        </ul>
+        <a href="#" class="btn btn-secondary">All assistance programs &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== CALC EMBED =========== -->
+<section class="calc section">
+  <div class="container">
+    <h2>One check. Every program.</h2>
+    <p>Tell us your zip code, household size, and income range. We screen you against every federal and state program and show your savings options at the same time.</p>
+    <div class="features">
+      <span><strong>Free</strong> to use</span>
+      <span><strong>4 min</strong> avg</span>
+      <span><strong>No account</strong> needed</span>
+      <span><strong>Zip-code accurate</strong></span>
+    </div>
+    <a href="#" class="btn btn-primary">Start eligibility check &rarr;</a>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container row">
+    <span>&copy; 2026 UtilityBenefits.com</span>
+    <span>
+      <a href="#">About</a><a href="#">Editorial Standards</a><a href="#">How We Make Money</a><a href="#">Privacy</a><a href="#">Terms</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

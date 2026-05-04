@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Design previews — UtilityBenefits</title>
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Inter',system-ui,sans-serif;background:#0F1226;color:#fff;
+  line-height:1.55;min-height:100vh;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:48px 22px 80px}
+@media(max-width:560px){.wrap{padding:32px 18px 60px}}
+.intro{text-align:center;margin-bottom:48px}
+.intro .eyebrow{
+  display:inline-block;font-size:.74rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:#A6B0E8;margin-bottom:14px;
+}
+.intro h1{
+  font-family:'Source Serif 4',serif;font-weight:700;
+  font-size:clamp(1.9rem,5.5vw,3rem);
+  letter-spacing:-.025em;line-height:1.05;margin:0 auto 14px;max-width:680px;
+}
+.intro p{
+  color:#A6B0E8;font-size:1.05rem;max-width:560px;margin:0 auto;line-height:1.55;
+}
+.grid{
+  display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+}
+.card{
+  display:block;text-decoration:none;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;padding:22px;
+  transition:transform .15s,border-color .15s,background .15s;
+  color:#fff;
+}
+.card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(255,255,255,.28);
+  background:rgba(255,255,255,.09);
+  text-decoration:none;
+}
+.card .preview-frame{
+  background:#fff;border-radius:10px;height:140px;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:center;font-size:.78rem;color:#888;
+  background-size:cover;background-position:top center;overflow:hidden;
+  position:relative;
+}
+.card.A .preview-frame{
+  background:linear-gradient(180deg,#FAFAFC 0%,#EEF0FF 100%);
+  color:#4F46E5;
+}
+.card.B .preview-frame{background:#FBF8F3;color:#0E1A24}
+.card.C .preview-frame{background:#FFF9EC;color:#0F2A3F}
+.card .preview-frame .demo{
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.15rem;letter-spacing:-.02em;
+  text-align:center;padding:0 14px;
+}
+.card.A .preview-frame .demo em{
+  background:linear-gradient(135deg,#FF6B57,#4F46E5);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;font-style:italic;
+}
+.card.B .preview-frame .demo em{color:#B8845A;font-style:italic}
+.card.C .preview-frame .demo em{
+  background:#FFC93C;display:inline-block;padding:0 6px;border-radius:4px;color:#0F2A3F;
+}
+.card .label{
+  font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#A6B0E8;margin-bottom:6px;
+}
+.card h2{
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.25rem;
+  margin:0 0 6px;letter-spacing:-.012em;
+}
+.card p{color:#C5CCEC;font-size:.92rem;margin:0;line-height:1.5}
+.card .tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
+.card .tag{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  font-size:.72rem;padding:3px 9px;border-radius:999px;color:#C5CCEC;
+}
+.card .arrow{
+  margin-top:14px;display:inline-flex;align-items:center;gap:6px;
+  font-size:.92rem;font-weight:600;color:#fff;
+}
+.note{
+  margin-top:48px;padding:18px 22px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;color:#A6B0E8;font-size:.88rem;line-height:1.55;
+}
+.note strong{color:#fff}
+.note a{color:#fff;text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="intro">
+    <div class="eyebrow">Internal preview &middot; not indexed</div>
+    <h1>Three design directions for UtilityBenefits.com</h1>
+    <p>Each preview is a single mobile-first homepage. Pick the direction you like and we'll roll it across the rest of the site.</p>
+  </div>
+
+  <div class="grid">
+
+    <a href="/preview/soft-modern/" class="card A">
+      <div class="preview-frame"><div class="demo">Save on bills, find <em>the help</em>.</div></div>
+      <div class="label">Direction A</div>
+      <h2>Soft Modern</h2>
+      <p>Linear/Vercel feel. Subtle gradients, generous whitespace, indigo + coral. Trustworthy and contemporary.</p>
+      <div class="tags">
+        <span class="tag">Indigo &amp; coral</span>
+        <span class="tag">Soft shadows</span>
+        <span class="tag">Gradient text</span>
+      </div>
+      <span class="arrow">Open preview &rarr;</span>
+    </a>
+
+    <a href="/preview/editorial/" class="card B">
+      <div class="preview-frame"><div class="demo">Save on every utility, <em>and find the help</em>.</div></div>
+      <div class="label">Direction B</div>
+      <h2>Editorial Premium</h2>
+      <p>NYT/Apple research-publication feel. Big serif headlines, hairline rules, "No. 01" numbering, single accent color.</p>
+      <div class="tags">
+        <span class="tag">Cream &amp; amber</span>
+        <span class="tag">Source Serif</span>
+        <span class="tag">Magazine grid</span>
+      </div>
+      <span class="arrow">Open preview &rarr;</span>
+    </a>
+
+    <a href="/preview/friendly-bright/" class="card C">
+      <div class="preview-frame"><div class="demo">Save on bills <em>and</em> get help.</div></div>
+      <div class="label">Direction C</div>
+      <h2>Friendly Bright</h2>
+      <p>Mint/Rocket feel. Sunshine yellow + leaf green, big rounded cards with hard shadows, conversational copy. Approachable for assistance traffic.</p>
+      <div class="tags">
+        <span class="tag">Yellow &amp; green</span>
+        <span class="tag">Rounded cards</span>
+        <span class="tag">Bouncy CTAs</span>
+      </div>
+      <span class="arrow">Open preview &rarr;</span>
+    </a>
+
+  </div>
+
+  <div class="note">
+    <strong>How to compare:</strong> open each preview on your phone <em>and</em> on desktop. They're mobile-first &mdash; the hero CTA, eligibility check, and trust signals all stack cleanly under 380px. Tell me which direction you want and I'll roll it across the rest of the site (vertical pillars, state pages, savings clusters). The current production site at <a href="/">utilitybenefits.vercel.app/</a> stays untouched until you pick.
+  </div>
+
+</div>
+</body>
+</html>

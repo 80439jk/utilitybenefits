@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>UtilityBenefits — Save on bills, find assistance (Preview: Friendly Bright)</title>
+<meta name="description" content="Lower your utility bills and find every assistance program you qualify for. Free, no spam, takes about 4 minutes." />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   PREVIEW C — Friendly Bright (Mint/Rocket-influenced)
+   Optimistic, approachable, warm. Big rounded shapes.
+   Sunshine yellow + leaf green + soft cream + deep navy.
+   Mobile-first, oversized touch targets, conversational tone.
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+:root{
+  --paper:#FFFFFF; --bg:#FFF9EC;
+  --ink:#0F2A3F; --ink-2:#3A4D5E; --muted:#6F7E8B;
+  --line:#F1E6CB; --line-strong:#E2D5B5;
+  --sun:#FFC93C; --sun-deep:#D49A11;
+  --leaf:#1FA365; --leaf-deep:#0F7A47; --leaf-soft:#DCF5E8;
+  --berry:#E84D6B; --berry-soft:#FFE4EA;
+  --sky:#3FA9D6; --sky-soft:#DBF0FA;
+}
+body{
+  font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--ink);
+  -webkit-font-smoothing:antialiased;line-height:1.55;font-size:16.5px;
+}
+h1,h2,h3,h4{margin:0;font-family:'Fraunces',Georgia,serif;font-weight:700;letter-spacing:-.018em;line-height:1.05;color:var(--ink)}
+p{margin:0 0 1em}
+a{color:var(--leaf-deep)}
+.container{max-width:1200px;margin:0 auto;padding:0 22px}
+@media(min-width:760px){.container{padding:0 32px}}
+
+.preview-banner{background:var(--ink);color:#fff;font-size:.78rem;text-align:center;padding:7px 14px}
+.preview-banner a{color:#fff;text-decoration:underline;margin-left:8px}
+
+/* ----------- Header ----------- */
+header.site{
+  background:var(--bg);padding:14px 0;position:sticky;top:0;z-index:30;
+  border-bottom:1px solid rgba(241,230,203,.6);
+}
+header.site .row{display:flex;align-items:center;justify-content:space-between}
+.logo{
+  display:flex;align-items:center;gap:10px;text-decoration:none;
+  color:var(--ink);font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;letter-spacing:-.01em;
+}
+.logo .mark{
+  width:34px;height:34px;background:var(--sun);border-radius:12px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:'DM Sans',sans-serif;font-weight:800;font-size:.92rem;color:var(--ink);
+  box-shadow:0 4px 0 var(--sun-deep),inset 0 1px 0 rgba(255,255,255,.5);
+  transform:rotate(-3deg);
+}
+nav.primary{display:flex;align-items:center;gap:8px}
+nav.primary a{
+  color:var(--ink);font-weight:600;font-size:.94rem;padding:9px 14px;border-radius:999px;
+  text-decoration:none;
+}
+nav.primary a:hover{background:rgba(15,42,63,.06)}
+nav.primary .cta{
+  background:var(--ink);color:var(--bg);padding:11px 20px;
+  box-shadow:0 4px 0 #001A2E;
+}
+nav.primary .cta:hover{background:var(--ink);transform:translateY(-1px);box-shadow:0 5px 0 #001A2E}
+@media(max-width:760px){
+  nav.primary a:not(.cta){display:none}
+}
+
+/* ----------- Hero ----------- */
+.hero{
+  position:relative;overflow:hidden;padding:36px 0 52px;
+  background:var(--bg);
+}
+@media(min-width:760px){.hero{padding:64px 0 80px}}
+/* big background blob */
+.hero::before{
+  content:"";position:absolute;
+  top:-180px;right:-120px;width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,201,60,.55), rgba(255,201,60,0) 70%);
+  z-index:0;
+}
+.hero::after{
+  content:"";position:absolute;
+  bottom:-200px;left:-100px;width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle, rgba(31,163,101,.32), rgba(31,163,101,0) 70%);
+  z-index:0;
+}
+.hero .grid{position:relative;z-index:1;display:grid;gap:36px;align-items:center}
+@media(min-width:880px){
+  .hero .grid{grid-template-columns:1fr 420px;gap:56px}
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;border:2px solid var(--ink);
+  padding:7px 14px;border-radius:999px;
+  font-weight:700;font-size:.82rem;color:var(--ink);margin-bottom:18px;
+  box-shadow:3px 3px 0 var(--sun);
+}
+.eyebrow .wave{display:inline-block;animation:wave 1.6s infinite}
+@keyframes wave{
+  0%,100%{transform:rotate(0)}
+  20%{transform:rotate(14deg)}
+  40%{transform:rotate(-8deg)}
+  60%{transform:rotate(10deg)}
+}
+.hero h1{
+  font-size:clamp(2.4rem,8.4vw,4.6rem);
+  letter-spacing:-.025em;line-height:.97;margin-bottom:18px;
+}
+.hero h1 .underlined{position:relative;display:inline-block}
+.hero h1 .underlined::after{
+  content:"";position:absolute;left:-2px;right:-2px;bottom:.05em;height:.32em;
+  background:var(--sun);z-index:-1;border-radius:3px;
+}
+.hero p.lede{
+  font-size:clamp(1.05rem,2.5vw,1.22rem);color:var(--ink-2);
+  max-width:540px;margin-bottom:24px;line-height:1.5;
+}
+.hero p.lede strong{color:var(--ink);font-weight:700}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 22px;border-radius:14px;font-weight:700;font-size:1rem;
+  text-decoration:none;border:0;cursor:pointer;font-family:inherit;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.btn-primary{
+  background:var(--leaf);color:#fff;
+  box-shadow:0 5px 0 var(--leaf-deep);
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 0 var(--leaf-deep)}
+.btn-primary:active{transform:translateY(2px);box-shadow:0 3px 0 var(--leaf-deep)}
+.btn-yellow{
+  background:var(--sun);color:var(--ink);
+  box-shadow:0 5px 0 var(--sun-deep);
+}
+.btn-yellow:hover{transform:translateY(-1px);box-shadow:0 6px 0 var(--sun-deep)}
+.btn-ghost{
+  background:#fff;color:var(--ink);border:2px solid var(--ink);
+  box-shadow:3px 3px 0 var(--ink);
+}
+.btn-ghost:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+
+.hero .trust-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.hero .trust-pills span{
+  background:#fff;border:1px solid var(--line-strong);border-radius:999px;
+  padding:5px 12px;font-size:.8rem;color:var(--ink-2);font-weight:500;
+}
+.hero .trust-pills span strong{color:var(--ink);font-weight:700}
+
+/* hero illustration card */
+.hero-art{
+  background:#fff;border:3px solid var(--ink);border-radius:24px;
+  padding:22px;box-shadow:8px 8px 0 var(--ink);
+  position:relative;
+}
+.hero-art .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.hero-art .top .who{
+  font-size:.84rem;color:var(--muted);font-weight:500;
+}
+.hero-art .top .who strong{color:var(--ink);font-weight:700;display:block}
+.hero-art .top .badge{
+  background:var(--leaf-soft);color:var(--leaf-deep);font-size:.7rem;font-weight:700;
+  padding:5px 10px;border-radius:999px;letter-spacing:.05em;text-transform:uppercase;
+}
+.hero-art .item{
+  display:flex;align-items:center;gap:14px;padding:12px;border-radius:14px;margin-bottom:8px;
+  background:var(--bg);border:1px solid var(--line);
+}
+.hero-art .emoji{
+  width:38px;height:38px;border-radius:12px;background:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+  border:1px solid var(--line);
+}
+.hero-art .item .name{flex:1;font-weight:600;font-size:.94rem}
+.hero-art .item .name small{display:block;font-weight:500;color:var(--muted);font-size:.8rem}
+.hero-art .item .save{
+  background:var(--leaf);color:#fff;font-weight:700;font-size:.86rem;
+  padding:5px 11px;border-radius:999px;font-variant-numeric:tabular-nums;
+}
+.hero-art .total{
+  margin-top:14px;padding:14px;border-radius:14px;
+  background:var(--ink);color:#fff;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.hero-art .total .lbl{font-weight:600;font-size:.95rem}
+.hero-art .total .amt{
+  font-family:'Fraunces',serif;font-weight:700;font-size:1.7rem;
+  color:var(--sun);font-variant-numeric:tabular-nums;letter-spacing:-.01em;
+}
+
+/* ----------- Section helpers ----------- */
+.section{padding:48px 0}
+@media(min-width:760px){.section{padding:80px 0}}
+.section-head{text-align:center;margin-bottom:36px;max-width:680px;margin-left:auto;margin-right:auto}
+.section-head .lbl{
+  display:inline-block;background:var(--berry-soft);color:var(--berry);
+  padding:5px 12px;border-radius:999px;font-size:.74rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px;
+}
+.section-head h2{font-size:clamp(1.7rem,5vw,2.6rem);letter-spacing:-.022em;margin-bottom:10px}
+.section-head h2 .squiggle{
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M0 6 Q 25 0, 50 6 T 100 6 T 150 6 T 200 6' stroke='%23FFC93C' stroke-width='4' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:bottom center;background-size:100% 10px;
+  padding-bottom:6px;
+}
+.section-head p{color:var(--ink-2);font-size:1.05rem}
+
+/* ----------- Verticals (rounded cards) ----------- */
+.section.verticals{background:#fff;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.vert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.vert-card{
+  background:var(--bg);border:2px solid var(--ink);border-radius:20px;padding:22px;
+  text-decoration:none;color:var(--ink);
+  display:flex;flex-direction:column;gap:12px;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.vert-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.vert-card .iconbox{
+  width:54px;height:54px;border-radius:16px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:1.7rem;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);
+}
+.vert-card.electricity .iconbox{background:var(--sun)}
+.vert-card.gas .iconbox       {background:var(--berry-soft)}
+.vert-card.internet .iconbox  {background:var(--sky)}
+.vert-card.cellphone .iconbox {background:#E0CCFF}
+.vert-card.security .iconbox  {background:var(--leaf-soft)}
+.vert-card.water .iconbox     {background:var(--sky-soft)}
+.vert-card h3{font-size:1.2rem;margin:0}
+.vert-card p{color:var(--ink-2);font-size:.94rem;margin:0;flex:1}
+.vert-card .tracks{display:flex;gap:6px;font-size:.74rem;font-weight:700}
+.vert-card .track{padding:4px 10px;border-radius:999px}
+.vert-card .track.s{background:var(--sun);color:var(--ink)}
+.vert-card .track.a{background:var(--leaf);color:#fff}
+.vert-card .arrow{
+  display:inline-flex;align-items:center;gap:6px;color:var(--leaf-deep);
+  font-weight:700;font-size:.92rem;margin-top:auto;
+}
+
+/* ----------- Dual track ----------- */
+.section.dual{background:var(--bg)}
+.dual-grid{display:grid;gap:18px}
+@media(min-width:880px){.dual-grid{grid-template-columns:1fr 1fr;gap:24px}}
+.track-card{
+  border-radius:24px;padding:28px;border:2px solid var(--ink);
+  position:relative;
+}
+.track-card.savings{background:var(--sun);box-shadow:6px 6px 0 var(--ink)}
+.track-card.assist{background:var(--leaf);color:#fff;box-shadow:6px 6px 0 var(--ink)}
+.track-card.assist h3,.track-card.assist .label,.track-card.assist li,.track-card.assist .meta{color:#fff}
+.track-card .label{
+  font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;
+}
+.track-card.savings .label{color:#7A4B0A}
+.track-card h3{font-size:1.6rem;margin-bottom:14px}
+.track-card ul{list-style:none;padding:0;margin:0 0 18px}
+.track-card li{
+  padding:11px 0;border-bottom:1.5px dashed rgba(0,0,0,.12);font-size:.95rem;font-weight:500;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+}
+.track-card.assist li{border-bottom-color:rgba(255,255,255,.25)}
+.track-card li:last-child{border-bottom:0}
+.track-card li .meta{font-weight:700;font-variant-numeric:tabular-nums}
+.track-card.savings li .meta{color:#7A4B0A}
+
+/* ----------- How it works ----------- */
+.how{background:#fff;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:760px){.how-grid{grid-template-columns:1fr;gap:14px}}
+.how-step{
+  background:var(--bg);border:2px solid var(--ink);border-radius:20px;padding:24px;
+  text-align:left;
+}
+.how-step .num{
+  width:42px;height:42px;background:var(--ink);color:var(--sun);
+  border-radius:12px;display:inline-flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:700;font-size:1.2rem;margin-bottom:12px;
+}
+.how-step h3{font-size:1.15rem;margin-bottom:6px}
+.how-step p{color:var(--ink-2);font-size:.94rem;margin:0}
+
+/* ----------- Calc CTA ----------- */
+.calc{
+  background:var(--ink);color:#fff;text-align:center;
+  background-image:
+    radial-gradient(circle at 100% 0%, rgba(255,201,60,.18), transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(31,163,101,.22), transparent 50%);
+}
+.calc h2{color:#fff}
+.calc h2 .squiggle{
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M0 6 Q 25 0, 50 6 T 100 6 T 150 6 T 200 6' stroke='%23FFC93C' stroke-width='4' fill='none' stroke-linecap='round'/></svg>");
+}
+.calc p{color:#A6B8C5;max-width:520px;margin:14px auto 28px;font-size:1.05rem}
+.calc .features{
+  display:flex;justify-content:center;flex-wrap:wrap;gap:18px;margin-bottom:28px;
+  font-size:.88rem;color:#A6B8C5;
+}
+.calc .features strong{color:#fff;font-weight:700}
+.calc .btn-yellow{box-shadow:0 5px 0 #001A2E}
+
+/* ----------- Footer ----------- */
+footer.site{
+  background:var(--bg);border-top:3px solid var(--ink);padding:36px 0 32px;
+  font-size:.85rem;color:var(--ink-2);
+}
+footer.site .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+footer.site .row a{color:var(--ink-2);margin-left:14px;text-decoration:none}
+footer.site .row a:hover{color:var(--ink);text-decoration:underline}
+@media(max-width:560px){footer.site .row{flex-direction:column}footer.site .row a{margin:0 14px 0 0}}
+
+/* mobile tightening */
+@media(max-width:560px){
+  .section{padding:36px 0}
+  .hero{padding:24px 0 36px}
+  .hero-ctas .btn{width:100%;justify-content:center}
+  .hero-art{padding:18px;border-width:2px}
+  .vert-grid{grid-template-columns:1fr}
+  .vert-card{padding:18px}
+  .track-card{padding:22px;border-width:2px}
+}
+</style>
+</head>
+<body>
+
+<div class="preview-banner">
+  Preview C &mdash; Friendly Bright direction
+  <a href="/preview/">&larr; back to comparison</a>
+</div>
+
+<header class="site">
+  <div class="container row">
+    <a href="/preview/friendly-bright/" class="logo"><span class="mark">UB</span> UtilityBenefits</a>
+    <nav class="primary">
+      <a href="#">Save</a>
+      <a href="#">Get help</a>
+      <a href="#">About</a>
+      <a href="#" class="cta">Check eligibility &rarr;</a>
+    </nav>
+  </div>
+</header>
+
+<!-- =========== HERO =========== -->
+<section class="hero">
+  <div class="container grid">
+    <div>
+      <span class="eyebrow"><span class="wave">&#128075;</span> Hi! We help 5.4M households a year</span>
+      <h1>Save on bills <em>and</em> find <span class="underlined">help you qualify for</span>.</h1>
+      <p class="lede">Tell us a tiny bit about your household and we'll show you every program you qualify for, plus how to lower the bill on every utility. <strong>Takes about four minutes.</strong></p>
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-primary">Check eligibility &rarr;</a>
+        <a href="#" class="btn btn-ghost">Browse savings</a>
+      </div>
+      <div class="trust-pills">
+        <span><strong>Free</strong> always</span>
+        <span><strong>No spam</strong> ever</span>
+        <span><strong>4 min</strong> to finish</span>
+        <span>Works in <strong>all 50 states</strong></span>
+      </div>
+    </div>
+
+    <aside class="hero-art">
+      <div class="top">
+        <div class="who"><strong>Sample household, TX</strong>2 adults &middot; 2 kids</div>
+        <span class="badge">Verified</span>
+      </div>
+      <div class="item">
+        <span class="emoji">&#9889;</span>
+        <span class="name">Electric supplier swap<small>5-min switch, fixed rate</small></span>
+        <span class="save">&minus;$28/mo</span>
+      </div>
+      <div class="item">
+        <span class="emoji">&#128241;</span>
+        <span class="name">Cell &rarr; MVNO<small>Same Verizon network, half price</small></span>
+        <span class="save">&minus;$45/mo</span>
+      </div>
+      <div class="item">
+        <span class="emoji">&#127968;</span>
+        <span class="name">LIHEAP heating credit<small>Federal program</small></span>
+        <span class="save">&minus;$420/yr</span>
+      </div>
+      <div class="total">
+        <span class="lbl">Saved per year</span>
+        <span class="amt">$1,560</span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- =========== VERTICALS =========== -->
+<section class="section verticals">
+  <div class="container">
+    <div class="section-head">
+      <span class="lbl">Six utilities</span>
+      <h2>One site for <span class="squiggle">every bill</span>.</h2>
+      <p>Tap any utility to see how to save and what assistance programs you qualify for.</p>
+    </div>
+    <div class="vert-grid">
+      <a href="#" class="vert-card electricity">
+        <div class="iconbox">&#9889;</div>
+        <h3>Electricity</h3>
+        <p>Switch suppliers in 17 states. Find LIHEAP and crisis programs.</p>
+        <div class="tracks"><span class="track s">Save</span><span class="track a">Get help</span></div>
+        <span class="arrow">Open &rarr;</span>
+      </a>
+      <a href="#" class="vert-card gas">
+        <div class="iconbox">&#128293;</div>
+        <h3>Natural Gas</h3>
+        <p>Why winter bills spike, and the 30+ states with shut-off protection.</p>
+        <div class="tracks"><span class="track s">Save</span><span class="track a">Get help</span></div>
+        <span class="arrow">Open &rarr;</span>
+      </a>
+      <a href="#" class="vert-card internet">
+        <div class="iconbox">&#127760;</div>
+        <h3>Internet</h3>
+        <p>Free broadband through Lifeline. Renegotiate your ISP bill.</p>
+        <div class="tracks"><span class="track s">Save</span><span class="track a">Get help</span></div>
+        <span class="arrow">Open &rarr;</span>
+      </a>
+      <a href="#" class="vert-card cellphone">
+        <div class="iconbox">&#128241;</div>
+        <h3>Cell Phone</h3>
+        <p>Free Lifeline service or a $5&ndash;$15 plan on the same big networks.</p>
+        <div class="tracks"><span class="track s">Save</span><span class="track a">Get help</span></div>
+        <span class="arrow">Open &rarr;</span>
+      </a>
+      <a href="#" class="vert-card security">
+        <div class="iconbox">&#128737;&#65039;</div>
+        <h3>Medical Alert</h3>
+        <p>Medicaid covers PERS in 47 states. We tell you which.</p>
+        <div class="tracks"><span class="track a">Get help</span></div>
+        <span class="arrow">Open &rarr;</span>
+      </a>
+      <a href="#" class="vert-card water">
+        <div class="iconbox">&#128167;</div>
+        <h3>Water</h3>
+        <p>Hardship grants, leak detection, and what replaced LIHWAP.</p>
+        <div class="tracks"><span class="track s">Save</span><span class="track a">Get help</span></div>
+        <span class="arrow">Open &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =========== DUAL TRACK =========== -->
+<section class="section dual">
+  <div class="container">
+    <div class="section-head">
+      <span class="lbl">Two ways we help</span>
+      <h2>Save money <em>or</em> get assistance &mdash; <span class="squiggle">most do both</span>.</h2>
+    </div>
+    <div class="dual-grid">
+      <div class="track-card savings">
+        <div class="label">Savings</div>
+        <h3>Lower the bill.</h3>
+        <ul>
+          <li>Switch electricity supplier <span class="meta">$200&ndash;$600/yr</span></li>
+          <li>Switch to MVNO cell plan <span class="meta">$400+/yr</span></li>
+          <li>Renegotiate internet <span class="meta">$240+/yr</span></li>
+          <li>Heat-pump rebate <span class="meta">up to $2,000</span></li>
+        </ul>
+        <a href="#" class="btn btn-ghost">All savings guides &rarr;</a>
+      </div>
+      <div class="track-card assist">
+        <div class="label">Assistance</div>
+        <h3>Get help paying.</h3>
+        <ul>
+          <li>LIHEAP heating credit <span class="meta">$200&ndash;$1,500</span></li>
+          <li>Lifeline cell &amp; broadband <span class="meta">free</span></li>
+          <li>Medicaid medical alert <span class="meta">$0/mo</span></li>
+          <li>Winter shut-off moratorium <span class="meta">30+ states</span></li>
+        </ul>
+        <a href="#" class="btn btn-yellow">All assistance &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== HOW IT WORKS =========== -->
+<section class="section how">
+  <div class="container">
+    <div class="section-head">
+      <span class="lbl">How it works</span>
+      <h2>Three steps, four minutes.</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="num">1</div>
+        <h3>Tell us your basics</h3>
+        <p>Zip code, household size, and income range. No SSN, no full name, no spam.</p>
+      </div>
+      <div class="how-step">
+        <div class="num">2</div>
+        <h3>See your matches</h3>
+        <p>Every federal and state program you qualify for, plus the lowest rates available where you live.</p>
+      </div>
+      <div class="how-step">
+        <div class="num">3</div>
+        <h3>Apply or save</h3>
+        <p>Direct links to official applications. Or talk to a case manager who handles it with you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== CALC =========== -->
+<section class="section calc">
+  <div class="container">
+    <h2>Find <span class="squiggle">every program</span> you qualify for.</h2>
+    <p>One quick check, no account, no sales pitch. We screen against every federal and state program.</p>
+    <div class="features">
+      <span><strong>Free</strong> always</span>
+      <span><strong>4 min</strong> avg</span>
+      <span><strong>No account</strong></span>
+      <span><strong>50 states</strong></span>
+    </div>
+    <a href="#" class="btn btn-yellow">Start eligibility check &rarr;</a>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="container row">
+    <span>&copy; 2026 UtilityBenefits.com &middot; made with care.</span>
+    <span>
+      <a href="#">About</a><a href="#">Editorial</a><a href="#">How we make money</a><a href="#">Privacy</a><a href="#">Terms</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
