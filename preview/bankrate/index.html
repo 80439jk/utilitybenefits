@@ -217,31 +217,40 @@ nav.primary .cta:hover{background:#0a7a4d}
 }
 .stats-card .source strong{color:var(--ink);font-weight:600}
 
-/* ----------- Press logos band ----------- */
-.press-band{
-  background:#fff;border-bottom:1px solid var(--line);padding:24px 0;
+/* ----------- Data-sources band ----------- */
+.sources-band{
+  background:#fff;border-bottom:1px solid var(--line);padding:32px 0;
 }
-.press-band .container{display:flex;flex-direction:column;align-items:center;gap:14px}
-.press-band .label{
+.sources-band .container{display:flex;flex-direction:column;align-items:center;gap:18px}
+.sources-band .label{
   font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.16em;font-weight:600;
+  text-align:center;
 }
-.press-band .logos{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:24px;align-items:center;
+.sources-band .label strong{color:var(--ink);font-weight:700}
+.sources-band .sources{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:18px 24px;
 }
-.press-band .logos span{
-  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.1rem;color:var(--ink-2);
-  letter-spacing:-.005em;opacity:.78;
+.sources-band .src{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--ink);font-weight:600;font-size:.92rem;
 }
-.press-band .logos .nyt{font-style:italic;letter-spacing:-.02em}
-.press-band .logos .wsj{font-weight:800;color:#000}
-.press-band .logos .forbes{font-weight:800}
-.press-band .logos .ap{
-  font-family:'Inter',sans-serif;font-weight:800;letter-spacing:-.02em;
-  background:var(--ink);color:#fff;padding:3px 8px;font-size:.95rem;
+.sources-band .src .icn{
+  width:34px;height:34px;border-radius:8px;
+  background:var(--bg);border:1px solid var(--line);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:'Inter',sans-serif;font-weight:800;font-size:.7rem;
+  color:var(--ink);letter-spacing:.02em;
 }
-.press-band .logos .reuters{
-  font-family:'Inter',sans-serif;font-weight:600;color:#FF8000;
+.sources-band .src small{
+  display:block;font-size:.74rem;font-weight:500;color:var(--muted);margin-top:1px;
 }
+.sources-band .src strong{display:block;line-height:1.1;font-weight:700;font-size:.92rem}
+.sources-band .footnote{
+  font-size:.78rem;color:var(--muted);text-align:center;
+  border-top:1px dashed var(--line);padding-top:14px;width:100%;max-width:700px;
+}
+.sources-band .footnote strong{color:var(--ink);font-weight:600}
 
 /* ----------- Cited stats strip ----------- */
 .facts-strip{
@@ -475,19 +484,33 @@ footer.site .legal .copy a{color:var(--muted);margin-left:14px}
   </div>
 </section>
 
-<!-- =========== PRESS =========== -->
-<section class="press-band">
+<!-- =========== LIVE DATA SOURCES =========== -->
+<section class="sources-band">
   <div class="container">
-    <span class="label">Coverage &amp; mentions</span>
-    <div class="logos">
-      <span class="nyt">The New York Times</span>
-      <span class="wsj">THE WALL STREET JOURNAL</span>
-      <span class="forbes">Forbes</span>
-      <span class="ap">AP</span>
-      <span class="reuters">Reuters</span>
-      <span>NPR</span>
-      <span>CNBC</span>
+    <span class="label">Live data drawn from <strong>authoritative public sources</strong></span>
+    <div class="sources">
+      <span class="src">
+        <span class="icn">HHS</span>
+        <span><strong>LIHEAP database</strong><small>U.S. Dept. of Health &amp; Human Services</small></span>
+      </span>
+      <span class="src">
+        <span class="icn">FCC</span>
+        <span><strong>Lifeline / USAC</strong><small>Federal Communications Commission</small></span>
+      </span>
+      <span class="src">
+        <span class="icn">CMS</span>
+        <span><strong>HCBS waiver registry</strong><small>Centers for Medicare &amp; Medicaid Services</small></span>
+      </span>
+      <span class="src">
+        <span class="icn">PUC</span>
+        <span><strong>52 state utility commissions</strong><small>Live electricity &amp; gas rate sheets</small></span>
+      </span>
+      <span class="src">
+        <span class="icn">BLS</span>
+        <span><strong>Energy price index</strong><small>U.S. Bureau of Labor Statistics</small></span>
+      </span>
     </div>
+    <p class="footnote">Last refreshed <strong>May 4, 2026</strong> &middot; Quarterly review cycle &middot; <a href="#" style="color:var(--ink)">See data dictionary &rarr;</a></p>
   </div>
 </section>
 
