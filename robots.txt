@@ -1,0 +1,25 @@
+# UtilityBenefits.com robots.txt
+# Allow all well-behaved crawlers full access.
+
+User-agent: *
+Allow: /
+
+# Common bad bots — block to save bandwidth
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Don't index the eligibility-check form submissions or query-parameter variants
+Disallow: /qualify/?
+Disallow: /*?
+
+# Sitemap location
+Sitemap: https://utilitybenefits.vercel.app/sitemap.xml
