@@ -15,7 +15,7 @@ body{
   font-family:'Inter',system-ui,sans-serif;background:#0F1226;color:#fff;
   line-height:1.55;min-height:100vh;
 }
-.wrap{max-width:1100px;margin:0 auto;padding:48px 22px 80px}
+.wrap{max-width:1200px;margin:0 auto;padding:48px 22px 80px}
 @media(max-width:560px){.wrap{padding:32px 18px 60px}}
 .intro{text-align:center;margin-bottom:48px}
 .intro .eyebrow{
@@ -30,9 +30,21 @@ body{
 .intro p{
   color:#A6B0E8;font-size:1.05rem;max-width:560px;margin:0 auto;line-height:1.55;
 }
-.grid{
-  display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+.round-label{
+  font-size:.74rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:#7DFFC1;margin:48px 0 18px;padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;
 }
+.round-label.r1{color:#9CA8D6}
+.round-label .recommended{
+  background:rgba(125,255,193,.12);color:#7DFFC1;
+  font-size:.7rem;padding:4px 10px;border-radius:999px;letter-spacing:.06em;
+  border:1px solid rgba(125,255,193,.3);
+}
+
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .card{
   display:block;text-decoration:none;
   background:rgba(255,255,255,.06);
@@ -43,26 +55,47 @@ body{
 }
 .card:hover{
   transform:translateY(-2px);
-  border-color:rgba(255,255,255,.28);
+  border-color:rgba(255,255,255,.32);
   background:rgba(255,255,255,.09);
   text-decoration:none;
 }
-.card .preview-frame{
-  background:#fff;border-radius:10px;height:140px;margin-bottom:16px;
+.card.featured{
+  border:1px solid rgba(125,255,193,.28);
+  background:rgba(125,255,193,.04);
+}
+.card.featured:hover{border-color:rgba(125,255,193,.5)}
+
+.preview-frame{
+  background:#fff;border-radius:10px;height:160px;margin-bottom:16px;
   display:flex;align-items:center;justify-content:center;font-size:.78rem;color:#888;
-  background-size:cover;background-position:top center;overflow:hidden;
-  position:relative;
+  overflow:hidden;position:relative;
 }
-.card.A .preview-frame{
-  background:linear-gradient(180deg,#FAFAFC 0%,#EEF0FF 100%);
-  color:#4F46E5;
+.card.D .preview-frame{background:linear-gradient(180deg,#fff 0%,#F7F7F4 100%)}
+.card.E .preview-frame{background:#FFFFFF}
+.card.F .preview-frame{background:linear-gradient(180deg,#FBF9F2 0%,#fff 100%)}
+.card.A .preview-frame{background:linear-gradient(180deg,#FAFAFC 0%,#EEF0FF 100%)}
+.card.B .preview-frame{background:#FBF8F3}
+.card.C .preview-frame{background:#FFF9EC}
+.preview-frame .demo{
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.15rem;letter-spacing:-.018em;
+  text-align:center;padding:0 18px;color:#0E1A24;
 }
-.card.B .preview-frame{background:#FBF8F3;color:#0E1A24}
-.card.C .preview-frame{background:#FFF9EC;color:#0F2A3F}
-.card .preview-frame .demo{
-  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.15rem;letter-spacing:-.02em;
-  text-align:center;padding:0 14px;
+.card.D .preview-frame .demo{color:#0A2540}
+.card.D .preview-frame .demo small{
+  display:block;font-family:'Inter',sans-serif;font-weight:600;font-size:.7rem;
+  color:#0E8E5C;margin-top:8px;letter-spacing:.04em;text-transform:uppercase;
 }
+.card.E .preview-frame .demo{color:#1A1A1A}
+.card.E .preview-frame .demo small{
+  display:block;font-family:'Inter',sans-serif;font-weight:600;font-size:.65rem;
+  color:#9F2027;margin-top:8px;letter-spacing:.16em;text-transform:uppercase;
+}
+.card.F .preview-frame .demo{color:#10243A}
+.card.F .preview-frame .demo small{
+  display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:.7rem;
+  color:#D29B22;margin-top:8px;letter-spacing:.04em;
+}
+.card.F .preview-frame .demo small::before{content:"★★★★★ "}
 .card.A .preview-frame .demo em{
   background:linear-gradient(135deg,#FF6B57,#4F46E5);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;font-style:italic;
@@ -71,13 +104,15 @@ body{
 .card.C .preview-frame .demo em{
   background:#FFC93C;display:inline-block;padding:0 6px;border-radius:4px;color:#0F2A3F;
 }
+
 .card .label{
   font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   color:#A6B0E8;margin-bottom:6px;
 }
+.card.featured .label{color:#7DFFC1}
 .card h2{
-  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.25rem;
-  margin:0 0 6px;letter-spacing:-.012em;
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.3rem;
+  margin:0 0 8px;letter-spacing:-.012em;
 }
 .card p{color:#C5CCEC;font-size:.92rem;margin:0;line-height:1.5}
 .card .tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
@@ -103,8 +138,81 @@ body{
 
   <div class="intro">
     <div class="eyebrow">Internal preview &middot; not indexed</div>
-    <h1>Three design directions for UtilityBenefits.com</h1>
-    <p>Each preview is a single mobile-first homepage. Pick the direction you like and we'll roll it across the rest of the site.</p>
+    <h1>Six design directions for UtilityBenefits.com</h1>
+    <p>The first round leaned design-forward; the second round leans on trust signals (expert reviewers, cited stats, press logos, methodology). Open each on phone <strong>and</strong> desktop &mdash; all are mobile-first.</p>
+  </div>
+
+  <!-- ROUND 2: Trust + Authority -->
+  <div class="round-label">
+    <span>Round 2 &middot; Trust + authority focus</span>
+    <span class="recommended">More credibility</span>
+  </div>
+
+  <div class="grid">
+
+    <a href="/preview/bankrate/" class="card D featured">
+      <div class="preview-frame">
+        <div class="demo">
+          Save on every utility bill, and find the help you qualify for.
+          <small>&#10003; Reviewed by Lisa Chen, Energy Policy Analyst</small>
+        </div>
+      </div>
+      <div class="label">Direction D &middot; Recommended</div>
+      <h2>Bankrate / NerdWallet</h2>
+      <p>Financial-publication authority. Navy + emerald. Big "Reviewed by [expert]" line under every headline, press-logo band (NYT, WSJ, Forbes, AP), cited statistics (HHS / FCC / CMS), methodology link in nav, "Last reviewed" timestamps. Verticals shown as a scannable data table.</p>
+      <div class="tags">
+        <span class="tag">Navy &amp; emerald</span>
+        <span class="tag">Reviewer avatar</span>
+        <span class="tag">Press logos</span>
+        <span class="tag">Cited stats</span>
+      </div>
+      <span class="arrow">Open preview &rarr;</span>
+    </a>
+
+    <a href="/preview/research/" class="card E featured">
+      <div class="preview-frame">
+        <div class="demo">
+          The complete catalog of U.S. utility assistance programs.
+          <small>Working Paper No. 1 &middot; May 2026</small>
+        </div>
+      </div>
+      <div class="label">Direction E</div>
+      <h2>Pew Research / RAND</h2>
+      <p>Research-institution gravitas. Quiet white + ink + crimson. Stats-first hero with $1,560/yr as oversized type. "Working Paper No. 1" framing throughout. A cited bar chart on the homepage. Methodology callout in dark band. Authors block with credentials. Reads like RAND or Pew.</p>
+      <div class="tags">
+        <span class="tag">White &amp; crimson</span>
+        <span class="tag">Bar chart on home</span>
+        <span class="tag">Working paper format</span>
+        <span class="tag">Author profiles</span>
+      </div>
+      <span class="arrow">Open preview &rarr;</span>
+    </a>
+
+    <a href="/preview/consumer-advocate/" class="card F featured">
+      <div class="preview-frame">
+        <div class="demo">
+          Save on every utility bill, and find the help you qualify for.
+          <small>4.8/5 from 12,418 households</small>
+        </div>
+      </div>
+      <div class="label">Direction F</div>
+      <h2>AARP / Consumer Reports</h2>
+      <p>Civic authority + consumer advocate. Trusted blue + warm cream + gold. 4.8-star rating in eyebrow, BBB / SOC 2 / NABA seals across the top, big reviewer card with photo + credentials, testimonial band, full parent-company / DE LLC / address footer. Approachable but heavily credentialed.</p>
+      <div class="tags">
+        <span class="tag">Blue &amp; cream</span>
+        <span class="tag">Star rating + reviewer</span>
+        <span class="tag">BBB / SOC 2 seals</span>
+        <span class="tag">Testimonials</span>
+      </div>
+      <span class="arrow">Open preview &rarr;</span>
+    </a>
+
+  </div>
+
+  <!-- ROUND 1: Original three -->
+  <div class="round-label r1">
+    <span>Round 1 &middot; Original directions</span>
+    <span style="font-size:.7rem;letter-spacing:.04em;text-transform:none;color:#7782A8">design-forward, less trust-focused</span>
   </div>
 
   <div class="grid">
@@ -113,12 +221,7 @@ body{
       <div class="preview-frame"><div class="demo">Save on bills, find <em>the help</em>.</div></div>
       <div class="label">Direction A</div>
       <h2>Soft Modern</h2>
-      <p>Linear/Vercel feel. Subtle gradients, generous whitespace, indigo + coral. Trustworthy and contemporary.</p>
-      <div class="tags">
-        <span class="tag">Indigo &amp; coral</span>
-        <span class="tag">Soft shadows</span>
-        <span class="tag">Gradient text</span>
-      </div>
+      <p>Linear/Vercel feel. Subtle gradients, indigo + coral, gradient-text accents.</p>
       <span class="arrow">Open preview &rarr;</span>
     </a>
 
@@ -126,12 +229,7 @@ body{
       <div class="preview-frame"><div class="demo">Save on every utility, <em>and find the help</em>.</div></div>
       <div class="label">Direction B</div>
       <h2>Editorial Premium</h2>
-      <p>NYT/Apple research-publication feel. Big serif headlines, hairline rules, "No. 01" numbering, single accent color.</p>
-      <div class="tags">
-        <span class="tag">Cream &amp; amber</span>
-        <span class="tag">Source Serif</span>
-        <span class="tag">Magazine grid</span>
-      </div>
+      <p>NYT/Apple feel. Big serif headlines, hairline rules, "No. 01" numbering.</p>
       <span class="arrow">Open preview &rarr;</span>
     </a>
 
@@ -139,19 +237,14 @@ body{
       <div class="preview-frame"><div class="demo">Save on bills <em>and</em> get help.</div></div>
       <div class="label">Direction C</div>
       <h2>Friendly Bright</h2>
-      <p>Mint/Rocket feel. Sunshine yellow + leaf green, big rounded cards with hard shadows, conversational copy. Approachable for assistance traffic.</p>
-      <div class="tags">
-        <span class="tag">Yellow &amp; green</span>
-        <span class="tag">Rounded cards</span>
-        <span class="tag">Bouncy CTAs</span>
-      </div>
+      <p>Mint/Rocket feel. Sunshine + leaf green, hard shadows, conversational copy.</p>
       <span class="arrow">Open preview &rarr;</span>
     </a>
 
   </div>
 
   <div class="note">
-    <strong>How to compare:</strong> open each preview on your phone <em>and</em> on desktop. They're mobile-first &mdash; the hero CTA, eligibility check, and trust signals all stack cleanly under 380px. Tell me which direction you want and I'll roll it across the rest of the site (vertical pillars, state pages, savings clusters). The current production site at <a href="/">utilitybenefits.vercel.app/</a> stays untouched until you pick.
+    <strong>How to compare:</strong> open each preview on your phone <em>and</em> on desktop. All are mobile-first &mdash; the hero CTA, eligibility check, and trust signals stack cleanly under 380px. Tell me which direction you want and I'll roll it across the rest of the site (vertical pillars, state pages, savings clusters). Production site at <a href="/">utilitybenefits.vercel.app/</a> stays untouched until you pick.
   </div>
 
 </div>

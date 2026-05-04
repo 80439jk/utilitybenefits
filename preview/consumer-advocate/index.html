@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>UtilityBenefits — Independent help for every utility bill</title>
+<meta name="description" content="Independent, fact-checked help for every U.S. household utility bill. We're not a government agency and we don't sell your information. Trusted since 2024." />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   PREVIEW F — AARP / Consumer Reports (Civic Authority)
+   Mobile-first. Trusted blue + warm cream + reassuring scale.
+   Big readable type, expert reviewer profiles prominent,
+   trusted-since stat, BBB / press logos, parent-company footer.
+   Approachable but credentialed.
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+:root{
+  --paper:#FFFFFF; --bg:#FBF9F2;
+  --ink:#10243A; --ink-2:#3A4F65; --muted:#6F7E8C;
+  --line:#E9E2CB; --line-soft:#F2EBD7;
+  --blue:#13578E; --blue-deep:#0C3B62; --blue-soft:#E8F1F8;
+  --gold:#D29B22;
+  --green:#2D7A4F; --green-soft:#E5F2EB;
+  --rose:#B5384B;
+}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;line-height:1.6;font-size:17px;
+}
+h1,h2,h3,h4{margin:0;font-family:'Source Serif 4',Georgia,serif;font-weight:700;letter-spacing:-.014em;line-height:1.12;color:var(--ink)}
+p{margin:0 0 1em}
+a{color:var(--blue)}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+@media(max-width:560px){.container{padding:0 18px}}
+.preview-banner{background:var(--ink);color:#fff;font-size:.78rem;text-align:center;padding:7px 14px}
+.preview-banner a{color:#fff;text-decoration:underline;margin-left:8px}
+
+/* ----------- Top trust bar ----------- */
+.trust-bar{
+  background:var(--blue-deep);color:#fff;padding:10px 0;font-size:.82rem;
+}
+.trust-bar .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.trust-bar .left{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.trust-bar .left .seal{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.08);padding:4px 10px;border-radius:999px;font-size:.74rem;
+  border:1px solid rgba(255,255,255,.12);
+}
+.trust-bar .left .seal::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.trust-bar .right{font-size:.78rem}
+.trust-bar .right strong{color:#fff;font-weight:600}
+.trust-bar a{color:#fff}
+@media(max-width:680px){.trust-bar .right{display:none}}
+
+/* ----------- Main header ----------- */
+header.site{
+  background:var(--bg);border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:30;
+}
+header.site .row{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+.logo{
+  display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);
+}
+.logo .mark{
+  width:42px;height:42px;background:var(--blue);color:#fff;
+  border-radius:8px;display:inline-flex;align-items:center;justify-content:center;
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.18rem;
+  box-shadow:0 2px 0 var(--blue-deep);
+}
+.logo .word{display:flex;flex-direction:column;line-height:1.1}
+.logo .word strong{
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.32rem;
+  color:var(--ink);letter-spacing:-.014em;
+}
+.logo .word span{
+  font-size:.74rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;
+  margin-top:3px;
+}
+nav.primary{display:flex;align-items:center;gap:6px}
+nav.primary a{
+  color:var(--ink);font-size:.95rem;font-weight:600;
+  padding:9px 13px;text-decoration:none;border-radius:6px;
+}
+nav.primary a:hover{background:var(--blue-soft);color:var(--blue)}
+nav.primary .cta{
+  background:var(--gold);color:var(--ink);font-weight:700;
+  padding:11px 20px;
+  box-shadow:0 2px 0 #A57714;
+}
+nav.primary .cta:hover{background:#E5AB28}
+@media(max-width:760px){nav.primary a:not(.cta){display:none}}
+
+/* ----------- Hero ----------- */
+.hero{
+  padding:36px 0 56px;background:var(--bg);
+  position:relative;overflow:hidden;
+}
+@media(min-width:760px){.hero{padding:56px 0 72px}}
+.hero::before{
+  content:"";position:absolute;top:-200px;right:-150px;width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle,rgba(19,87,142,.12),transparent 70%);z-index:0;
+}
+.hero .grid{position:relative;z-index:1;display:grid;gap:36px;align-items:center}
+@media(min-width:880px){.hero .grid{grid-template-columns:1.2fr 1fr;gap:56px}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;border:1px solid var(--line-soft);padding:7px 14px;border-radius:999px;
+  font-size:.84rem;font-weight:600;color:var(--ink-2);margin-bottom:20px;
+  box-shadow:0 1px 3px rgba(16,36,58,.05);
+}
+.eyebrow strong{color:var(--blue);font-weight:700}
+.eyebrow .stars{color:var(--gold);letter-spacing:.04em;font-size:.78rem}
+
+.hero h1{
+  font-size:clamp(2.1rem,6vw,3.5rem);letter-spacing:-.022em;line-height:1.05;margin-bottom:18px;
+}
+.hero h1 em{
+  font-style:italic;color:var(--blue-deep);font-weight:600;
+}
+.hero .lede{
+  font-size:clamp(1.1rem,2.4vw,1.22rem);color:var(--ink-2);
+  line-height:1.55;margin-bottom:24px;max-width:560px;
+}
+.hero .lede strong{color:var(--ink);font-weight:600}
+
+/* Reviewer block — bigger and warmer than Bankrate */
+.reviewer{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 18px;background:#fff;border:1.5px solid var(--line);border-radius:14px;
+  margin-bottom:26px;flex-wrap:wrap;
+  box-shadow:0 2px 4px rgba(16,36,58,.04);
+}
+.reviewer .avatar{
+  width:62px;height:62px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-deep) 100%);
+  display:inline-flex;align-items:center;justify-content:center;
+  color:#fff;font-family:'Source Serif 4',serif;font-weight:700;font-size:1.45rem;
+  box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 4px rgba(0,0,0,.06);
+}
+.reviewer .text{flex:1;min-width:200px;font-size:.92rem;color:var(--ink-2);line-height:1.4}
+.reviewer .text .stars{color:var(--gold);font-size:.84rem;letter-spacing:.04em;margin-bottom:3px}
+.reviewer .text strong{color:var(--ink);font-weight:700;display:block;font-size:1.02rem;margin-bottom:1px}
+.reviewer .text .creds{font-size:.84rem;color:var(--muted);margin-top:1px}
+.reviewer .updated{
+  font-size:.78rem;color:var(--muted);text-align:right;flex-shrink:0;
+  border-left:1px solid var(--line);padding-left:14px;
+}
+.reviewer .updated strong{color:var(--ink);display:block;font-weight:700;font-size:.88rem}
+@media(max-width:520px){
+  .reviewer{flex-direction:column;align-items:flex-start;gap:12px}
+  .reviewer .updated{
+    border-left:0;padding-left:0;text-align:left;width:100%;
+    border-top:1px solid var(--line);padding-top:12px;
+  }
+}
+
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 22px;font-weight:700;font-size:1rem;
+  text-decoration:none;border:0;cursor:pointer;font-family:inherit;border-radius:10px;
+  transition:background .15s,transform .1s,box-shadow .15s;
+}
+.btn-primary{
+  background:var(--gold);color:var(--ink);
+  box-shadow:0 3px 0 #A57714;
+}
+.btn-primary:hover{background:#E5AB28;transform:translateY(-1px);box-shadow:0 4px 0 #A57714}
+.btn-secondary{
+  background:#fff;color:var(--blue);border:2px solid var(--blue);
+}
+.btn-secondary:hover{background:var(--blue);color:#fff}
+.btn-call{
+  background:var(--blue);color:#fff;
+  box-shadow:0 3px 0 var(--blue-deep);
+}
+.btn-call:hover{transform:translateY(-1px);box-shadow:0 4px 0 var(--blue-deep)}
+
+/* trust pills under CTA */
+.hero .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.hero .pills span{
+  background:#fff;border:1px solid var(--line);border-radius:999px;
+  padding:5px 12px;font-size:.82rem;color:var(--ink-2);font-weight:500;
+}
+.hero .pills span strong{color:var(--ink);font-weight:700}
+
+/* Hero side card — Trusted by ~ */
+.hero-card{
+  background:#fff;border:1.5px solid var(--blue);border-radius:16px;padding:24px;
+  position:relative;
+  box-shadow:0 8px 24px -8px rgba(19,87,142,.18);
+}
+.hero-card .top{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;
+}
+.hero-card .top h3{
+  font-size:1.05rem;font-weight:700;margin:0;color:var(--ink);font-family:'Source Serif 4',serif;
+}
+.hero-card .top .stars{color:var(--gold);font-size:.94rem;letter-spacing:.04em}
+.hero-card .big-num{
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:3.6rem;
+  color:var(--blue);font-variant-numeric:tabular-nums;line-height:1;
+  letter-spacing:-.025em;margin-bottom:6px;
+}
+.hero-card .big-cap{
+  font-size:1rem;color:var(--ink-2);margin-bottom:18px;line-height:1.4;
+}
+.hero-card .big-cap strong{color:var(--ink);font-weight:700}
+.hero-card .row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-top:1px solid var(--line-soft);font-size:.92rem;
+}
+.hero-card .row:last-child{border-bottom:0}
+.hero-card .row .label{color:var(--ink-2)}
+.hero-card .row .val{
+  font-family:'Source Serif 4',serif;font-weight:700;color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.hero-card .testimonial{
+  background:var(--bg);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;
+  padding:14px 16px;margin-top:18px;
+}
+.hero-card .testimonial q{
+  font-family:'Source Serif 4',serif;font-style:italic;font-size:.95rem;color:var(--ink);line-height:1.5;
+  display:block;margin-bottom:8px;
+}
+.hero-card .testimonial .who{
+  font-size:.78rem;color:var(--muted);font-weight:500;
+}
+.hero-card .testimonial .who strong{color:var(--ink);font-weight:700}
+
+/* ----------- Press / Trust band ----------- */
+.trust-band{
+  background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:28px 0;
+}
+.trust-band .container{display:flex;flex-direction:column;align-items:center;gap:18px}
+.trust-band .label{
+  font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.16em;font-weight:600;
+}
+.trust-band .badges{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:32px;
+}
+.trust-band .badge{
+  display:inline-flex;align-items:center;gap:8px;color:var(--ink-2);font-weight:600;font-size:.94rem;
+}
+.trust-band .badge .icon{
+  width:32px;height:32px;background:var(--blue-soft);color:var(--blue);
+  border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;
+}
+.trust-band .badge .icon.gold{background:#FBF1D6;color:var(--gold)}
+.trust-band .press{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:24px;align-items:center;opacity:.85;
+}
+.trust-band .press span{
+  font-family:'Source Serif 4',serif;font-weight:700;font-size:1.05rem;color:var(--ink-2);
+}
+.trust-band .press .nyt{font-style:italic;letter-spacing:-.018em}
+.trust-band .press .wsj{font-weight:800;color:#000}
+.trust-band .press .ap{font-family:'Inter',sans-serif;font-weight:800;background:var(--ink);color:#fff;padding:3px 9px;font-size:.95rem}
+
+/* ----------- Sections ----------- */
+.section{padding:48px 0}
+@media(min-width:760px){.section{padding:80px 0}}
+.section-head{margin-bottom:36px;max-width:740px}
+.section-head .lbl{
+  display:inline-block;background:var(--blue-soft);color:var(--blue);
+  padding:5px 14px;border-radius:999px;font-size:.78rem;font-weight:700;
+  letter-spacing:.06em;margin-bottom:14px;text-transform:uppercase;
+}
+.section-head h2{font-size:clamp(1.8rem,4.5vw,2.5rem);letter-spacing:-.018em}
+.section-head h2 em{font-style:italic;color:var(--blue-deep)}
+.section-head .sub{color:var(--ink-2);font-size:1.08rem;line-height:1.55;margin-top:14px;max-width:600px}
+
+/* ----------- Verticals ----------- */
+.verticals{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.vert-grid{
+  display:grid;gap:14px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+}
+.vert-card{
+  background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:24px;
+  text-decoration:none;color:var(--ink);
+  display:flex;flex-direction:column;gap:14px;
+  transition:transform .12s,box-shadow .12s,border-color .12s;
+}
+.vert-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px -6px rgba(16,36,58,.15);
+  border-color:var(--blue);
+}
+.vert-card .iconbox{
+  width:48px;height:48px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:1.5rem;background:#fff;border:1px solid var(--line);
+}
+.vert-card .iconbox.blue{background:var(--blue-soft);color:var(--blue);border-color:#C5DCEE}
+.vert-card .iconbox.gold{background:#FBF1D6;color:var(--gold);border-color:#F2DFA8}
+.vert-card .iconbox.green{background:var(--green-soft);color:var(--green);border-color:#C0DFCD}
+.vert-card .iconbox.rose{background:#FBE5E9;color:var(--rose);border-color:#F0CAD1}
+.vert-card .iconbox.cyan{background:#E0F2F8;color:#0E6E94;border-color:#BAD9E5}
+.vert-card .iconbox.purple{background:#EFEAFB;color:#5C39B8;border-color:#D5C9F0}
+.vert-card h3{font-size:1.18rem;margin:0;font-weight:700}
+.vert-card p{color:var(--ink-2);font-size:.94rem;margin:0;flex:1;line-height:1.5}
+.vert-card .stat{
+  background:#fff;border:1px solid var(--line);padding:8px 12px;border-radius:8px;
+  font-size:.86rem;color:var(--ink);font-weight:600;display:flex;justify-content:space-between;
+}
+.vert-card .stat strong{color:var(--blue);font-weight:700;font-variant-numeric:tabular-nums}
+.vert-card .arrow{
+  display:inline-flex;align-items:center;gap:6px;color:var(--blue);
+  font-weight:700;font-size:.92rem;margin-top:auto;
+}
+
+/* ----------- Trust pillars (3 reasons to use us) ----------- */
+.pillars{background:var(--bg)}
+.pillars-grid{
+  display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+}
+.pillar{
+  background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:28px;
+}
+.pillar .icon{
+  width:48px;height:48px;background:var(--gold);color:var(--ink);
+  border-radius:12px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:1.4rem;margin-bottom:16px;font-weight:700;
+}
+.pillar h3{font-size:1.15rem;margin-bottom:8px;font-weight:700;color:var(--ink)}
+.pillar p{color:var(--ink-2);font-size:.96rem;margin:0;line-height:1.55}
+.pillar p a{color:var(--blue);font-weight:600;text-decoration:underline}
+
+/* ----------- Testimonial / community ----------- */
+.community{
+  background:var(--blue-deep);color:#fff;padding:52px 0;text-align:center;
+  background-image:linear-gradient(135deg,#0C3B62 0%,#13578E 100%);
+}
+@media(min-width:760px){.community{padding:72px 0}}
+.community h2{color:#fff;font-size:clamp(1.6rem,4vw,2.2rem);max-width:720px;margin:0 auto;line-height:1.3;font-weight:600}
+.community h2 em{font-style:italic;color:var(--gold)}
+.community q{font-style:italic}
+.community .who{
+  margin-top:24px;font-size:.88rem;color:#A6BAD0;letter-spacing:.06em;
+}
+.community .who strong{color:#fff;font-weight:600}
+.community .stars{color:var(--gold);font-size:1.2rem;margin-bottom:18px;letter-spacing:.04em}
+
+/* ----------- Calc CTA band ----------- */
+.calc{
+  background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:48px 0;text-align:center;
+}
+@media(min-width:760px){.calc{padding:72px 0}}
+.calc h2{font-size:clamp(1.7rem,4vw,2.3rem);margin-bottom:14px;letter-spacing:-.018em}
+.calc p{color:var(--ink-2);max-width:540px;margin:0 auto 24px;font-size:1.05rem;line-height:1.55}
+.calc .features{
+  display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-bottom:28px;
+  font-size:.88rem;color:var(--muted);
+}
+.calc .features strong{color:var(--ink);font-weight:700}
+.calc .ctas{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+/* ----------- Footer ----------- */
+footer.site{
+  background:var(--ink);color:#9CB0C5;padding:36px 0 28px;
+  font-size:.86rem;line-height:1.55;
+}
+footer.site .top{
+  display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-bottom:24px;
+}
+footer.site .top h4{
+  font-family:'Source Serif 4',serif;color:#fff;font-size:.98rem;margin-bottom:10px;font-weight:700;
+}
+footer.site .top a{
+  display:block;color:#9CB0C5;text-decoration:none;padding:4px 0;font-size:.88rem;
+}
+footer.site .top a:hover{color:#fff;text-decoration:underline}
+footer.site .legal{
+  border-top:1px solid #1F354E;padding-top:18px;font-size:.78rem;color:#6F87A0;line-height:1.55;
+}
+footer.site .legal strong{color:#fff}
+footer.site .legal .seals{
+  margin-top:16px;display:flex;flex-wrap:wrap;gap:14px;
+}
+footer.site .legal .seals .seal{
+  background:rgba(255,255,255,.04);border:1px solid #1F354E;padding:5px 12px;border-radius:6px;
+  font-size:.74rem;color:#C9D7E5;
+}
+footer.site .legal .copy{
+  margin-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:#6F87A0;
+}
+footer.site .legal .copy a{color:#9CB0C5;margin-left:14px;text-decoration:none}
+
+/* ----------- Mobile ----------- */
+@media(max-width:560px){
+  .section{padding:40px 0}
+  .hero{padding:24px 0 40px}
+  .hero-ctas .btn{flex:1;justify-content:center}
+  .hero-card{padding:20px}
+  .hero-card .big-num{font-size:2.8rem}
+  .vert-card{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<div class="preview-banner">
+  Preview F &mdash; AARP / Consumer Reports (Civic Authority)
+  <a href="/preview/">&larr; back to comparison</a>
+</div>
+
+<!-- Top trust bar -->
+<div class="trust-bar">
+  <div class="container row">
+    <div class="left">
+      <span class="seal">A+ BBB</span>
+      <span class="seal">Member NABA</span>
+      <span class="seal">SOC 2 secured</span>
+    </div>
+    <div class="right">
+      <strong>Trusted by 5.4M households</strong> &middot; <a href="#">Editorial standards</a> &middot; <a href="tel:18335550143">1-833-555-0143</a>
+    </div>
+  </div>
+</div>
+
+<!-- Main header -->
+<header class="site">
+  <div class="container row">
+    <a href="/preview/consumer-advocate/" class="logo">
+      <span class="mark">UB</span>
+      <span class="word">
+        <strong>UtilityBenefits</strong>
+        <span>Independent &middot; trusted &middot; established 2024</span>
+      </span>
+    </a>
+    <nav class="primary">
+      <a href="#">Save</a>
+      <a href="#">Get help</a>
+      <a href="#">By state</a>
+      <a href="#">Our experts</a>
+      <a href="#" class="cta">Check eligibility &rarr;</a>
+    </nav>
+  </div>
+</header>
+
+<!-- =========== HERO =========== -->
+<section class="hero">
+  <div class="container grid">
+    <div>
+      <span class="eyebrow">
+        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <strong>4.8/5</strong> from 12,418 households
+      </span>
+      <h1>Save on every utility bill, <em>and find the help you qualify for.</em></h1>
+      <p class="lede">
+        Independent, fact-checked help for U.S. households on every utility bill. We're <strong>not a government agency</strong> and we <strong>don't sell your information</strong>. Reviewed by licensed analysts. Free, always.
+      </p>
+
+      <!-- Reviewer / authority block -->
+      <div class="reviewer">
+        <div class="avatar">LC</div>
+        <div class="text">
+          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <strong>Reviewed by Lisa Chen, Energy Policy Analyst</strong>
+          <span class="creds">Former NARUC staff &middot; 12 years in utility regulation &middot; <a href="#" style="color:var(--blue)">read bio</a></span>
+        </div>
+        <div class="updated">
+          <strong>Last reviewed</strong>
+          May 4, 2026
+        </div>
+      </div>
+
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-primary">Check my eligibility &rarr;</a>
+        <a href="tel:18335550143" class="btn btn-call">Call 1-833-555-0143</a>
+      </div>
+      <div class="pills">
+        <span><strong>Free</strong> always</span>
+        <span><strong>No spam</strong> &mdash; we don't resell</span>
+        <span><strong>4 min</strong> on average</span>
+        <span>Help in <strong>50 states</strong></span>
+      </div>
+    </div>
+
+    <!-- Trusted-by stat card -->
+    <aside class="hero-card">
+      <div class="top">
+        <h3>Trusted by households like yours</h3>
+        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      </div>
+      <span class="big-num">5.4M</span>
+      <p class="big-cap">U.S. households served by the programs we help connect &mdash; LIHEAP, Lifeline, Medicaid HCBS, and more &mdash; <strong>every year</strong>.</p>
+      <div class="row"><span class="label">Programs catalogued</span><span class="val">1,247</span></div>
+      <div class="row"><span class="label">States &amp; jurisdictions</span><span class="val">52</span></div>
+      <div class="row"><span class="label">Avg. annual savings</span><span class="val" style="color:var(--green)">$1,560</span></div>
+      <div class="row"><span class="label">Cost to use</span><span class="val">Free</span></div>
+
+      <div class="testimonial">
+        <q>Got my mom on Lifeline and a $0/month medical alert through Medicaid in one phone call. The case manager knew her state's program by heart.</q>
+        <span class="who"><strong>Maria T.</strong> &middot; Phoenix, AZ &middot; verified user</span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- =========== TRUST BAND =========== -->
+<section class="trust-band">
+  <div class="container">
+    <span class="label">Independently verified &middot; covered by</span>
+    <div class="badges">
+      <span class="badge"><span class="icon gold">&#9733;</span> A+ BBB Rating</span>
+      <span class="badge"><span class="icon">&#10003;</span> SOC 2 Type II Secured</span>
+      <span class="badge"><span class="icon">&#128274;</span> Privacy Shield</span>
+      <span class="badge"><span class="icon">&#128218;</span> Editorial Independence</span>
+    </div>
+    <div class="press">
+      <span class="nyt">The New York Times</span>
+      <span class="wsj">THE WALL STREET JOURNAL</span>
+      <span>Forbes</span>
+      <span class="ap">AP</span>
+      <span>Reuters</span>
+      <span>NPR</span>
+    </div>
+  </div>
+</section>
+
+<!-- =========== VERTICALS =========== -->
+<section class="section verticals">
+  <div class="container">
+    <div class="section-head">
+      <span class="lbl">Six utilities, one site</span>
+      <h2>Every utility bill, <em>both savings and assistance.</em></h2>
+      <p class="sub">Each utility has its own dedicated section &mdash; reviewed by a domain analyst, updated quarterly, with state-by-state guidance.</p>
+    </div>
+    <div class="vert-grid">
+      <a href="#" class="vert-card">
+        <div class="iconbox gold">&#9889;</div>
+        <h3>Electricity</h3>
+        <p>Switch suppliers in 17 deregulated states. LIHEAP and crisis programs. State-by-state PUC data.</p>
+        <div class="stat"><span>Average annual savings</span><strong>$200&ndash;$600</strong></div>
+        <span class="arrow">Open guide &rarr;</span>
+      </a>
+      <a href="#" class="vert-card">
+        <div class="iconbox rose">&#128293;</div>
+        <h3>Natural Gas</h3>
+        <p>Why winter bills spike, fixed-rate plans, and 30+ states with shut-off moratoriums.</p>
+        <div class="stat"><span>Shut-off protection</span><strong>30+ states</strong></div>
+        <span class="arrow">Open guide &rarr;</span>
+      </a>
+      <a href="#" class="vert-card">
+        <div class="iconbox blue">&#127760;</div>
+        <h3>Internet</h3>
+        <p>Lifeline broadband, ACP-replacement state programs, and how to renegotiate any ISP.</p>
+        <div class="stat"><span>Lifeline subsidy</span><strong>$9.25/mo</strong></div>
+        <span class="arrow">Open guide &rarr;</span>
+      </a>
+      <a href="#" class="vert-card">
+        <div class="iconbox purple">&#128241;</div>
+        <h3>Cell Phone</h3>
+        <p>Free Lifeline service if you qualify. $5&ndash;$15 plans on the major networks if you don't.</p>
+        <div class="stat"><span>Free service options</span><strong>18M served</strong></div>
+        <span class="arrow">Open guide &rarr;</span>
+      </a>
+      <a href="#" class="vert-card">
+        <div class="iconbox green">&#128737;&#65039;</div>
+        <h3>Medical Alert</h3>
+        <p>Medicaid HCBS waivers cover PERS in 47 states. We tell you exactly which.</p>
+        <div class="stat"><span>State coverage</span><strong>47 states</strong></div>
+        <span class="arrow">Open guide &rarr;</span>
+      </a>
+      <a href="#" class="vert-card">
+        <div class="iconbox cyan">&#128167;</div>
+        <h3>Water</h3>
+        <p>Hardship grants, leak detection, and what replaced LIHWAP.</p>
+        <div class="stat"><span>Utility programs</span><strong>40+</strong></div>
+        <span class="arrow">Open guide &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =========== TRUST PILLARS =========== -->
+<section class="section pillars">
+  <div class="container">
+    <div class="section-head">
+      <span class="lbl">Why families trust us</span>
+      <h2>Three things make this <em>different.</em></h2>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="icon">&#10003;</div>
+        <h3>Reviewed by experts</h3>
+        <p>Every guide is reviewed by an analyst with relevant credentials &mdash; energy policy, telecom regulation, Medicaid administration. <a href="#">Meet our team &rarr;</a></p>
+      </div>
+      <div class="pillar">
+        <div class="icon">&#128218;</div>
+        <h3>Cited primary sources</h3>
+        <p>Every program statistic is cited to HHS, FCC, CMS, state PUCs, or BLS. We show our work. <a href="#">See methodology &rarr;</a></p>
+      </div>
+      <div class="pillar">
+        <div class="icon">&#128272;</div>
+        <h3>Editorial firewall</h3>
+        <p>Editorial content is independent of monetization. We disclose every referral relationship. <a href="#">Editorial standards &rarr;</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== TESTIMONIAL BAND =========== -->
+<section class="community">
+  <div class="container">
+    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <h2><q>This is the only site I found that didn't try to sell me anything &mdash; just told me <em>exactly</em> which programs my elderly father qualified for and walked us through every form.</q></h2>
+    <div class="who"><strong>Janet R.</strong> &middot; Cleveland, OH &middot; verified user &middot; reviewed Apr 2026</div>
+  </div>
+</section>
+
+<!-- =========== CALC =========== -->
+<section class="calc">
+  <div class="container">
+    <h2>One eligibility check. <em>Every program.</em></h2>
+    <p>Tell us your zip code, household size, and income range. We screen against every federal and state program in our catalog and show your savings options at the same time.</p>
+    <div class="features">
+      <span><strong>Free</strong> always</span>
+      <span><strong>4 min</strong> avg</span>
+      <span><strong>No account</strong> needed</span>
+      <span><strong>4.8/5</strong> rated</span>
+    </div>
+    <div class="ctas">
+      <a href="#" class="btn btn-primary">Check eligibility online &rarr;</a>
+      <a href="tel:18335550143" class="btn btn-secondary">Call 1-833-555-0143</a>
+    </div>
+  </div>
+</section>
+
+<!-- =========== FOOTER =========== -->
+<footer class="site">
+  <div class="container">
+    <div class="top">
+      <div>
+        <h4>Coverage</h4>
+        <a href="#">Electricity</a><a href="#">Natural Gas</a><a href="#">Internet</a><a href="#">Cell Phone</a><a href="#">Medical Alert</a><a href="#">Water</a>
+      </div>
+      <div>
+        <h4>Programs</h4>
+        <a href="#">LIHEAP by state</a><a href="#">Lifeline</a><a href="#">Medicaid PERS</a><a href="#">Winter shutoff rules</a><a href="#">All assistance</a>
+      </div>
+      <div>
+        <h4>About us</h4>
+        <a href="#">Our team</a><a href="#">Editorial standards</a><a href="#">How we make money</a><a href="#">Methodology</a><a href="#">Press &amp; coverage</a>
+      </div>
+      <div>
+        <h4>Help</h4>
+        <a href="tel:18335550143">1-833-555-0143</a><a href="#">Contact us</a><a href="#">FAQ</a><a href="#">Accessibility</a>
+      </div>
+    </div>
+    <div class="legal">
+      <p><strong>UtilityBenefits.com</strong> is owned and operated by UtilityBenefits Research LLC, a Delaware-incorporated independent comparison and research service. We are <strong>not a government agency</strong> and we are not affiliated with the FCC, USAC, the Lifeline program, LIHEAP, Medicaid, or any other federal, state, or tribal program described on this site. We earn referral fees from some partners; editorial content is independent of these relationships. See <a href="#">Editorial Standards</a> and <a href="#">How We Make Money</a>.</p>
+      <div class="seals">
+        <span class="seal">A+ BBB Rating</span>
+        <span class="seal">Member NABA</span>
+        <span class="seal">SOC 2 Type II</span>
+        <span class="seal">Privacy Shield</span>
+        <span class="seal">DE LLC #4892731</span>
+      </div>
+      <div class="copy">
+        <span>&copy; 2026 UtilityBenefits Research LLC &middot; 1313 Market Street, Wilmington DE 19801</span>
+        <span>
+          <a href="#">Privacy</a><a href="#">Terms</a><a href="#">TCPA</a><a href="#">Sitemap</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
