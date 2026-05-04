@@ -1,25 +1,348 @@
-# UtilityBenefits.com robots.txt
-# Allow all well-behaved crawlers full access.
+# ============================================================
+# UtilityBenefits.com — robots.txt
+# Last reviewed: 2026-05-04
+#
+# This file controls which automated crawlers are allowed to access
+# this site, at what rate, and for what purpose. Three buckets:
+#   1. Search engines (Google, Bing, etc.) — allowed everywhere
+#   2. SEO/marketing crawlers — rate-limited or blocked
+#   3. AI training crawlers — blocked by default per copyright
+#      (Editorial content is original research; not licensed for AI training)
+# ============================================================
+
+# ------------------------------------------------------------
+# Sitemap declarations (read first by most well-behaved crawlers)
+# ------------------------------------------------------------
+Sitemap: https://utilitybenefits.vercel.app/sitemap.xml
+
+
+# ============================================================
+# Section 1 — Default rules (applies to all crawlers not matched below)
+# ============================================================
 
 User-agent: *
 Allow: /
 
-# Common bad bots — block to save bandwidth
+# Don't waste crawl budget on these:
+Disallow: /qualify/submit
+Disallow: /qualify/result
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /*.json$
+Disallow: /*.xml.gz$
+
+# Block all query-string variants to prevent duplicate-content indexing
+# (UTM tags, session IDs, sort params, etc.)
+Disallow: /*?
+Disallow: /*&
+
+# Block tracking and form-submission paths
+Disallow: /*?fbclid=*
+Disallow: /*?gclid=*
+Disallow: /*?utm_*
+Disallow: /*?ref=*
+Disallow: /*?source=*
+Disallow: /*?_=*
+
+# Block search-result and filter pages (would create infinite crawl loops)
+Disallow: /search
+Disallow: /search/
+Disallow: /*/filter/
+Disallow: /*/sort/
+
+# Block staging, draft, and preview paths
+Disallow: /staging/
+Disallow: /draft/
+Disallow: /preview/
+Disallow: /_tour
+Disallow: /_tour.html
+
+# Block legacy and stub paths
+Disallow: /tmp/
+Disallow: /test/
+Disallow: /old/
+Disallow: /backup/
+
+
+# ============================================================
+# Section 2 — Major search engines (full access, no delay)
+# ============================================================
+
+# Google
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /qualify/submit
+Disallow: /*?utm_*
+
+User-agent: Googlebot-Image
+Allow: /assets/
+Allow: /images/
+Disallow: /
+
+User-agent: Googlebot-News
+Allow: /
+Disallow: /api/
+
+# Bing & Microsoft
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /qualify/submit
+Crawl-delay: 1
+
+User-agent: msnbot
+Allow: /
+Crawl-delay: 1
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+# Apple
+User-agent: Applebot
+Allow: /
+Crawl-delay: 1
+
+# Yandex (Russia) — allow but rate-limit
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 10
+
+# Baidu (China) — allow but rate-limit
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 10
+
+
+# ============================================================
+# Section 3 — SEO / marketing scrapers (rate-limited)
+# Why: We use these tools ourselves and want backlink data,
+#      but they consume meaningful bandwidth at default rates.
+# ============================================================
+
 User-agent: AhrefsBot
+Allow: /
 Crawl-delay: 10
 
 User-agent: SemrushBot
+Allow: /
+Crawl-delay: 10
+
+User-agent: SemrushBot-SA
+Allow: /
+Crawl-delay: 10
+
+User-agent: rogerbot
+Allow: /
+Crawl-delay: 10
+
+User-agent: dotbot
+Allow: /
 Crawl-delay: 10
 
 User-agent: MJ12bot
 Disallow: /
 
-User-agent: DotBot
+User-agent: BLEXBot
 Disallow: /
 
-# Don't index the eligibility-check form submissions or query-parameter variants
-Disallow: /qualify/?
-Disallow: /*?
+User-agent: Sogou
+Disallow: /
 
-# Sitemap location
-Sitemap: https://utilitybenefits.vercel.app/sitemap.xml
+User-agent: SeznamBot
+Crawl-delay: 30
+
+
+# ============================================================
+# Section 4 — AI training / LLM crawlers (BLOCKED by default)
+# Why: Editorial content is original research and is not licensed
+#      for AI model training. Search-purpose AI crawlers (e.g.
+#      Perplexity-User, ChatGPT-User responding to a real-time
+#      query) are allowed below. Training crawlers are blocked.
+#
+# Reference: Anthropic, OpenAI, Google, and Meta all publish
+# distinct user-agents for training vs. real-time-search use.
+# ============================================================
+
+# OpenAI training crawler — blocked
+User-agent: GPTBot
+Disallow: /
+
+# OpenAI real-time search-on-behalf-of-user — allowed
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic training crawler — blocked
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+# Anthropic real-time agent (Claude in Chrome, etc.) — allowed
+User-agent: Claude-Web
+Allow: /
+
+# Google Bard / Gemini training (separate from Googlebot search) — blocked
+User-agent: Google-Extended
+Disallow: /
+
+# Common Crawl (foundation for many LLM training sets) — blocked
+User-agent: CCBot
+Disallow: /
+
+# Meta / Facebook AI training — blocked
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+# Bytespider (TikTok / ByteDance training) — blocked
+User-agent: Bytespider
+Disallow: /
+
+# Apple Intelligence training — blocked
+User-agent: Applebot-Extended
+Disallow: /
+
+# Amazon AI training — blocked
+User-agent: Amazonbot
+Disallow: /
+
+# Diffbot (data extraction) — blocked
+User-agent: Diffbot
+Disallow: /
+
+# Cohere training — blocked
+User-agent: cohere-ai
+Disallow: /
+
+# Perplexity (training arm) — blocked; Perplexity-User (real-time) — allowed
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# You.com — allowed for search, blocked for training
+User-agent: YouBot
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# Other AI/LLM training crawlers — blocked
+User-agent: ImagesiftBot
+Disallow: /
+
+User-agent: omgilibot
+Disallow: /
+
+User-agent: omgili
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: Timpibot
+Disallow: /
+
+User-agent: VelenPublicWebCrawler
+Disallow: /
+
+User-agent: Webzio-Extended
+Disallow: /
+
+
+# ============================================================
+# Section 5 — Known bad bots, scrapers, and abuse sources
+# ============================================================
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: AspiegelBot
+Disallow: /
+
+User-agent: SeekportBot
+Disallow: /
+
+User-agent: SerendeputyBot
+Disallow: /
+
+User-agent: trendictionbot
+Disallow: /
+
+User-agent: ZoominfoBot
+Disallow: /
+
+User-agent: BUbiNG
+Disallow: /
+
+User-agent: SiteAuditBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: serpstatbot
+Disallow: /
+
+User-agent: linkfluence
+Disallow: /
+
+User-agent: Mediatoolkitbot
+Disallow: /
+
+
+# ============================================================
+# Section 6 — Social media unfurlers (allowed, full access)
+# These fetch pages to build link previews, not to crawl.
+# ============================================================
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+User-agent: Slackbot-LinkExpanding
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Pinterest
+Allow: /
+
+User-agent: redditbot
+Allow: /
+
+
+# ============================================================
+# End of robots.txt
+# Questions: contact us via the site footer.
+# Sitemap: https://utilitybenefits.vercel.app/sitemap.xml
+# ============================================================
