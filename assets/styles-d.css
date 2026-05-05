@@ -97,9 +97,20 @@ a:hover{text-decoration:underline}
   60%{box-shadow:0 0 0 7px rgba(14,142,92,0)}
 }
 .utility-bar .right{color:#9CA8B5}
+.utility-bar .right a{
+  color:#fff;text-decoration:none;font-weight:600;
+  font-variant-numeric:tabular-nums;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.utility-bar .right a::before{
+  content:"";display:inline-block;width:11px;height:11px;flex-shrink:0;
+  background-color:var(--emerald);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><path d='M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><path d='M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z'/></svg>") center/contain no-repeat;
+}
+.utility-bar .right a:hover{text-decoration:underline}
 .utility-bar a{color:#fff;text-decoration:none}
-.utility-bar a:hover{text-decoration:underline}
-@media(max-width:560px){.utility-bar .right{display:none}}
+@media(max-width:560px){.utility-bar .right{display:inline-flex}}
 
 /* ============================================================
    Main header
