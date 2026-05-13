@@ -1,6 +1,6 @@
 # ============================================================
 # UtilityBenefits.com — robots.txt
-# Last reviewed: 2026-05-04
+# Last reviewed: 2026-05-13
 #
 # This file controls which automated crawlers are allowed to access
 # this site, at what rate, and for what purpose. Three buckets:
@@ -13,7 +13,7 @@
 # ------------------------------------------------------------
 # Sitemap declarations (read first by most well-behaved crawlers)
 # ------------------------------------------------------------
-Sitemap: https://utilitybenefits.vercel.app/sitemap.xml
+Sitemap: https://www.utilitybenefits.com/sitemap.xml
 
 
 # ============================================================
@@ -356,5 +356,5 @@ Allow: /
 # ============================================================
 # End of robots.txt
 # Questions: contact us via the site footer.
-# Sitemap: https://utilitybenefits.vercel.app/sitemap.xml
+# Sitemap: https://www.utilitybenefits.com/sitemap.xml
 # ============================================================
