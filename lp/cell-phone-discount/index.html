@@ -124,6 +124,7 @@
 
       <!-- Form card (single conversion path) -->
       <form class="lp-form-card" id="lp-form" method="get" action="/qualify/thank-you/" novalidate>
+        <input type="hidden" name="xxTrustedFormCertUrl" value="" />
         <span class="form-eyebrow">Free Plan Comparison</span>
         <h2>Find your lowest cell phone bill</h2>
         <p class="form-sub">We compare Lifeline, MVNO, and state programs — instantly.</p>
@@ -359,12 +360,19 @@
         // Snapshot form data for later (when backend is wired)
         var data = {};
         new FormData(form).forEach(function(val,key){ data[key] = val; });
+
+        // TrustedForm auto-populates the hidden xxTrustedFormCertUrl input
+        // with the cert URL by submit time. Capture it for downstream use.
+        var certInput = form.querySelector('input[name="xxTrustedFormCertUrl"]');
+        var certUrl = certInput ? certInput.value : '';
+
         try {
           sessionStorage.setItem('ub_lead', JSON.stringify({
             case: caseNum,
             ts: Date.now(),
             lp_slug: document.body.getAttribute('data-lp'),
             lp_variant: v,
+            trustedform_cert: certUrl,
             utm_source: params.get('utm_source') || '',
             utm_medium: params.get('utm_medium') || '',
             utm_campaign: params.get('utm_campaign') || '',
@@ -386,6 +394,9 @@
           'lp':   document.body.getAttribute('data-lp') || '',
           'v':    v
         });
+        // Carry the cert URL through so thank-you / downstream can persist it
+        if (certUrl) qs.set('tf', certUrl);
+
         // Carry UTMs through for attribution on thank-you / call connect
         ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){
           var val = params.get(k);
@@ -408,5 +419,21 @@
   })();
 </script>
 
+<!-- TrustedForm -->
+<script type="text/javascript">
+(function() {
+var tf = document.createElement('script');
+tf.type = 'text/javascript';
+tf.async = true;
+tf.src = ("https:" == document.location.protocol ? 'https' : 'http') +
+'://api.trustedform.com/trustedform.js?field=xxTrustedFormCertUrl&use_tagged_consent=true&l=' +
+new Date().getTime() + Math.random();
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(tf, s);
+})();
+</script>
+<noscript>
+<img src='https://api.trustedform.com/ns.gif' />
+</noscript>
+<!-- End TrustedForm -->
 </body>
 </html>
