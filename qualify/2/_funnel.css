@@ -98,3 +98,93 @@ body{background:var(--bg)}
 .reviewed-by .ub-mark{width:24px;height:24px;border-radius:5px;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;flex-shrink:0}
 .reviewed-by strong{color:var(--ink);font-weight:600}
 .reviewed-by .sep{color:var(--line-strong);margin:0 6px}
+
+/* ============================================================
+   Mobile tightening — keep the CTA + trust signals above the fold.
+   Targets iPhone-class viewports (≤ 560px).
+   ============================================================ */
+@media (max-width: 560px) {
+
+  /* — Utility bar + header — slim and one-line — */
+  .lp-utility { padding: 6px 0; font-size: .76rem }
+  .lp-header { padding: 8px 0 }
+  .lp-header .container { gap: 8px }
+  .lp-logo { font-size: .94rem; gap: 7px }
+  .lp-logo .mark { width: 28px; height: 28px; font-size: .8rem }
+  .lp-header .phone { padding: 7px 11px; font-size: .82rem }
+  .lp-header .phone svg { width: 13px; height: 13px }
+
+  /* — Page padding — give back vertical space — */
+  .funnel-main { padding: 12px 0 88px }
+
+  /* — Eyebrow chip — slim — */
+  .hero-eyebrow { margin-bottom: 6px }
+  .hero-eyebrow span { font-size: .66rem; padding: 4px 9px }
+
+  /* — Card — tighter padding, no rounded edges (full-width) — */
+  .funnel-card,
+  .funnel-card.step { padding: 18px 18px 16px; border-radius: 0 }
+
+  /* — H1/H2 — smaller — */
+  .funnel-card h1 { font-size: 1.32rem; margin: 0 0 4px }
+  .funnel-card h2 { font-size: 1.32rem; margin: 4px 0 12px }
+
+  /* — Lede — tighter; pages can opt in to hiding on mobile — */
+  .funnel-card .lede { font-size: .88rem; margin: 0 auto 14px; line-height: 1.42 }
+  .funnel-card .lede.mobile-hide { display: none }
+
+  /* — Section heading rows — tighter — */
+  .section-title { font-size: .72rem; margin: 12px 0 4px; gap: 6px }
+  .section-title .n { width: 18px; height: 18px; font-size: .66rem }
+  .section-sub { font-size: .8rem; margin-bottom: 8px; padding-left: 0 }
+  .section-sub.mobile-hide { display: none }
+
+  /* — Picker tiles — 96px → 74px — */
+  .picker { gap: 8px; padding-left: 0 }
+  .picker label {
+    min-height: 74px;
+    padding: 12px 8px 10px;
+    font-size: .8rem;
+    gap: 6px;
+    border-radius: 8px;
+  }
+  .picker .ico { width: 24px; height: 24px }
+  .picker .dot { width: 14px; height: 14px; top: 6px; right: 6px }
+  .picker label:has(input:checked) .dot::after { width: 5px; height: 5px }
+
+  /* — Step header (Step 1 of 4 + progress bar) — tighter — */
+  .step-meta { font-size: .7rem; margin-bottom: 6px }
+  .progress { margin-bottom: 16px; height: 5px }
+
+  /* — Form fields — */
+  .field { margin-bottom: 10px; padding-left: 0 }
+  .field.indent { padding-left: 0 }
+  .field label { font-size: .82rem; margin-bottom: 4px }
+  .field label.mobile-hide { display: none }
+  .field input, .field select { height: 44px; font-size: .98rem; padding: 0 12px }
+  .field select { padding-right: 28px }
+
+  /* — TCPA box — tighter — */
+  .tcpa-box { padding: 12px 14px; margin-top: 10px }
+  .tcpa-box label { font-size: .74rem; line-height: 1.45; gap: 8px }
+  .tcpa-box input[type=checkbox] { width: 16px; height: 16px }
+
+  /* — Action buttons — */
+  .actions { margin-top: 14px; padding-left: 0 }
+  .actions.landing { padding-left: 0 }
+  .btn-continue.lg { height: 48px; font-size: 1rem }
+  .btn-continue { height: 44px; font-size: .96rem }
+  .btn-back { height: 44px; padding: 0 12px; font-size: .86rem }
+
+  /* — Trust row + microcopy — */
+  .trust-row { gap: 10px; font-size: .76rem; margin-top: 12px }
+  .trust-row .item { gap: 4px }
+  .micro { font-size: .76rem; margin-top: 10px; line-height: 1.4 }
+
+  /* — Reviewed-by — hide on mobile of dense pages — saves ~60px — */
+  .reviewed-by { font-size: .72rem; padding: 10px 14px }
+  .reviewed-by.mobile-hide { display: none }
+
+  /* — Sticky call bar — slim — */
+  .lp-sticky-call { padding: 8px 12px }
+}
