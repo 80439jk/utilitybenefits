@@ -313,9 +313,12 @@ module.exports = async function handler(req, res) {
     console.error('caliber-error', { error: errMsg, x_request_id: reqId, case: caseNum });
   }
 
-  // Debug mode: return JSON instead of redirecting (for smoke tests).
-  // Trigger by setting ?debug=1 on the request URL or x-debug: 1 header.
-  const isDebug = (req.query && req.query.debug === '1') || req.headers['x-debug'] === '1';
+  // Debug mode: gated by LEAD_DEBUG_SECRET env var + matching x-debug-secret
+  // header. Returns the full Caliber response inline instead of redirecting,
+  // for smoke-testing the integration end-to-end. The redirect path (normal
+  // flow) NEVER exposes lead data — only goes to /qualify/thank-you/?case=…
+  const debugSecret = process.env.LEAD_DEBUG_SECRET;
+  const isDebug = debugSecret && req.headers['x-debug-secret'] === debugSecret;
   if (isDebug) {
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).send(JSON.stringify({
