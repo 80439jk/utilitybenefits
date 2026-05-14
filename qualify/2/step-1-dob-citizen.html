@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Step 1: Basic information — UtilityBenefits</title>
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="stylesheet" href="/lp/_shared.css" />
+<link rel="stylesheet" href="/qualify/2/_funnel.css" />
+</head>
+<body>
+
+<div class="lp-utility">
+  <div class="container row">
+    <span class="left"><strong>Live</strong> &mdash; agents available now</span>
+    <span class="right"><a href="tel:9999999999">(999) 999-9999</a></span>
+  </div>
+</div>
+
+<header class="lp-header">
+  <div class="container">
+    <a href="/" class="lp-logo"><span class="mark">UB</span> UtilityBenefits</a>
+    <a href="tel:9999999999" class="phone">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+      (999) 999-9999
+    </a>
+  </div>
+</header>
+
+<main class="funnel-main">
+  <div class="container">
+    <form class="funnel-card step" id="funnel-form" method="get" action="/qualify/2/step-2-address/" novalidate>
+      <div class="step-meta">
+        <span>Step 1 of 4</span>
+        <span class="pct">25% complete</span>
+      </div>
+      <div class="progress"><div class="bar" style="width:25%"></div></div>
+
+      <h2>Your basic information</h2>
+
+      <div class="field">
+        <label for="dob">Date of birth</label>
+        <input type="text" inputmode="numeric" id="dob" name="dob" placeholder="MM / DD / YYYY" autocomplete="bday" required />
+      </div>
+
+      <div class="field">
+        <label for="citizen">Citizenship status</label>
+        <select id="citizen" name="citizen" required>
+          <option value="">Select&hellip;</option>
+          <option>U.S. Citizen</option>
+          <option>U.S. National</option>
+          <option>Lawful Permanent Resident</option>
+          <option>Qualifying immigrant status</option>
+          <option>Other / not sure</option>
+        </select>
+      </div>
+
+      <div class="actions split">
+        <a href="/qualify/2/" class="btn-back">&lsaquo; Back</a>
+        <button type="submit" class="btn-continue" id="cta" disabled>Continue &rarr;</button>
+      </div>
+
+      <p class="micro"><strong>No credit check. No commitment.</strong><br>Your info is encrypted and used only to match you with programs.</p>
+    </form>
+
+    <div class="reviewed-by">
+      <span class="ub-mark">UB</span>
+      <span><strong>Reviewed by UtilityBenefits Editorial Team</strong> <span class="sep">|</span> Last reviewed May 2026 <span class="sep">|</span> Cites HHS, FCC, CMS</span>
+    </div>
+  </div>
+</main>
+
+<div class="lp-sticky-call" role="region" aria-label="Call now">
+  <div class="meta">Free &middot; no SSN needed</div>
+  <a href="tel:9999999999" class="call">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+    Call now
+  </a>
+</div>
+
+<footer class="lp-footer">
+  <div class="container">
+    <p class="lp-tcpa">UtilityBenefits.com is an independent comparison and information service operated by UtilityBenefits Research LLC. We are not a government agency.</p>
+    <div class="copyright">
+      <span>&copy; 2026 UtilityBenefits Research LLC. All rights reserved.</span>
+      <span class="legal-links">
+        <a href="/legal/privacy/">Privacy</a>
+        <a href="/legal/terms/">Terms</a>
+        <a href="/legal/tcpa/">TCPA</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var dob = document.getElementById('dob');
+  var cit = document.getElementById('citizen');
+  var cta = document.getElementById('cta');
+  dob.value = sessionStorage.getItem('ub2_dob') || '';
+  cit.value = sessionStorage.getItem('ub2_citizen') || '';
+  dob.addEventListener('input', function(){
+    var v = dob.value.replace(/\D/g,'').slice(0,8);
+    if (v.length >= 5) v = v.slice(0,2)+' / '+v.slice(2,4)+' / '+v.slice(4);
+    else if (v.length >= 3) v = v.slice(0,2)+' / '+v.slice(2);
+    dob.value = v;
+    check();
+  });
+  cit.addEventListener('change', check);
+  function check(){ cta.disabled = !(dob.value.replace(/\D/g,'').length === 8 && cit.value); }
+  document.getElementById('funnel-form').addEventListener('submit', function(){
+    try {
+      sessionStorage.setItem('ub2_dob', dob.value);
+      sessionStorage.setItem('ub2_citizen', cit.value);
+    } catch(e){}
+  });
+  check();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+/* ============================================================
+   /qualify/2/ — multi-step funnel
+   Layered on top of /lp/_shared.css (Direction D tokens).
+   Matches the thank-you page palette: navy + emerald + ivory.
+   ============================================================ */
+
+body{background:var(--bg)}
+
+.funnel-main{padding:28px 0 90px}
+
+/* Editorial eyebrow chip used on landing */
+.hero-eyebrow{display:flex;justify-content:center;margin-bottom:10px}
+.hero-eyebrow span{display:inline-block;background:#fff;border:1px solid var(--line);color:var(--ink-2);font-size:.74rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:5px 11px;border-radius:999px}
+.hero-eyebrow .dot{display:inline-block;width:6px;height:6px;background:var(--emerald);border-radius:50%;margin-right:6px;vertical-align:1px}
+
+/* The central card all steps live inside */
+.funnel-card{max-width:600px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px 32px 26px;box-shadow:var(--shadow-md)}
+@media(max-width:560px){.funnel-card{padding:22px 20px;border-radius:0;border-left:0;border-right:0;margin:0}}
+
+/* Steps 1-4 use a slightly narrower card than the landing */
+.funnel-card.step{max-width:560px;padding:26px 32px 24px}
+
+.funnel-card h1,
+.funnel-card h2{
+  font-family:'Source Serif 4',serif;
+  font-size:1.5rem;line-height:1.18;letter-spacing:-.018em;
+  text-align:center;margin:6px 0 16px;color:var(--ink);
+}
+.funnel-card h1{font-size:1.55rem;margin:0 0 8px}
+.funnel-card .lede{text-align:center;color:var(--ink-2);font-size:.94rem;margin:0 auto 22px;max-width:460px}
+
+/* Step header (progress bar block) */
+.step-meta{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
+.step-meta .pct{color:var(--emerald-deep)}
+.progress{height:6px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin-bottom:24px}
+.progress .bar{height:100%;background:linear-gradient(90deg,var(--emerald),var(--emerald-deep));border-radius:99px;transition:width .35s ease}
+
+/* Landing's two numbered sections */
+.section-title{font-size:.78rem;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:8px;margin:18px 0 6px}
+.section-title .n{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.74rem;letter-spacing:0}
+.section-sub{font-size:.86rem;color:var(--ink-2);margin:0 0 12px;padding-left:30px}
+@media(max-width:520px){.section-sub{padding-left:0}}
+
+/* Intent picker (landing) */
+.picker{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 8px;padding-left:30px}
+@media(max-width:520px){.picker{grid-template-columns:repeat(2,1fr);padding-left:0}}
+.picker label{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 8px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:.86rem;font-weight:600;color:var(--ink);text-align:center;line-height:1.2;transition:border-color .15s,background .15s;min-height:96px}
+.picker label:hover{border-color:var(--emerald);background:var(--emerald-soft)}
+.picker input{position:absolute;opacity:0;pointer-events:none}
+.picker .ico{width:30px;height:30px;color:var(--emerald-deep)}
+.picker label:has(input:checked){border-color:var(--emerald);background:var(--emerald-soft);box-shadow:0 0 0 1px var(--emerald) inset}
+.picker .dot{position:absolute;top:8px;right:8px;width:16px;height:16px;border:1.5px solid var(--line);border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+.picker label:has(input:checked) .dot{background:var(--emerald);border-color:var(--emerald)}
+.picker label:has(input:checked) .dot::after{content:"";width:6px;height:6px;background:#fff;border-radius:50%}
+
+/* Form fields */
+.field{margin:0 0 14px}
+.field.indent{padding-left:30px}
+@media(max-width:520px){.field.indent{padding-left:0}}
+.field label{display:block;font-size:.86rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+.field input,
+.field select{width:100%;height:48px;padding:0 14px;font-size:1rem;font-family:'Inter',sans-serif;border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.field input:focus,
+.field select:focus{outline:0;border-color:var(--emerald);box-shadow:0 0 0 3px rgba(14,142,92,.15)}
+.field select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path fill='%236B7280' d='M6 8L0 0h12z'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row2.addr{grid-template-columns:1.4fr 1fr}
+@media(max-width:420px){.row2,.row2.addr{grid-template-columns:1fr}}
+
+/* TCPA consent box */
+.tcpa-box{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:14px}
+.tcpa-box label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:.78rem;color:var(--ink-2);line-height:1.55}
+.tcpa-box input[type=checkbox]{flex-shrink:0;width:18px;height:18px;margin-top:1px;accent-color:var(--emerald)}
+.tcpa-box a{color:var(--navy);text-decoration:underline}
+
+/* Action row */
+.actions{margin-top:22px}
+.actions.split{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
+.actions.landing{padding-left:30px}
+@media(max-width:520px){.actions.landing{padding-left:0}}
+.btn-back{height:48px;padding:0 16px;border:1.5px solid var(--line);background:#fff;color:var(--ink-2);font-size:.92rem;font-weight:600;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:border-color .15s}
+.btn-back:hover{border-color:var(--ink-2);text-decoration:none;color:var(--ink-2)}
+.btn-continue{height:48px;padding:0 18px;border:0;background:var(--emerald);color:#fff;font-size:1rem;font-weight:700;font-family:'Source Serif 4',serif;border-radius:8px;cursor:pointer;letter-spacing:-.01em;transition:background .15s,transform .1s;box-shadow:0 6px 18px rgba(14,142,92,.28)}
+.btn-continue.lg{height:52px;font-size:1.05rem;width:100%}
+.btn-continue:hover{background:var(--emerald-deep)}
+.btn-continue:active{transform:translateY(1px)}
+.btn-continue:disabled{background:#D9DDE3;color:#8a93a0;cursor:not-allowed;box-shadow:none}
+
+/* Microcopy + trust */
+.micro{text-align:center;font-size:.82rem;color:var(--muted);margin-top:14px;line-height:1.5}
+.micro strong{color:var(--ink-2);font-weight:600}
+.trust-row{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:.84rem;color:var(--ink-2)}
+.trust-row .item{display:inline-flex;align-items:center;gap:5px}
+.trust-row .check{color:var(--emerald-deep);font-weight:700}
+
+/* Editorial review byline below card */
+.reviewed-by{max-width:600px;margin:14px auto 0;display:flex;align-items:center;gap:10px;font-size:.78rem;color:var(--muted);padding:12px 16px}
+.reviewed-by .ub-mark{width:24px;height:24px;border-radius:5px;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;flex-shrink:0}
+.reviewed-by strong{color:var(--ink);font-weight:600}
+.reviewed-by .sep{color:var(--line-strong);margin:0 6px}
