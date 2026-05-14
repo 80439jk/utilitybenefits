@@ -264,16 +264,18 @@ module.exports = async function handler(req, res) {
 
   let leadId = null;
   let statusCode = 0;
+  let rawBody = '';
+  let errMsg = null;
   try {
     let resp = await post(1);
     statusCode = resp.status;
-    // 500: retry once with same x-request-id (per the partner guide)
     if (resp.status >= 500 && resp.status < 600) {
       resp = await post(2);
       statusCode = resp.status;
     }
+    rawBody = await resp.text();
     let parsed = {};
-    try { parsed = await resp.json(); } catch (e) { /* non-JSON body */ }
+    try { parsed = JSON.parse(rawBody); } catch (e) { /* non-JSON body */ }
     if (parsed && parsed.lead_id) leadId = parsed.lead_id;
 
     console.log('caliber-response', {
@@ -281,15 +283,33 @@ module.exports = async function handler(req, res) {
       lead_id: leadId,
       x_request_id: reqId,
       case: caseNum,
-      contact_state: payload.contact.state,
-      contact_zip: payload.contact.zip ? maskCaseHash(payload.contact.zip) : null
+      body_preview: rawBody.slice(0, 400)
     });
   } catch (err) {
-    console.error('caliber-error', {
-      error: err && err.message,
+    errMsg = err && err.message;
+    console.error('caliber-error', { error: errMsg, x_request_id: reqId, case: caseNum });
+  }
+
+  // Debug mode: return JSON instead of redirecting (for smoke tests).
+  // Trigger by setting ?debug=1 on the request URL or x-debug: 1 header.
+  const isDebug = (req.query && req.query.debug === '1') || req.headers['x-debug'] === '1';
+  if (isDebug) {
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).send(JSON.stringify({
+      case: caseNum,
+      caliber_status: statusCode,
+      caliber_lead_id: leadId,
+      caliber_body: rawBody,
+      caliber_error: errMsg,
       x_request_id: reqId,
-      case: caseNum
-    });
+      thank_you_url: thankYou({ lead_id: leadId }),
+      payload_preview: {
+        consent_given: payload.consent.given,
+        contact: payload.contact,
+        attribution_keys_set: Object.keys(payload.attribution).filter(function(k){ return payload.attribution[k] != null; }),
+        extended_keys_set: Object.keys(payload.extended).filter(function(k){ return payload.extended[k] != null && !(Array.isArray(payload.extended[k]) && payload.extended[k].length === 0); })
+      }
+    }, null, 2));
   }
 
   return res.redirect(302, thankYou({ lead_id: leadId }));
