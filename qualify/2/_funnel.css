@@ -65,7 +65,8 @@ body{background:var(--bg)}
 .field select{padding-right:32px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .row2.addr{grid-template-columns:1.4fr 1fr}
-@media(max-width:420px){.row2,.row2.addr{grid-template-columns:1fr}}
+/* Only stack on tiny phones (iPhone SE etc) — most modern phones stay 2-col */
+@media(max-width:360px){.row2,.row2.addr{grid-template-columns:1fr}}
 
 /* TCPA consent box */
 .tcpa-box{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:14px}
@@ -127,7 +128,8 @@ body{background:var(--bg)}
 
   /* — H1/H2 — smaller — */
   .funnel-card h1 { font-size: 1.32rem; margin: 0 0 4px }
-  .funnel-card h2 { font-size: 1.32rem; margin: 4px 0 12px }
+  .funnel-card h2 { font-size: 1.18rem; margin: 4px 0 10px }
+  .funnel-card h2.mobile-hide { display: none }
 
   /* — Lede — tighter; pages can opt in to hiding on mobile — */
   .funnel-card .lede { font-size: .88rem; margin: 0 auto 14px; line-height: 1.42 }
