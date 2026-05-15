@@ -167,6 +167,10 @@ module.exports = async function handler(req, res) {
   const referer = req.headers['referer'] || '';
   const consentTs = b.consent_timestamp || new Date().toISOString();
 
+  // Generate case# up-front so it's available to both the payload (as
+  // extended.case_number) and the request headers (as x-request-id).
+  const caseNum = genCaseNumber();
+
   const payload = {
     consent: {
       given: bool(b.tcpa) === true,
@@ -235,16 +239,17 @@ module.exports = async function handler(req, res) {
       raw_employment: nullable(b.employ),
       raw_citizen:    nullable(b.citizen),
 
-      // Funnel identifiers
-      lp:         nullable(b.lp) || 'qualify2',
-      lp_variant: nullable(b.v)  || 'A'
+      // Funnel identifiers + cross-system tracking
+      lp:           nullable(b.lp) || 'qualify2',
+      lp_variant:   nullable(b.v)  || 'A',
+      case_number:  caseNum  // shown on our thank-you page; same as x-request-id
     }
   };
 
-  const caseNum = genCaseNumber();
-  const reqId = (typeof crypto.randomUUID === 'function')
-    ? crypto.randomUUID()
-    : (Date.now() + '-' + Math.random().toString(36).slice(2, 10));
+  // Use our case# (declared above) as Caliber's x-request-id so the lead is
+  // searchable in their dashboard by the same number we display on the
+  // thank-you page. Caliber uses x-request-id for idempotency + audit.
+  const reqId = caseNum;
 
   // Build redirect URL first — we always redirect, even on Caliber failure
   function thankYou(extra) {
