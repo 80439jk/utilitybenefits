@@ -16,6 +16,52 @@
 <link rel="stylesheet" href="/lp/_shared.css" />
 <link rel="stylesheet" href="/qualify/2/_funnel.css" />
 <script src="/qualify/2/_attribution.js"></script>
+<style>
+  /* Payoff section — shows what we'll check for the user, with brief "checking..." animation */
+  .payoff{max-width:600px;margin:0 auto 16px;background:linear-gradient(180deg,var(--emerald-soft) 0%,#fff 65%);border:1px solid #C0DFCE;border-radius:14px;padding:22px 24px;box-shadow:var(--shadow-sm)}
+  @media(max-width:560px){.payoff{padding:18px;border-radius:0;border-left:0;border-right:0;margin:0 0 12px}}
+
+  .payoff-checking{text-align:center;padding:6px 0}
+  .payoff-spinner{width:36px;height:36px;border-radius:50%;border:3px solid #cce6da;border-top-color:var(--emerald);animation:ub-spin .9s linear infinite;margin:0 auto 10px}
+  @keyframes ub-spin{to{transform:rotate(360deg)}}
+  .payoff-checking .label{font-size:.95rem;color:var(--ink-2);margin-bottom:10px}
+  .payoff-checking .label strong{color:var(--ink);font-weight:600}
+  .payoff-checking .bar-wrap{height:6px;background:rgba(14,142,92,.18);border-radius:99px;overflow:hidden;max-width:280px;margin:0 auto}
+  .payoff-checking .bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--emerald),var(--emerald-deep));border-radius:99px;animation:ub-fill 1.2s ease-out forwards}
+  @keyframes ub-fill{to{width:100%}}
+
+  .payoff-result{animation:ub-fade .4s ease-out}
+  @keyframes ub-fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+  .payoff-header{display:flex;align-items:center;gap:8px;font-size:1rem;color:var(--ink);margin-bottom:10px;font-family:'Source Serif 4',serif;letter-spacing:-.01em;line-height:1.3}
+  .payoff-header strong{color:var(--emerald-deep);font-weight:700}
+  .payoff-check{width:24px;height:24px;border-radius:50%;background:var(--emerald);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+
+  .payoff-value{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:.86rem;color:var(--ink-2);margin-bottom:14px;text-align:center}
+  .payoff-value strong{font-family:'Source Serif 4',serif;color:var(--emerald-deep);font-size:1.15rem;font-weight:700;display:block;letter-spacing:-.012em;margin-bottom:1px}
+
+  .payoff-grid{display:grid;grid-template-columns:1fr;gap:8px}
+  @media(min-width:768px){.payoff-grid{grid-template-columns:1fr 1fr 1fr}}
+  .program-card{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px;animation:ub-slide .4s ease-out both}
+  .program-card:nth-child(1){animation-delay:.05s}
+  .program-card:nth-child(2){animation-delay:.15s}
+  .program-card:nth-child(3){animation-delay:.25s}
+  @keyframes ub-slide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .program-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+  .program-body{flex:1;min-width:0}
+  .program-name{font-family:'Source Serif 4',serif;font-weight:700;color:var(--ink);font-size:1rem;letter-spacing:-.01em;line-height:1.2}
+  .program-desc{color:var(--ink-2);font-size:.82rem;margin-top:3px;line-height:1.4}
+  .program-tags{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+  .tag-benefit,.tag-state{font-size:.7rem;padding:2px 8px;border-radius:99px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+  .tag-benefit{background:#fef3c7;color:#92400e}
+  .tag-state{background:var(--emerald-soft);color:var(--emerald-deep)}
+
+  .payoff-more{text-align:center;font-size:.8rem;color:var(--muted);margin:12px 0 0}
+
+  /* Soften the form heading since the payoff above does the motivating */
+  .funnel-card h2.verify-h2{font-size:1.1rem;color:var(--ink-2);font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0;margin:0 0 14px}
+  @media(max-width:560px){.funnel-card h2.verify-h2{font-size:.98rem;margin:0 0 12px}}
+</style>
 </head>
 <body>
 
@@ -38,6 +84,64 @@
 
 <main class="funnel-main">
   <div class="container">
+
+    <!-- Payoff section — shows up first so the user sees what they're working toward -->
+    <div class="payoff" id="payoff">
+      <div class="payoff-checking" id="payoff-checking">
+        <div class="payoff-spinner"></div>
+        <div class="label">Checking programs available at <strong class="user-state">your address</strong>&hellip;</div>
+        <div class="bar-wrap"><div class="bar-fill"></div></div>
+      </div>
+      <div class="payoff-result" id="payoff-result" hidden>
+        <div class="payoff-header">
+          <span class="payoff-check">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 6L9 17l-5-5"/></svg>
+          </span>
+          <span>Found <strong>3+ programs</strong> for <strong class="user-state">your area</strong></span>
+        </div>
+        <div class="payoff-value">
+          <strong>$200 &ndash; $2,500+/year</strong>
+          in potential benefits
+        </div>
+        <div class="payoff-grid">
+          <div class="program-card">
+            <div class="program-icon" style="background:#fef3c7;color:#d97706">&#9889;</div>
+            <div class="program-body">
+              <div class="program-name">LIHEAP</div>
+              <div class="program-desc">Federal help paying heating &amp; cooling bills.</div>
+              <div class="program-tags">
+                <span class="tag-benefit">Up to $1,500/yr</span>
+                <span class="tag-state">&#10003; Available in <span class="user-state">your area</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="program-card">
+            <div class="program-icon" style="background:#dbeafe;color:#2563eb">&#128241;</div>
+            <div class="program-body">
+              <div class="program-name">Lifeline</div>
+              <div class="program-desc">Discount on monthly phone or internet service.</div>
+              <div class="program-tags">
+                <span class="tag-benefit">$9.25/mo off</span>
+                <span class="tag-state">&#10003; Available in <span class="user-state">your area</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="program-card">
+            <div class="program-icon" style="background:#dcfce7;color:#16a34a">&#127973;</div>
+            <div class="program-body">
+              <div class="program-name">Medical Alert</div>
+              <div class="program-desc">Free emergency response device through Medicaid.</div>
+              <div class="program-tags">
+                <span class="tag-benefit">$0/mo</span>
+                <span class="tag-state">&#10003; Available in <span class="user-state">your area</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="payoff-more">+ 100+ more programs being checked</p>
+      </div>
+    </div>
+
     <form class="funnel-card step" id="funnel-form" method="get" action="/qualify/3/step-2-income-employ/" novalidate>
       <div class="step-meta">
         <span>Step 1 of 3</span>
@@ -45,7 +149,7 @@
       </div>
       <div class="progress"><div class="bar" style="width:33%"></div></div>
 
-      <h2>Your basic information</h2>
+      <h2 class="verify-h2">Quick verification &mdash; takes 30 seconds</h2>
 
       <div class="field">
         <label for="dob">Date of birth</label>
@@ -102,6 +206,45 @@
 </footer>
 
 <script>
+/* Payoff section: state-personalized program preview + 1.2s "checking..." animation */
+(function(){
+  var STATE_NAMES = {
+    AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',
+    CO:'Colorado',CT:'Connecticut',DE:'Delaware',FL:'Florida',GA:'Georgia',
+    HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',
+    KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',
+    MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',
+    MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',
+    NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',
+    OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',
+    SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',
+    VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming',
+    DC:'District of Columbia'
+  };
+
+  var raw = (sessionStorage.getItem('ub2_state') || '').trim();
+  var stateName;
+  if (/^[A-Za-z]{2}$/.test(raw)) {
+    stateName = STATE_NAMES[raw.toUpperCase()] || raw.toUpperCase();
+  } else if (raw) {
+    stateName = raw;
+  } else {
+    stateName = 'your area';
+  }
+
+  document.querySelectorAll('.user-state').forEach(function(el){
+    el.textContent = stateName;
+  });
+
+  // Animate checking -> result after the bar finishes
+  var checking = document.getElementById('payoff-checking');
+  var result = document.getElementById('payoff-result');
+  setTimeout(function(){
+    if (checking) checking.style.display = 'none';
+    if (result) result.hidden = false;
+  }, 1250);
+})();
+
 (function(){
   var dob = document.getElementById('dob');
   var cit = document.getElementById('citizen');
