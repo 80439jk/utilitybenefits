@@ -146,19 +146,53 @@
   var form = document.getElementById('funnel-form');
   var cta = document.getElementById('cta');
   var stateSel = document.getElementById('state');
-  function check(){
+  var ctaOriginalText = cta.textContent;
+  var userTouched = false;   // only auto-advance after a real interaction
+  var advanceFired = false;  // one-shot guard
+
+  function isReady(){
     var intents = form.querySelectorAll('input[name=intent]:checked').length;
-    cta.disabled = !(intents > 0 && stateSel.value);
+    return intents > 0 && !!stateSel.value;
   }
-  form.addEventListener('change', check);
+
+  function check(){
+    var ready = isReady();
+    cta.disabled = !ready;
+
+    if (userTouched && ready && !advanceFired) {
+      advanceFired = true;
+      cta.textContent = 'Loading…';
+      cta.disabled = true;
+      // Brief delay so user sees the state populated before navigating.
+      setTimeout(function(){
+        if (form.requestSubmit) form.requestSubmit();
+        else form.submit();
+      }, 450);
+    }
+  }
+
+  form.addEventListener('change', function(){
+    userTouched = true;
+    check();
+  });
   check();
-  // Persist for back-nav
+
+  // Persist on submit so back-nav can re-hydrate later steps
   form.addEventListener('submit', function(){
     var intents = Array.from(form.querySelectorAll('input[name=intent]:checked')).map(function(i){return i.value}).join(',');
     try {
       sessionStorage.setItem('ub2_intent', intents);
       sessionStorage.setItem('ub2_state', stateSel.value);
     } catch(e){}
+  });
+
+  // If user comes back via browser-back, cancel any pending advance + restore CTA
+  window.addEventListener('pageshow', function(e){
+    if (e.persisted) {
+      advanceFired = false;
+      cta.textContent = ctaOriginalText;
+      cta.disabled = !isReady();
+    }
   });
 })();
 </script>
