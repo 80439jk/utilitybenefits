@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>What does your address qualify for? — UtilityBenefits</title>
+<meta name="description" content="Type your home address. Free 60-second check for utility bill help, LIHEAP, Lifeline, and more. No SSN needed." />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://maps.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="stylesheet" href="/lp/_shared.css" />
+<link rel="stylesheet" href="/qualify/2/_funnel.css" />
+<script src="/qualify/2/_attribution.js"></script>
+<style>
+  /* Address-autocomplete landing — extends /qualify/2/_funnel.css */
+  .addr-card { max-width: 580px }
+  .addr-input-wrap { position: relative; margin: 18px 0 4px }
+  .addr-input-wrap .pin {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; color: var(--emerald-deep); pointer-events: none;
+  }
+  #addr-input {
+    width: 100%; height: 56px;
+    padding: 0 14px 0 42px;
+    font-size: 1.04rem; font-family: 'Inter', sans-serif;
+    border: 1.5px solid var(--line); border-radius: 10px;
+    background: #fff; color: var(--ink);
+    transition: border-color .15s, box-shadow .15s;
+  }
+  #addr-input:focus { outline: 0; border-color: var(--emerald); box-shadow: 0 0 0 4px rgba(14,142,92,.18) }
+  #addr-input::placeholder { color: #8a93a0 }
+
+  .addr-confirm {
+    display: none; align-items: center; gap: 8px;
+    background: var(--emerald-soft); border: 1px solid #C0DFCE;
+    color: var(--emerald-deep);
+    padding: 10px 14px; border-radius: 8px;
+    font-size: .92rem; font-weight: 600;
+    margin: 12px 0 0;
+  }
+  .addr-confirm.show { display: flex }
+  .addr-confirm svg { flex-shrink: 0; width: 18px; height: 18px }
+  .addr-confirm .addr-text { color: var(--ink); font-weight: 500 }
+
+  .key-warning {
+    background: #FFF7E6; border: 1px solid #F0DCAE; color: #6E5320;
+    padding: 10px 14px; border-radius: 8px;
+    font-size: .82rem; margin-top: 10px;
+  }
+
+  /* Override Google Places dropdown to match our style */
+  .pac-container {
+    border: 1.5px solid var(--line) !important;
+    border-radius: 8px !important;
+    box-shadow: var(--shadow-md) !important;
+    margin-top: 4px !important;
+    font-family: 'Inter', sans-serif !important;
+    background: #fff !important;
+  }
+  .pac-item {
+    padding: 10px 14px !important;
+    border-top: 1px solid var(--line-soft) !important;
+    font-size: .92rem !important;
+    line-height: 1.4 !important;
+    cursor: pointer !important;
+  }
+  .pac-item:first-child { border-top: 0 !important }
+  .pac-item:hover, .pac-item-selected {
+    background: var(--emerald-soft) !important;
+  }
+  .pac-icon { display: none !important }
+  .pac-item-query { color: var(--ink) !important; font-size: .94rem !important; font-weight: 600 !important }
+  .pac-matched { color: var(--emerald-deep) !important; font-weight: 700 !important }
+
+  @media (max-width: 560px) {
+    #addr-input { height: 52px; font-size: .98rem; padding-left: 38px }
+    .addr-input-wrap .pin { left: 12px; width: 16px; height: 16px }
+  }
+</style>
+</head>
+<body>
+
+<div class="lp-utility">
+  <div class="container row">
+    <span class="left"><strong>Live</strong> &mdash; agents available now</span>
+    <span class="right"><a href="tel:9999999999">(999) 999-9999</a></span>
+  </div>
+</div>
+
+<header class="lp-header">
+  <div class="container">
+    <a href="/" class="lp-logo"><span class="mark">UB</span> UtilityBenefits</a>
+    <a href="tel:9999999999" class="phone">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+      (999) 999-9999
+    </a>
+  </div>
+</header>
+
+<main class="funnel-main">
+  <div class="container">
+
+    <div class="hero-eyebrow"><span><span class="dot"></span>Independent &middot; not a government agency &middot; free</span></div>
+
+    <form class="funnel-card addr-card" id="funnel-form" method="get" action="/qualify/3/step-1-dob-citizen/" novalidate>
+      <h1>What does your address qualify for?</h1>
+      <p class="lede">Find out in 60 seconds. <strong>Free check</strong> &mdash; no SSN needed.</p>
+
+      <div class="addr-input-wrap">
+        <svg class="pin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+        </svg>
+        <input id="addr-input" type="text" name="addr_full" placeholder="Start typing your home address…" autocomplete="off" required />
+      </div>
+
+      <div class="addr-confirm" id="addr-confirm">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        <span class="addr-text" id="addr-confirm-text"></span>
+      </div>
+
+      <div class="key-warning" id="key-warning" hidden>
+        Address autocomplete is unavailable. You can still type your full address and continue.
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn-continue lg" id="cta" disabled>See what I qualify for &rarr;</button>
+      </div>
+
+      <div class="trust-row">
+        <span class="item"><span class="check">&#10003;</span> 100% free</span>
+        <span class="item"><span class="check">&#10003;</span> No SSN needed</span>
+        <span class="item"><span class="check">&#10003;</span> Takes 60 seconds</span>
+      </div>
+    </form>
+
+    <div class="reviewed-by">
+      <span class="ub-mark">UB</span>
+      <span><strong>Reviewed by UtilityBenefits Editorial Team</strong> <span class="sep">|</span> Last reviewed May 2026 <span class="sep">|</span> Cites HHS, FCC, CMS</span>
+    </div>
+
+  </div>
+</main>
+
+<div class="lp-sticky-call" role="region" aria-label="Call now">
+  <div class="meta">Free &middot; no SSN needed</div>
+  <a href="tel:9999999999" class="call">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+    Call now
+  </a>
+</div>
+
+<footer class="lp-footer">
+  <div class="container">
+    <p class="lp-tcpa">UtilityBenefits.com is an independent comparison and information service operated by UtilityBenefits Research LLC. We are not a government agency and not affiliated with the FCC, USAC, the Lifeline program, LIHEAP, Medicaid, or any other federal or state program.</p>
+    <div class="copyright">
+      <span>&copy; 2026 UtilityBenefits Research LLC. All rights reserved.</span>
+      <span class="legal-links">
+        <a href="/legal/privacy/">Privacy</a>
+        <a href="/legal/terms/">Terms</a>
+        <a href="/legal/tcpa/">TCPA</a>
+        <a href="/legal/do-not-sell/">Do Not Sell My Info</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var form = document.getElementById('funnel-form');
+  var input = document.getElementById('addr-input');
+  var cta = document.getElementById('cta');
+  var ctaOriginalText = cta.textContent;
+  var confirm = document.getElementById('addr-confirm');
+  var confirmText = document.getElementById('addr-confirm-text');
+  var keyWarning = document.getElementById('key-warning');
+  var placeSelected = false;     // true after user picks an autocomplete suggestion
+  var advanceFired = false;
+  var userTouched = false;
+
+  /* ---- Persist & advance ---- */
+  function persistAndAdvance() {
+    if (advanceFired) return;
+    advanceFired = true;
+    cta.textContent = 'Loading…';
+    cta.disabled = true;
+    setTimeout(function(){ form.requestSubmit ? form.requestSubmit() : form.submit(); }, 450);
+  }
+
+  /* Strip components from a Google Places result */
+  function componentVal(components, type, useShort) {
+    var c = components && components.find(function(c){ return c.types.indexOf(type) !== -1; });
+    if (!c) return '';
+    return useShort ? c.short_name : c.long_name;
+  }
+
+  function handlePlace(place) {
+    if (!place || !place.address_components) return;
+    var c = place.address_components;
+    var num = componentVal(c, 'street_number', false);
+    var route = componentVal(c, 'route', false);
+    var street = (num + ' ' + route).trim();
+    var city = componentVal(c, 'locality', false)
+            || componentVal(c, 'sublocality_level_1', false)
+            || componentVal(c, 'neighborhood', false);
+    var state = componentVal(c, 'administrative_area_level_1', true);
+    var zip = componentVal(c, 'postal_code', false);
+
+    // Persist for downstream steps (same keys as /qualify/2)
+    try {
+      sessionStorage.setItem('ub2_addr',  street);
+      sessionStorage.setItem('ub2_city',  city);
+      sessionStorage.setItem('ub2_state', state);
+      sessionStorage.setItem('ub2_zip',   zip);
+      sessionStorage.setItem('ub2_addr_formatted', place.formatted_address || '');
+    } catch (e) {}
+
+    confirmText.textContent = place.formatted_address || (street + ', ' + city + ' ' + state + ' ' + zip);
+    confirm.classList.add('show');
+    cta.disabled = false;
+    placeSelected = true;
+    persistAndAdvance();
+  }
+
+  /* ---- Plain-text submit (fallback, or no-autocomplete-pick) ---- */
+  function handlePlainSubmit() {
+    // If user typed something but didn't pick a Place, save the raw text;
+    // server-side mapping handles missing city/state/zip gracefully.
+    if (!placeSelected) {
+      try {
+        sessionStorage.setItem('ub2_addr', input.value);
+        sessionStorage.setItem('ub2_addr_formatted', input.value);
+      } catch (e) {}
+    }
+  }
+
+  /* Enable CTA whenever the input has text — even without a Place pick. */
+  input.addEventListener('input', function(){
+    userTouched = true;
+    cta.disabled = input.value.trim().length < 6;
+    if (placeSelected && input.value !== confirmText.textContent) {
+      // user edited after picking; reset
+      placeSelected = false;
+      confirm.classList.remove('show');
+    }
+  });
+
+  form.addEventListener('submit', handlePlainSubmit);
+
+  /* ---- Load Google Places SDK ---- */
+  fetch('/api/maps-key')
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if (!j || !j.key) {
+        keyWarning.hidden = false;
+        return;
+      }
+      // Inject the Maps SDK with places library
+      var s = document.createElement('script');
+      s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(j.key)
+        + '&libraries=places&loading=async&callback=__initUBAutocomplete';
+      s.async = true;
+      s.defer = true;
+      s.onerror = function(){ keyWarning.hidden = false; };
+      window.__initUBAutocomplete = function() {
+        try {
+          var ac = new google.maps.places.Autocomplete(input, {
+            componentRestrictions: { country: 'us' },
+            types: ['address'],
+            fields: ['address_components', 'formatted_address']
+          });
+          ac.addListener('place_changed', function(){
+            handlePlace(ac.getPlace());
+          });
+        } catch (e) {
+          keyWarning.hidden = false;
+        }
+      };
+      document.head.appendChild(s);
+    })
+    .catch(function(){ keyWarning.hidden = false; });
+
+  /* If user comes back via browser-back, restore CTA */
+  window.addEventListener('pageshow', function(e){
+    if (e.persisted) {
+      advanceFired = false;
+      cta.textContent = ctaOriginalText;
+      cta.disabled = input.value.trim().length < 6;
+    }
+  });
+})();
+</script>
+
+<!-- TrustedForm -->
+<script type="text/javascript">
+(function(){
+  var tf = document.createElement('script');
+  tf.type = 'text/javascript'; tf.async = true;
+  tf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+    '://api.trustedform.com/trustedform.js?field=xxTrustedFormCertUrl&use_tagged_consent=true&l=' +
+    new Date().getTime() + Math.random();
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(tf, s);
+})();
+</script>
+<noscript><img src="https://api.trustedform.com/ns.gif" /></noscript>
+<!-- End TrustedForm -->
+
+</body>
+</html>

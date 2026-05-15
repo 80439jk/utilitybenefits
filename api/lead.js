@@ -79,7 +79,10 @@ function mapCitizenship(v) {
   return null;
 }
 
-function mapIntentToUtilities(v) {
+function mapIntentToUtilities(v, lp) {
+  // qualify3 doesn't ask about intent — default to all major utility types so
+  // the lead is well-tagged for routing.
+  if (!v && lp === 'qualify3') return ['electric', 'gas', 'internet'];
   if (!v) return [];
   const arr = String(v).split(',').map(function (s) { return s.trim(); });
   const out = [];
@@ -216,7 +219,7 @@ module.exports = async function handler(req, res) {
       employment_status:             mapEmployment(b.employ),
 
       // Utilities / intent
-      utility_behind_types:               mapIntentToUtilities(b.intent),
+      utility_behind_types:               mapIntentToUtilities(b.intent, b.lp),
       interested_in_assistance_programs:  true,
 
       // Intent (high-level)
