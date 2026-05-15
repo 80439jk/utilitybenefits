@@ -17,33 +17,42 @@
 <link rel="stylesheet" href="/qualify/2/_funnel.css" />
 <script src="/qualify/2/_attribution.js"></script>
 <style>
-  /* Payoff section — shows what we'll check for the user, with brief "checking..." animation */
-  .payoff{max-width:600px;margin:0 auto 16px;background:linear-gradient(180deg,var(--emerald-soft) 0%,#fff 65%);border:1px solid #C0DFCE;border-radius:14px;padding:22px 24px;box-shadow:var(--shadow-sm)}
-  @media(max-width:560px){.payoff{padding:18px;border-radius:0;border-left:0;border-right:0;margin:0 0 12px}}
+  /* Compact payoff banner — sits inside the funnel-card so the form stays the focus. */
+  .payoff-banner{
+    display:flex;align-items:center;gap:10px;
+    background:linear-gradient(135deg,var(--emerald-soft) 0%,#f4faf6 100%);
+    border:1px solid #C0DFCE;border-radius:10px;
+    padding:10px 12px;margin-bottom:16px;
+    animation:ub-fade .35s ease-out;
+  }
+  @keyframes ub-fade{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
 
-  .payoff-checking{text-align:center;padding:6px 0}
-  .payoff-spinner{width:36px;height:36px;border-radius:50%;border:3px solid #cce6da;border-top-color:var(--emerald);animation:ub-spin .9s linear infinite;margin:0 auto 10px}
-  @keyframes ub-spin{to{transform:rotate(360deg)}}
-  .payoff-checking .label{font-size:.95rem;color:var(--ink-2);margin-bottom:10px}
-  .payoff-checking .label strong{color:var(--ink);font-weight:600}
-  .payoff-checking .bar-wrap{height:6px;background:rgba(14,142,92,.18);border-radius:99px;overflow:hidden;max-width:280px;margin:0 auto}
-  .payoff-checking .bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--emerald),var(--emerald-deep));border-radius:99px;animation:ub-fill 1.2s ease-out forwards}
-  @keyframes ub-fill{to{width:100%}}
+  .payoff-banner .check{
+    width:22px;height:22px;border-radius:50%;
+    background:var(--emerald);color:#fff;flex-shrink:0;
+    display:inline-flex;align-items:center;justify-content:center;
+    margin-top:1px;
+  }
+  .payoff-banner .copy{flex:1;color:var(--ink-2);font-size:.88rem;line-height:1.4;letter-spacing:-.005em}
+  .payoff-banner .copy strong{color:var(--ink);font-weight:700}
+  .payoff-banner .copy .dollar{
+    font-family:'Source Serif 4',serif;
+    color:var(--emerald-deep);font-weight:700;
+    font-size:1rem;letter-spacing:-.012em;
+    white-space:nowrap;
+  }
+  .payoff-banner .copy .sep{color:#a7c4b7;margin:0 4px}
 
-  .payoff-result{animation:ub-fade .4s ease-out}
-  @keyframes ub-fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-
-  .payoff-header{display:flex;align-items:center;gap:8px;font-size:1rem;color:var(--ink);margin-bottom:10px;font-family:'Source Serif 4',serif;letter-spacing:-.01em;line-height:1.3}
-  .payoff-header strong{color:var(--emerald-deep);font-weight:700}
-  .payoff-check{width:24px;height:24px;border-radius:50%;background:var(--emerald);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-
-  .payoff-value{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px;font-size:.88rem;color:var(--ink-2);text-align:center}
-  .payoff-value strong{font-family:'Source Serif 4',serif;color:var(--emerald-deep);font-size:1.4rem;font-weight:700;display:block;letter-spacing:-.014em;margin-bottom:2px}
-  @media(max-width:560px){.payoff-value strong{font-size:1.25rem}}
-
-  /* Soften the form heading since the payoff above does the motivating */
-  .funnel-card h2.verify-h2{font-size:1.1rem;color:var(--ink-2);font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0;margin:0 0 14px}
-  @media(max-width:560px){.funnel-card h2.verify-h2{font-size:.98rem;margin:0 0 12px}}
+  @media(max-width:560px){
+    .payoff-banner{padding:9px 11px}
+    .payoff-banner .copy{font-size:.82rem}
+    .payoff-banner .copy .dollar{font-size:.96rem}
+    .payoff-banner .copy .sep{display:none}
+    .payoff-banner .copy .line2{display:block;margin-top:2px}
+  }
+  @media(min-width:561px){
+    .payoff-banner .copy .line2{display:inline}
+  }
 </style>
 </head>
 <body>
@@ -68,35 +77,27 @@
 <main class="funnel-main">
   <div class="container">
 
-    <!-- Payoff section — shows up first so the user sees what they're working toward -->
-    <div class="payoff" id="payoff">
-      <div class="payoff-checking" id="payoff-checking">
-        <div class="payoff-spinner"></div>
-        <div class="label">Checking programs available at <strong class="user-state">your address</strong>&hellip;</div>
-        <div class="bar-wrap"><div class="bar-fill"></div></div>
-      </div>
-      <div class="payoff-result" id="payoff-result" hidden>
-        <div class="payoff-header">
-          <span class="payoff-check">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 6L9 17l-5-5"/></svg>
-          </span>
-          <span>Found <strong>100+ programs</strong> in <strong class="user-state">your area</strong></span>
-        </div>
-        <div class="payoff-value">
-          <strong>$200 &ndash; $2,500+/year</strong>
-          in potential benefits
-        </div>
-      </div>
-    </div>
-
     <form class="funnel-card step" id="funnel-form" method="get" action="/qualify/3/step-2-income-employ/" novalidate>
+
+      <!-- Slim payoff banner — sits at the top of the form card so the form stays the focus -->
+      <div class="payoff-banner">
+        <span class="check">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 6L9 17l-5-5"/></svg>
+        </span>
+        <div class="copy">
+          <strong>100+ programs</strong> in <strong class="user-state">your area</strong>
+          <span class="sep">&middot;</span>
+          <span class="line2">Up to <span class="dollar">$2,500+/yr</span> potential</span>
+        </div>
+      </div>
+
       <div class="step-meta">
         <span>Step 1 of 3</span>
         <span class="pct">33% complete</span>
       </div>
       <div class="progress"><div class="bar" style="width:33%"></div></div>
 
-      <h2 class="verify-h2">Quick verification &mdash; takes 30 seconds</h2>
+      <h2>Your basic information</h2>
 
       <div class="field">
         <label for="dob">Date of birth</label>
@@ -182,14 +183,6 @@
   document.querySelectorAll('.user-state').forEach(function(el){
     el.textContent = stateName;
   });
-
-  // Animate checking -> result after the bar finishes
-  var checking = document.getElementById('payoff-checking');
-  var result = document.getElementById('payoff-result');
-  setTimeout(function(){
-    if (checking) checking.style.display = 'none';
-    if (result) result.hidden = false;
-  }, 1250);
 })();
 
 (function(){
