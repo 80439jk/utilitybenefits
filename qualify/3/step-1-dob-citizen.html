@@ -37,26 +37,9 @@
   .payoff-header strong{color:var(--emerald-deep);font-weight:700}
   .payoff-check{width:24px;height:24px;border-radius:50%;background:var(--emerald);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 
-  .payoff-value{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:.86rem;color:var(--ink-2);margin-bottom:14px;text-align:center}
-  .payoff-value strong{font-family:'Source Serif 4',serif;color:var(--emerald-deep);font-size:1.15rem;font-weight:700;display:block;letter-spacing:-.012em;margin-bottom:1px}
-
-  .payoff-grid{display:grid;grid-template-columns:1fr;gap:8px}
-  @media(min-width:768px){.payoff-grid{grid-template-columns:1fr 1fr 1fr}}
-  .program-card{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px;animation:ub-slide .4s ease-out both}
-  .program-card:nth-child(1){animation-delay:.05s}
-  .program-card:nth-child(2){animation-delay:.15s}
-  .program-card:nth-child(3){animation-delay:.25s}
-  @keyframes ub-slide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-  .program-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
-  .program-body{flex:1;min-width:0}
-  .program-name{font-family:'Source Serif 4',serif;font-weight:700;color:var(--ink);font-size:1rem;letter-spacing:-.01em;line-height:1.2}
-  .program-desc{color:var(--ink-2);font-size:.82rem;margin-top:3px;line-height:1.4}
-  .program-tags{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
-  .tag-benefit,.tag-state{font-size:.7rem;padding:2px 8px;border-radius:99px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
-  .tag-benefit{background:#fef3c7;color:#92400e}
-  .tag-state{background:var(--emerald-soft);color:var(--emerald-deep)}
-
-  .payoff-more{text-align:center;font-size:.8rem;color:var(--muted);margin:12px 0 0}
+  .payoff-value{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px;font-size:.88rem;color:var(--ink-2);text-align:center}
+  .payoff-value strong{font-family:'Source Serif 4',serif;color:var(--emerald-deep);font-size:1.4rem;font-weight:700;display:block;letter-spacing:-.014em;margin-bottom:2px}
+  @media(max-width:560px){.payoff-value strong{font-size:1.25rem}}
 
   /* Soften the form heading since the payoff above does the motivating */
   .funnel-card h2.verify-h2{font-size:1.1rem;color:var(--ink-2);font-family:'Inter',sans-serif;font-weight:600;letter-spacing:0;margin:0 0 14px}
@@ -97,48 +80,12 @@
           <span class="payoff-check">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 6L9 17l-5-5"/></svg>
           </span>
-          <span>Found <strong>3+ programs</strong> for <strong class="user-state">your area</strong></span>
+          <span>Found <strong>100+ programs</strong> in <strong class="user-state">your area</strong></span>
         </div>
         <div class="payoff-value">
           <strong>$200 &ndash; $2,500+/year</strong>
           in potential benefits
         </div>
-        <div class="payoff-grid">
-          <div class="program-card">
-            <div class="program-icon" style="background:#fef3c7;color:#d97706">&#9889;</div>
-            <div class="program-body">
-              <div class="program-name">LIHEAP</div>
-              <div class="program-desc">Federal help paying heating &amp; cooling bills.</div>
-              <div class="program-tags">
-                <span class="tag-benefit">Up to $1,500/yr</span>
-                <span class="tag-state">&#10003; Available in <span class="user-state">your area</span></span>
-              </div>
-            </div>
-          </div>
-          <div class="program-card">
-            <div class="program-icon" style="background:#dbeafe;color:#2563eb">&#128241;</div>
-            <div class="program-body">
-              <div class="program-name">Lifeline</div>
-              <div class="program-desc">Discount on monthly phone or internet service.</div>
-              <div class="program-tags">
-                <span class="tag-benefit">$9.25/mo off</span>
-                <span class="tag-state">&#10003; Available in <span class="user-state">your area</span></span>
-              </div>
-            </div>
-          </div>
-          <div class="program-card">
-            <div class="program-icon" style="background:#dcfce7;color:#16a34a">&#127973;</div>
-            <div class="program-body">
-              <div class="program-name">Medical Alert</div>
-              <div class="program-desc">Free emergency response device through Medicaid.</div>
-              <div class="program-tags">
-                <span class="tag-benefit">$0/mo</span>
-                <span class="tag-state">&#10003; Available in <span class="user-state">your area</span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p class="payoff-more">+ 100+ more programs being checked</p>
       </div>
     </div>
 
