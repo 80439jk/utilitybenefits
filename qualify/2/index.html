@@ -90,28 +90,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="section-title"><span class="n">2</span>Where do you live?</div>
       <p class="section-sub mobile-hide">Programs and income limits vary by state.</p>
 
-      <div class="field indent">
+      <div class="field indent state-field">
         <label for="state" class="mobile-hide">State</label>
-        <select id="state" name="state" required>
-          <option value="">Select your state to begin</option>
-          <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
-          <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
-          <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
-          <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
-          <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
-          <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
-          <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
-          <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
-          <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
-          <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
-          <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
-          <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
-          <option>Wisconsin</option><option>Wyoming</option><option>District of Columbia</option>
-        </select>
-      </div>
-
-      <div class="actions landing">
-        <button type="submit" class="btn-continue lg" id="cta" disabled>Check my eligibility &rarr;</button>
+        <div class="state-select-wrap">
+          <select id="state" name="state" required>
+            <option value="">Select your state to begin</option>
+            <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+            <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+            <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+            <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+            <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+            <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+            <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+            <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+            <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+            <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+            <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+            <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+            <option>Wisconsin</option><option>Wyoming</option><option>District of Columbia</option>
+          </select>
+        </div>
       </div>
 
       <div class="trust-row">
@@ -155,9 +153,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 (function(){
   var form = document.getElementById('funnel-form');
-  var cta = document.getElementById('cta');
   var stateSel = document.getElementById('state');
-  var ctaOriginalText = cta.textContent;
   var userTouched = false;   // only auto-advance after a real interaction
   var advanceFired = false;  // one-shot guard
 
@@ -167,13 +163,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   function check(){
-    var ready = isReady();
-    cta.disabled = !ready;
-
-    if (userTouched && ready && !advanceFired) {
+    if (userTouched && isReady() && !advanceFired) {
       advanceFired = true;
-      cta.textContent = 'Loading…';
-      cta.disabled = true;
       // Brief delay so user sees the state populated before navigating.
       setTimeout(function(){
         if (form.requestSubmit) form.requestSubmit();
@@ -186,7 +177,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     userTouched = true;
     check();
   });
-  check();
 
   // Persist on submit so back-nav can re-hydrate later steps
   form.addEventListener('submit', function(){
@@ -197,12 +187,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     } catch(e){}
   });
 
-  // If user comes back via browser-back, cancel any pending advance + restore CTA
+  // If user comes back via browser-back, cancel any pending advance
   window.addEventListener('pageshow', function(e){
     if (e.persisted) {
       advanceFired = false;
-      cta.textContent = ctaOriginalText;
-      cta.disabled = !isReady();
     }
   });
 })();

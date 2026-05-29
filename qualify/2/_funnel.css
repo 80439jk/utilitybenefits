@@ -46,8 +46,8 @@ body{background:var(--bg)}
 .progress .bar{height:100%;background:linear-gradient(90deg,#1B5E20,#14491A);border-radius:99px;transition:width .35s ease}
 
 /* Landing's two numbered sections */
-.section-title{font-size:.78rem;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:8px;margin:18px 0 6px}
-.section-title .n{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.74rem;letter-spacing:0}
+.section-title{font-size:1rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;display:flex;align-items:center;gap:10px;margin:22px 0 6px;text-transform:none}
+.section-title .n{width:28px;height:28px;border-radius:50%;background:#F57C00;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.92rem;font-weight:700;letter-spacing:0;flex-shrink:0}
 .section-sub{font-size:.86rem;color:var(--ink-2);margin:0 0 12px;padding-left:30px}
 @media(max-width:520px){.section-sub{padding-left:0}}
 
@@ -78,8 +78,50 @@ body{background:var(--bg)}
 /* Only stack on tiny phones */
 @media(max-width:360px){.row2,.row2.addr{grid-template-columns:1fr}}
 
-/* Landing state dropdown — green border per CRO 1.2 */
-.field select#state{border:2px solid #1B5E20}
+/* ============================================================
+   Landing state dropdown — high-impact NBA-reference treatment.
+   Replaces the CTA button (auto-advances on select).
+   Amber background + orange border + orange chevron button.
+   ============================================================ */
+.state-field{margin-bottom:18px}
+.state-select-wrap{position:relative;display:block;box-shadow:0 6px 18px rgba(230,81,0,.22);border-radius:10px}
+.state-select-wrap::after{
+  content:"";
+  position:absolute;
+  right:0;top:0;bottom:0;
+  width:56px;
+  background:#E65100;
+  border-radius:0 8px 8px 0;
+  pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23fff'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:26px 26px;
+}
+.state-select-wrap select#state{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  width:100%;
+  background:#FFF3E0;
+  border:2.5px solid #E65100;
+  border-radius:10px;
+  color:#0A1F2E;
+  font-weight:700;
+  font-size:17px;
+  padding:0 70px 0 18px;
+  min-height:60px;
+  cursor:pointer;
+  box-sizing:border-box;
+}
+.state-select-wrap select#state:focus{
+  outline:0;
+  border-color:#BF360C;
+  box-shadow:0 0 0 3px rgba(230,81,0,.20);
+}
+.state-select-wrap select#state:hover{
+  background:#FFE8CC;
+}
 
 /* TCPA consent box */
 .tcpa-box{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:14px}
@@ -194,6 +236,12 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:8px 20px;font-size:14px;min
   .field label.mobile-hide { display: none }
   .field input, .field select { min-height: 48px; font-size: 16px; padding: 10px 14px }
   .field select { padding-right: 32px }
+
+  /* Keep the landing state dropdown bold on mobile */
+  .state-select-wrap select#state { min-height: 56px; font-size: 16px; padding: 0 60px 0 16px }
+  .state-select-wrap::after { width: 48px; background-size: 22px 22px }
+  .section-title { font-size: .96rem; margin: 16px 0 4px; gap: 8px }
+  .section-title .n { width: 24px; height: 24px; font-size: .82rem }
 
   .tcpa-box { padding: 12px 14px; margin-top: 10px }
   .tcpa-box label { font-size: .74rem; line-height: 1.45; gap: 8px }
