@@ -60,8 +60,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <h2>Where do you live?</h2>
 
       <div class="field">
-        <label for="zip">ZIP code</label>
-        <input type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" id="zip" name="zip" placeholder="Enter your ZIP code" autocomplete="postal-code" required />
+        <label for="addr">Street address</label>
+        <input type="text" id="addr" name="addr" placeholder="123 Main Street" autocomplete="street-address" required />
+      </div>
+
+      <div class="row2 addr">
+        <div class="field">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" autocomplete="address-level2" required />
+        </div>
+        <div class="field">
+          <label for="zip">ZIP code</label>
+          <input type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" id="zip" name="zip" autocomplete="postal-code" required />
+        </div>
       </div>
 
       <div class="actions split">
@@ -70,7 +81,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
 
       <p class="trust-copy">No credit check. No commitment. 100% free and confidential.</p>
-      <p class="trust-context">Programs vary by state and county &mdash; we use your ZIP to match local programs.</p>
+      <p class="trust-context">Programs vary by state and county &mdash; we use your address to match local programs.</p>
     </form>
 
     <div class="reviewed-by">
@@ -104,14 +115,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script>
 (function(){
+  var addr = document.getElementById('addr');
+  var city = document.getElementById('city');
   var zip = document.getElementById('zip');
   var cta = document.getElementById('cta');
-  zip.value = sessionStorage.getItem('ub2_zip') || '';
-  zip.addEventListener('input', function(){
-    sessionStorage.setItem('ub2_zip', zip.value);
-    check();
+  [addr,city,zip].forEach(function(el){
+    el.value = sessionStorage.getItem('ub2_'+el.name) || '';
+    el.addEventListener('input', function(){
+      sessionStorage.setItem('ub2_'+el.name, el.value);
+      check();
+    });
   });
-  function check(){ cta.disabled = !/^\d{5}$/.test(zip.value); }
+  function check(){ cta.disabled = !(addr.value.trim() && city.value.trim() && /^\d{5}$/.test(zip.value)); }
   check();
 })();
 </script>
