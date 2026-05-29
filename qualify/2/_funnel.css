@@ -54,14 +54,15 @@ body{background:var(--bg)}
 /* Intent picker (landing) — CRO 3.9 enlarged */
 .picker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 8px;padding-left:30px}
 @media(max-width:520px){.picker{grid-template-columns:repeat(2,1fr);padding-left:0}}
-.picker label{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px 8px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:var(--ink);text-align:center;line-height:1.2;transition:border-color .15s,background .15s;min-height:96px}
-.picker label:hover{border-color:#1B5E20;background:#E8F5E9}
+.picker label{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:22px 8px 18px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:var(--ink);text-align:center;line-height:1.2;transition:border-color .15s,background .15s,box-shadow .15s;min-height:108px;box-shadow:0 1px 2px rgba(10,31,46,.04)}
+.picker label:hover{border-color:#1B5E20;background:#E8F5E9;box-shadow:0 2px 8px rgba(27,94,32,.10)}
 .picker input{position:absolute;opacity:0;pointer-events:none}
 .picker .ico{width:28px;height:28px;color:#1B5E20}
-.picker label:has(input:checked){border-color:#1B5E20;background:#E8F5E9;box-shadow:0 0 0 1px #1B5E20 inset}
-.picker .dot{position:absolute;top:8px;right:8px;width:16px;height:16px;border:1.5px solid var(--line);border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+.picker label:has(input:checked){border-color:#1B5E20;background:#E8F5E9;box-shadow:0 0 0 2px #1B5E20 inset}
+/* Faint gray radio dot — makes each card read as a selectable button */
+.picker .dot{position:absolute;top:10px;right:10px;width:20px;height:20px;border:2px solid #BFC4CC;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
 .picker label:has(input:checked) .dot{background:#1B5E20;border-color:#1B5E20}
-.picker label:has(input:checked) .dot::after{content:"";width:6px;height:6px;background:#fff;border-radius:50%}
+.picker label:has(input:checked) .dot::after{content:"";width:8px;height:8px;background:#fff;border-radius:50%}
 
 /* Form fields — CRO 3.6 — bigger inputs, bigger labels */
 .field{margin:0 0 24px}
@@ -158,16 +159,16 @@ body{background:var(--bg)}
 .btn-continue:active{transform:translateY(0);box-shadow:0 4px 12px rgba(27,94,32,.35)}
 .btn-continue:disabled{background:#1B5E20;color:#fff;opacity:.55;cursor:not-allowed;box-shadow:none;transform:none}
 
-/* Trust copy — CRO 2.1 — consistent line under every CTA */
-.trust-copy{font-size:13px;color:#888;text-align:center;margin-top:16px;line-height:1.5;margin-bottom:0}
-.trust-context{font-size:12px;color:#999;text-align:center;margin-top:8px;line-height:1.5;margin-bottom:0}
+/* Trust copy — consistent line under every CTA. Navy + larger for readability. */
+.trust-copy{font-size:15px;font-weight:600;color:var(--navy);text-align:center;margin-top:18px;line-height:1.45;margin-bottom:0}
+.trust-context{font-size:14px;color:var(--navy);text-align:center;margin-top:10px;line-height:1.5;margin-bottom:0}
 
 /* Legacy classes left intact for non-funnel reuse */
 .micro{text-align:center;font-size:.82rem;color:var(--muted);margin-top:14px;line-height:1.5}
 .micro strong{color:var(--ink-2);font-weight:600}
-.trust-row{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:.84rem;color:var(--ink-2)}
-.trust-row .item{display:inline-flex;align-items:center;gap:5px}
-.trust-row .check{color:#1B5E20;font-weight:700}
+.trust-row{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:15px;font-weight:600;color:var(--navy)}
+.trust-row .item{display:inline-flex;align-items:center;gap:6px}
+.trust-row .check{color:#1B5E20;font-weight:700;font-size:16px}
 
 /* Editorial review byline — hidden on step pages per CRO 3.5; shown on landing */
 .reviewed-by{max-width:600px;margin:14px auto 0;display:flex;align-items:center;gap:10px;font-size:.78rem;color:var(--muted);padding:12px 16px}
@@ -178,19 +179,31 @@ body{background:var(--bg)}
 .funnel-card.step ~ .reviewed-by{display:none}
 
 /* ============================================================
-   Sticky footer slim-down — CRO 3.8 — funnel pages only.
-   Scoped to bodies that contain the funnel via :has().
+   Step 4 (.compact) — tighter field spacing so Submit fits above
+   the fold on iPhone-class viewports.
    ============================================================ */
-body:has(.funnel-main) .lp-sticky-call{padding:8px 16px}
-body:has(.funnel-main) .lp-sticky-call .meta{font-size:12px}
-body:has(.funnel-main) .lp-sticky-call .call{padding:8px 20px;font-size:14px;min-height:auto}
+.funnel-card.compact .field{margin-bottom:14px}
+.funnel-card.compact .row2{gap:10px}
+.funnel-card.compact .tcpa-box{margin-top:10px;padding:12px 14px}
+.funnel-card.compact .actions{margin-top:18px}
+.funnel-card.compact h2{margin:6px 0 16px}
+.funnel-card.compact .lede{margin:0 auto 12px}
+
+/* ============================================================
+   Sticky footer — funnel pages only. Tall enough to read the phone
+   number clearly; scoped via :has() to avoid affecting /lp/* pages.
+   ============================================================ */
+body:has(.funnel-main) .lp-sticky-call{padding:14px 16px}
+body:has(.funnel-main) .lp-sticky-call .meta{font-size:14px;font-weight:600}
+body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;font-weight:700;min-height:auto;white-space:nowrap}
 
 /* ============================================================
    Mobile tightening (≤ 560px) — keep CTA above the fold.
    ============================================================ */
 @media (max-width: 560px) {
 
-  .lp-utility { padding: 6px 0; font-size: .76rem }
+  .lp-utility { padding: 10px 0; font-size: .92rem }
+  .lp-utility strong { font-size: .98rem }
   .lp-header { padding: 8px 0 }
   .lp-header .container { gap: 8px }
   .lp-logo { font-size: .94rem; gap: 7px }
@@ -217,15 +230,15 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:8px 20px;font-size:14px;min
 
   .picker { gap: 10px; padding-left: 0 }
   .picker label {
-    min-height: 80px;
-    padding: 16px 8px;
+    min-height: 92px;
+    padding: 18px 8px 14px;
     font-size: 14px;
     gap: 8px;
     border-radius: 10px;
   }
   .picker .ico { width: 26px; height: 26px }
-  .picker .dot { width: 14px; height: 14px; top: 6px; right: 6px }
-  .picker label:has(input:checked) .dot::after { width: 5px; height: 5px }
+  .picker .dot { width: 18px; height: 18px; top: 8px; right: 8px; border-width: 2px }
+  .picker label:has(input:checked) .dot::after { width: 7px; height: 7px }
 
   .step-meta { font-size: .74rem; margin-bottom: 6px }
   .progress { margin-bottom: 18px; height: 5px }
@@ -252,16 +265,26 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:8px 20px;font-size:14px;min
   .btn-continue { min-height: 48px; font-size: 16px; padding: 12px 20px }
   .btn-back { min-height: 48px; padding: 0 14px; font-size: 14px }
 
-  .trust-row { gap: 10px; font-size: .76rem; margin-top: 12px }
-  .trust-row .item { gap: 4px }
-  .trust-copy { font-size: 12px; margin-top: 12px }
-  .trust-context { font-size: 11px }
+  .trust-row { gap: 14px; font-size: 14px; margin-top: 14px }
+  .trust-row .item { gap: 5px }
+  .trust-row .check { font-size: 15px }
+  .trust-copy { font-size: 14px; margin-top: 14px }
+  .trust-context { font-size: 13px }
   .micro { font-size: .76rem; margin-top: 10px; line-height: 1.4 }
 
   .reviewed-by { font-size: .72rem; padding: 10px 14px }
   .reviewed-by.mobile-hide { display: none }
 
-  body:has(.funnel-main) .lp-sticky-call{padding:6px 12px}
-  body:has(.funnel-main) .lp-sticky-call .meta{font-size:11px}
-  body:has(.funnel-main) .lp-sticky-call .call{padding:6px 16px;font-size:13px}
+  body:has(.funnel-main) .lp-sticky-call{padding:12px 14px}
+  body:has(.funnel-main) .lp-sticky-call .meta{font-size:13px}
+  body:has(.funnel-main) .lp-sticky-call .call{padding:10px 16px;font-size:15px;white-space:nowrap}
+
+  /* Step 4 compact spacing — mobile */
+  .funnel-card.compact{padding:18px 18px 16px}
+  .funnel-card.compact .field{margin-bottom:10px}
+  .funnel-card.compact .row2{gap:8px}
+  .funnel-card.compact h2{font-size:22px;margin:4px 0 12px}
+  .funnel-card.compact .tcpa-box{margin-top:8px;padding:10px 12px}
+  .funnel-card.compact .tcpa-box label{font-size:.72rem;line-height:1.4}
+  .funnel-card.compact .actions{margin-top:14px}
 }

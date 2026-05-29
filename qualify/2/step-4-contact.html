@@ -51,13 +51,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <main class="funnel-main">
   <div class="container">
-    <form class="funnel-card step" id="funnel-form" method="POST" action="/api/lead/" novalidate>
+    <form class="funnel-card step compact" id="funnel-form" method="POST" action="/api/lead/" novalidate>
       <div class="step-meta">
         <span>Step 4 of 4</span>
       </div>
       <div class="progress"><div class="bar" style="width:100%"></div></div>
 
-      <h2>Where should we send your case manager?</h2>
+      <h2>Contact Information</h2>
       <p class="lede mobile-hide">Your assigned specialist will call to confirm what you qualify for &mdash; usually within minutes.</p>
 
       <!-- TrustedForm cert URL (auto-populated by the script) -->
@@ -136,7 +136,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="actions split">
         <a href="/qualify/2/step-3-income-employ/" class="btn-back">&lsaquo; Back</a>
-        <button type="submit" class="btn-continue" id="cta" disabled>Complete &amp; get matched &rarr;</button>
+        <button type="submit" class="btn-continue" id="cta" disabled>Submit</button>
       </div>
 
       <p class="trust-copy">No credit check. No commitment. 100% free and confidential.</p>
@@ -154,7 +154,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="meta">Or call directly</div>
   <a href="tel:18138204157" class="call">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
-    Call now
+    Call (813) 820-4157
   </a>
 </div>
 
@@ -188,9 +188,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
   tcpa.addEventListener('change', check);
 
-  // Phone auto-format
+  // Phone auto-format. If user pastes an 11-digit US number with leading 1
+  // (e.g. 18138204157), drop the country-code digit so 813 becomes the area
+  // code instead of 181.
   phone.addEventListener('input', function(){
-    var v = phone.value.replace(/\D/g,'').slice(0,10);
+    var v = phone.value.replace(/\D/g,'');
+    if (v.length === 11 && v.charAt(0) === '1') v = v.slice(1);
+    v = v.slice(0,10);
     if (v.length >= 7) v = '('+v.slice(0,3)+') '+v.slice(3,6)+'-'+v.slice(6);
     else if (v.length >= 4) v = '('+v.slice(0,3)+') '+v.slice(3);
     else if (v.length >= 1) v = '('+v;
