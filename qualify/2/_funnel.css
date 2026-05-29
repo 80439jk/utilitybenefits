@@ -114,7 +114,7 @@ body{background:var(--bg)}
 .btn-continue.lg{width:100%}
 .btn-continue:hover{background:#14491A;transform:translateY(-1px);box-shadow:0 12px 30px rgba(27,94,32,.50),0 2px 4px rgba(27,94,32,.20)}
 .btn-continue:active{transform:translateY(0);box-shadow:0 4px 12px rgba(27,94,32,.35)}
-.btn-continue:disabled{background:#D9DDE3;color:#8a93a0;cursor:not-allowed;box-shadow:none;transform:none}
+.btn-continue:disabled{background:#1B5E20;color:#fff;opacity:.55;cursor:not-allowed;box-shadow:none;transform:none}
 
 /* Trust copy — CRO 2.1 — consistent line under every CTA */
 .trust-copy{font-size:13px;color:#888;text-align:center;margin-top:16px;line-height:1.5;margin-bottom:0}
