@@ -140,7 +140,7 @@ body:has(.funnel-main) .lp-utility .left::before{
   -webkit-appearance:none;
   -moz-appearance:none;
   width:100%;
-  background:#FFF3E0;
+  background:var(--emerald-soft);
   border:2.5px solid var(--emerald);
   border-radius:10px;
   color:#0A1F2E;
@@ -157,7 +157,7 @@ body:has(.funnel-main) .lp-utility .left::before{
   box-shadow:0 0 0 3px rgba(14,142,92,.20);
 }
 .state-select-wrap select#state:hover{
-  background:#FFE9C7;
+  background:#D4ECDE;
 }
 
 /* TCPA consent box */
@@ -299,9 +299,12 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;fo
   .btn-continue { min-height: 48px; font-size: 16px; padding: 12px 20px }
   .btn-back { min-height: 48px; padding: 0 14px; font-size: 14px }
 
-  .trust-row { gap: 14px; font-size: 14px; margin-top: 14px }
-  .trust-row .item { gap: 5px }
-  .trust-row .check { font-size: 15px }
+  /* Mobile: keep 3 trust items on a single line at iPhone widths (375-414).
+     Sized to fit Free & Confidential + No SSN needed + Takes 2 minutes
+     within ~330px usable card width. */
+  .trust-row { gap: 8px; font-size: 11px; margin-top: 14px; flex-wrap: nowrap; letter-spacing: -.01em }
+  .trust-row .item { gap: 3px; white-space: nowrap }
+  .trust-row .check { font-size: 12px }
   .trust-copy { font-size: 14px; margin-top: 14px }
   .trust-context { font-size: 13px }
   .micro { font-size: .76rem; margin-top: 10px; line-height: 1.4 }
