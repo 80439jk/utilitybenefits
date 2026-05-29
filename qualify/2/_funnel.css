@@ -1,113 +1,248 @@
 /* ============================================================
    /qualify/2/ — multi-step funnel
    Layered on top of /lp/_shared.css (Direction D tokens).
-   Matches the thank-you page palette: navy + emerald + ivory.
+   CRO baseline applied (cro-audit branch).
+   Spec: outputs/UtilityBenefits_CRO-Implementation-Spec.md
    ============================================================ */
 
 body{background:var(--bg)}
 
+/* ============================================================
+   Funnel-scoped typeface — DM Sans for a rounder, friendlier feel
+   that diverges from the model funnel's typical Inter setup.
+   Scoped via :has() so the rest of the site is unaffected.
+   ============================================================ */
+body:has(.funnel-main),
+body:has(.funnel-main) input,
+body:has(.funnel-main) select,
+body:has(.funnel-main) textarea,
+body:has(.funnel-main) button{
+  font-family:'DM Sans','Inter',system-ui,sans-serif;
+  letter-spacing:-.005em;
+}
+body:has(.funnel-main) h1,
+body:has(.funnel-main) h2,
+body:has(.funnel-main) h3{
+  font-family:'DM Sans','Inter',system-ui,sans-serif;
+}
+
+/* ============================================================
+   Live indicator pulse — subtle, infinite, scoped to funnel.
+   Animates the existing .lp-utility .left::before dot.
+   ============================================================ */
+@keyframes ub-live-pulse{
+  0%  { box-shadow: 0 0 0 0 rgba(14,142,92,0.65); }
+  70% { box-shadow: 0 0 0 10px rgba(14,142,92,0); }
+  100%{ box-shadow: 0 0 0 0 rgba(14,142,92,0); }
+}
+body:has(.funnel-main) .lp-utility .left::before{
+  width:9px;height:9px;
+  animation:ub-live-pulse 1.8s ease-out infinite;
+}
+
 .funnel-main{padding:28px 0 90px}
 
-/* Editorial eyebrow chip used on landing */
-.hero-eyebrow{display:flex;justify-content:center;margin-bottom:10px}
-.hero-eyebrow span{display:inline-block;background:#fff;border:1px solid var(--line);color:var(--ink-2);font-size:.74rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:5px 11px;border-radius:999px}
-.hero-eyebrow .dot{display:inline-block;width:6px;height:6px;background:var(--emerald);border-radius:50%;margin-right:6px;vertical-align:1px}
+/* Editorial eyebrow chip — hidden per CRO 1.3 (kept in CSS for reuse) */
+.hero-eyebrow{display:none}
 
-/* The central card all steps live inside */
-.funnel-card{max-width:600px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px 32px 26px;box-shadow:var(--shadow-md)}
-@media(max-width:560px){.funnel-card{padding:22px 20px;border-radius:0;border-left:0;border-right:0;margin:0}}
+/* The central card — softer, rounder treatment than the model funnel.
+   18px radius + soft single-layer shadow. */
+.funnel-card{max-width:600px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+@media(max-width:560px){.funnel-card{padding:24px 20px;border-radius:18px;border-left:1px solid var(--line);border-right:1px solid var(--line);margin:0 12px}}
 
-/* Steps 1-4 use a slightly narrower card than the landing */
-.funnel-card.step{max-width:560px;padding:26px 32px 24px}
+/* Steps 1-4 — same soft treatment */
+.funnel-card.step{
+  max-width:560px;
+  padding:32px;
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
 
+/* Headings — large, near-black, dominant. Typeface inherits the DM Sans
+   override from the funnel-scoped body rule above. */
 .funnel-card h1,
 .funnel-card h2{
-  font-family:'Source Serif 4',serif;
-  font-size:1.5rem;line-height:1.18;letter-spacing:-.018em;
-  text-align:center;margin:6px 0 16px;color:var(--ink);
+  font-weight:700;
+  letter-spacing:-.022em;
+  text-align:center;
+  color:#1A1A1A;
+  line-height:1.2;
 }
-.funnel-card h1{font-size:1.55rem;margin:0 0 8px}
-.funnel-card .lede{text-align:center;color:var(--ink-2);font-size:.94rem;margin:0 auto 22px;max-width:460px}
+.funnel-card h1{font-size:32px;margin:0 0 12px}
+.funnel-card h2{font-size:28px;margin:8px 0 24px}
+.funnel-card .lede{text-align:center;color:var(--ink-2);font-size:.96rem;margin:0 auto 22px;max-width:460px}
 
-/* Step header (progress bar block) */
-.step-meta{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
-.step-meta .pct{color:var(--emerald-deep)}
-.progress{height:6px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin-bottom:24px}
-.progress .bar{height:100%;background:linear-gradient(90deg,var(--emerald),var(--emerald-deep));border-radius:99px;transition:width .35s ease}
+/* Step header (progress bar block) — % hidden per CRO 3.4 */
+.step-meta{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.step-meta .pct{display:none}
 
-/* Landing's two numbered sections */
-.section-title{font-size:.78rem;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:8px;margin:18px 0 6px}
-.section-title .n{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.74rem;letter-spacing:0}
-.section-sub{font-size:.86rem;color:var(--ink-2);margin:0 0 12px;padding-left:30px}
-@media(max-width:520px){.section-sub{padding-left:0}}
+/* Segmented progress — four discrete stepping-stone segments.
+   Each step page emits 4 .seg spans, the first N have .filled. */
+.progress{display:flex;gap:6px;background:transparent;height:7px;margin-bottom:24px;overflow:visible;border-radius:0}
+.progress .seg{flex:1;height:100%;background:var(--line-soft);border-radius:99px;transition:background .25s ease}
+.progress .seg.filled{background:linear-gradient(90deg,#1B5E20,#14491A)}
+/* Legacy .bar (continuous fill) kept around in case any reference still uses it */
+.progress .bar{height:100%;background:linear-gradient(90deg,#1B5E20,#14491A);border-radius:99px;transition:width .35s ease}
+
+/* Landing section headings — numbered circles dropped; type-only treatment. */
+.section-title{font-size:1.08rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;margin:24px 0 6px}
+.section-title .n{display:none}
+.section-sub{font-size:.92rem;color:var(--ink-2);margin:0 0 12px;padding-left:0}
 
 /* Intent picker (landing) */
-.picker{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 8px;padding-left:30px}
-@media(max-width:520px){.picker{grid-template-columns:repeat(2,1fr);padding-left:0}}
-.picker label{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 8px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:.86rem;font-weight:600;color:var(--ink);text-align:center;line-height:1.2;transition:border-color .15s,background .15s;min-height:96px}
-.picker label:hover{border-color:var(--emerald);background:var(--emerald-soft)}
+.picker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 8px;padding-left:0}
+@media(max-width:520px){.picker{grid-template-columns:repeat(2,1fr)}}
+.picker label{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:22px 8px 18px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:var(--ink);text-align:center;line-height:1.2;transition:border-color .15s,background .15s,box-shadow .15s;min-height:108px;box-shadow:0 1px 2px rgba(10,31,46,.04)}
+.picker label:hover{border-color:#1B5E20;background:#E8F5E9;box-shadow:0 2px 8px rgba(27,94,32,.10)}
 .picker input{position:absolute;opacity:0;pointer-events:none}
-.picker .ico{width:30px;height:30px;color:var(--emerald-deep)}
-.picker label:has(input:checked){border-color:var(--emerald);background:var(--emerald-soft);box-shadow:0 0 0 1px var(--emerald) inset}
-.picker .dot{position:absolute;top:8px;right:8px;width:16px;height:16px;border:1.5px solid var(--line);border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
-.picker label:has(input:checked) .dot{background:var(--emerald);border-color:var(--emerald)}
-.picker label:has(input:checked) .dot::after{content:"";width:6px;height:6px;background:#fff;border-radius:50%}
+.picker .ico{width:28px;height:28px;color:#1B5E20}
+.picker label:has(input:checked){border-color:#1B5E20;background:#E8F5E9;box-shadow:0 0 0 2px #1B5E20 inset}
+/* Faint gray radio dot — makes each card read as a selectable button */
+.picker .dot{position:absolute;top:10px;right:10px;width:20px;height:20px;border:2px solid #BFC4CC;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+.picker label:has(input:checked) .dot{background:#1B5E20;border-color:#1B5E20}
+.picker label:has(input:checked) .dot::after{content:"";width:8px;height:8px;background:#fff;border-radius:50%}
 
-/* Form fields */
-.field{margin:0 0 14px}
-.field.indent{padding-left:30px}
-@media(max-width:520px){.field.indent{padding-left:0}}
-.field label{display:block;font-size:.86rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+/* Form fields — CRO 3.6 — bigger inputs, bigger labels */
+.field{margin:0 0 24px}
+.field.indent{padding-left:0}
+.field label{display:block;font-size:16px;font-weight:600;color:#333;margin-bottom:6px}
 .field input,
-.field select{width:100%;height:48px;padding:0 14px;font-size:1rem;font-family:'Inter',sans-serif;border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.field select{width:100%;min-height:52px;padding:12px 16px;font-size:16px;border:1.5px solid #CCC;border-radius:8px;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s;box-sizing:border-box}
 .field input:focus,
-.field select:focus{outline:0;border-color:var(--emerald);box-shadow:0 0 0 3px rgba(14,142,92,.15)}
-.field select{padding-right:32px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field select:focus{outline:0;border-color:#1B5E20;box-shadow:0 0 0 3px rgba(27,94,32,.15)}
+.field select{padding-right:36px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .row2.addr{grid-template-columns:1.4fr 1fr}
-/* Only stack on tiny phones (iPhone SE etc) — most modern phones stay 2-col */
+/* Only stack on tiny phones */
 @media(max-width:360px){.row2,.row2.addr{grid-template-columns:1fr}}
+
+/* ============================================================
+   Landing state dropdown — high-impact NBA-reference treatment.
+   Replaces the CTA button (auto-advances on select).
+   Amber background + orange border + orange chevron button.
+   ============================================================ */
+.state-field{margin-bottom:18px}
+.state-select-wrap{position:relative;display:block;box-shadow:0 6px 18px rgba(14,142,92,.22);border-radius:10px}
+.state-select-wrap::after{
+  content:"";
+  position:absolute;
+  right:0;top:0;bottom:0;
+  width:56px;
+  background:var(--emerald);
+  border-radius:0 8px 8px 0;
+  pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23fff'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:26px 26px;
+}
+.state-select-wrap select#state{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  width:100%;
+  background:var(--emerald-soft);
+  border:2.5px solid var(--emerald);
+  border-radius:10px;
+  color:#0A1F2E;
+  font-weight:700;
+  font-size:17px;
+  padding:0 70px 0 18px;
+  min-height:60px;
+  cursor:pointer;
+  box-sizing:border-box;
+}
+.state-select-wrap select#state:focus{
+  outline:0;
+  border-color:var(--emerald-deep);
+  box-shadow:0 0 0 3px rgba(14,142,92,.20);
+}
+.state-select-wrap select#state:hover{
+  background:#D4ECDE;
+}
 
 /* TCPA consent box */
 .tcpa-box{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:14px}
 .tcpa-box label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:.78rem;color:var(--ink-2);line-height:1.55}
-.tcpa-box input[type=checkbox]{flex-shrink:0;width:18px;height:18px;margin-top:1px;accent-color:var(--emerald)}
+.tcpa-box input[type=checkbox]{flex-shrink:0;width:18px;height:18px;margin-top:1px;accent-color:#1B5E20}
 .tcpa-box a{color:var(--navy);text-decoration:underline}
 
-/* Action row */
-.actions{margin-top:22px}
+/* Action row — CRO 3.2 — 32px gap above buttons */
+.actions{margin-top:32px}
 .actions.split{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
-.actions.landing{padding-left:30px}
-@media(max-width:520px){.actions.landing{padding-left:0}}
-.btn-back{height:48px;padding:0 16px;border:1.5px solid var(--line);background:#fff;color:var(--ink-2);font-size:.92rem;font-weight:600;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:border-color .15s}
+.actions.landing{padding-left:0}
+.btn-back{min-height:52px;padding:0 18px;border:1.5px solid var(--line);background:#fff;color:var(--ink-2);font-size:15px;font-weight:600;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:border-color .15s}
 .btn-back:hover{border-color:var(--ink-2);text-decoration:none;color:var(--ink-2)}
-.btn-continue{height:48px;padding:0 18px;border:0;background:var(--emerald);color:#fff;font-size:1rem;font-weight:700;font-family:'Source Serif 4',serif;border-radius:8px;cursor:pointer;letter-spacing:-.01em;transition:background .15s,transform .1s;box-shadow:0 6px 18px rgba(14,142,92,.28)}
-.btn-continue.lg{height:52px;font-size:1.05rem;width:100%}
-.btn-continue:hover{background:var(--emerald-deep)}
-.btn-continue:active{transform:translateY(1px)}
-.btn-continue:disabled{background:#D9DDE3;color:#8a93a0;cursor:not-allowed;box-shadow:none}
 
-/* Microcopy + trust */
+/* Continue / Complete CTAs — #1B5E20 dark green. Inherits DM Sans. */
+.btn-continue{
+  min-height:52px;
+  padding:16px 32px;
+  border:0;
+  background:#1B5E20;
+  color:#fff;
+  font-size:17px;
+  font-weight:700;
+  border-radius:8px;
+  cursor:pointer;
+  letter-spacing:-.005em;
+  transition:background .15s,transform .12s,box-shadow .15s;
+  box-shadow:0 8px 24px rgba(27,94,32,.40),0 2px 4px rgba(27,94,32,.18);
+}
+.btn-continue.lg{width:100%}
+.btn-continue:hover{background:#14491A;transform:translateY(-1px);box-shadow:0 12px 30px rgba(27,94,32,.50),0 2px 4px rgba(27,94,32,.20)}
+.btn-continue:active{transform:translateY(0);box-shadow:0 4px 12px rgba(27,94,32,.35)}
+.btn-continue:disabled{background:#1B5E20;color:#fff;opacity:.55;cursor:not-allowed;box-shadow:none;transform:none}
+
+/* Trust copy — consistent line under every CTA. Navy + larger for readability. */
+.trust-copy{font-size:15px;font-weight:600;color:var(--navy);text-align:center;margin-top:18px;line-height:1.45;margin-bottom:0}
+.trust-context{font-size:14px;color:var(--navy);text-align:center;margin-top:10px;line-height:1.5;margin-bottom:0}
+
+/* Legacy classes left intact for non-funnel reuse */
 .micro{text-align:center;font-size:.82rem;color:var(--muted);margin-top:14px;line-height:1.5}
 .micro strong{color:var(--ink-2);font-weight:600}
-.trust-row{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:.84rem;color:var(--ink-2)}
-.trust-row .item{display:inline-flex;align-items:center;gap:5px}
-.trust-row .check{color:var(--emerald-deep);font-weight:700}
+.trust-row{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:15px;font-weight:600;color:var(--navy)}
+.trust-row .item{display:inline-flex;align-items:center;gap:6px}
+.trust-row .check{color:#1B5E20;font-weight:700;font-size:16px}
 
-/* Editorial review byline below card */
+/* Editorial review byline — hidden on step pages per CRO 3.5; shown on landing */
 .reviewed-by{max-width:600px;margin:14px auto 0;display:flex;align-items:center;gap:10px;font-size:.78rem;color:var(--muted);padding:12px 16px}
 .reviewed-by .ub-mark{width:24px;height:24px;border-radius:5px;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;flex-shrink:0}
 .reviewed-by strong{color:var(--ink);font-weight:600}
 .reviewed-by .sep{color:var(--line-strong);margin:0 6px}
+/* Hide review byline when it follows a step card (steps 1-4) */
+.funnel-card.step ~ .reviewed-by{display:none}
 
 /* ============================================================
-   Mobile tightening — keep the CTA + trust signals above the fold.
-   Targets iPhone-class viewports (≤ 560px).
+   Step 4 (.compact) — tight enough that Submit sits above the fold
+   on both 768px desktop viewports and 390x844 iPhones.
+   ============================================================ */
+.funnel-card.compact{padding:24px 32px 20px}
+.funnel-card.compact h2{font-size:24px;margin:2px 0 14px}
+.funnel-card.compact .lede{display:none}
+.funnel-card.compact .field{margin-bottom:10px}
+.funnel-card.compact .field label{margin-bottom:4px}
+.funnel-card.compact .row2{gap:10px}
+.funnel-card.compact .tcpa-box{margin-top:8px;padding:10px 12px}
+.funnel-card.compact .tcpa-box label{font-size:.72rem;line-height:1.4}
+.funnel-card.compact .actions{margin-top:14px}
+.funnel-card.compact .trust-copy{margin-top:12px;font-size:14px}
+.funnel-card.compact .trust-context{margin-top:6px;font-size:13px}
+
+/* ============================================================
+   Sticky footer — funnel pages only. Tall enough to read the phone
+   number clearly; scoped via :has() to avoid affecting /lp/* pages.
+   ============================================================ */
+body:has(.funnel-main) .lp-sticky-call{padding:14px 16px}
+body:has(.funnel-main) .lp-sticky-call .meta{font-size:14px;font-weight:600}
+body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;font-weight:700;min-height:auto;white-space:nowrap}
+
+/* ============================================================
+   Mobile tightening (≤ 560px) — keep CTA above the fold.
    ============================================================ */
 @media (max-width: 560px) {
 
-  /* — Utility bar + header — slim and one-line — */
-  .lp-utility { padding: 6px 0; font-size: .76rem }
+  .lp-utility { padding: 10px 0; font-size: .92rem }
+  .lp-utility strong { font-size: .98rem }
   .lp-header { padding: 8px 0 }
   .lp-header .container { gap: 8px }
   .lp-logo { font-size: .94rem; gap: 7px }
@@ -115,118 +250,83 @@ body{background:var(--bg)}
   .lp-header .phone { padding: 7px 11px; font-size: .82rem }
   .lp-header .phone svg { width: 13px; height: 13px }
 
-  /* — Page padding — give back vertical space — */
   .funnel-main { padding: 12px 0 88px }
 
-  /* — Eyebrow chip — slim — */
-  .hero-eyebrow { margin-bottom: 6px }
-  .hero-eyebrow span { font-size: .66rem; padding: 4px 9px }
-
-  /* — Card — tighter padding, no rounded edges (full-width) — */
   .funnel-card,
-  .funnel-card.step { padding: 18px 18px 16px; border-radius: 0 }
+  .funnel-card.step { padding: 22px 18px; border-radius: 0 }
 
-  /* — H1/H2 — smaller — */
-  .funnel-card h1 { font-size: 1.32rem; margin: 0 0 4px }
-  .funnel-card h2 { font-size: 1.18rem; margin: 4px 0 10px }
+  .funnel-card h1 { font-size: 24px; margin: 0 0 8px }
+  .funnel-card h2 { font-size: 22px; margin: 6px 0 20px }
   .funnel-card h2.mobile-hide { display: none }
 
-  /* — Lede — tighter; pages can opt in to hiding on mobile — */
-  .funnel-card .lede { font-size: .88rem; margin: 0 auto 14px; line-height: 1.42 }
+  .funnel-card .lede { font-size: .9rem; margin: 0 auto 16px; line-height: 1.42 }
   .funnel-card .lede.mobile-hide { display: none }
 
-  /* — Section heading rows — tighter — */
   .section-title { font-size: .72rem; margin: 12px 0 4px; gap: 6px }
   .section-title .n { width: 18px; height: 18px; font-size: .66rem }
   .section-sub { font-size: .8rem; margin-bottom: 8px; padding-left: 0 }
   .section-sub.mobile-hide { display: none }
 
-  /* — Picker tiles — 96px → 74px — */
-  .picker { gap: 8px; padding-left: 0 }
+  .picker { gap: 10px; padding-left: 0 }
   .picker label {
-    min-height: 74px;
-    padding: 12px 8px 10px;
-    font-size: .8rem;
-    gap: 6px;
-    border-radius: 8px;
+    min-height: 92px;
+    padding: 18px 8px 14px;
+    font-size: 14px;
+    gap: 8px;
+    border-radius: 10px;
   }
-  .picker .ico { width: 24px; height: 24px }
-  .picker .dot { width: 14px; height: 14px; top: 6px; right: 6px }
-  .picker label:has(input:checked) .dot::after { width: 5px; height: 5px }
+  .picker .ico { width: 26px; height: 26px }
+  .picker .dot { width: 18px; height: 18px; top: 8px; right: 8px; border-width: 2px }
+  .picker label:has(input:checked) .dot::after { width: 7px; height: 7px }
 
-  /* — Step header (Step 1 of 4 + progress bar) — tighter — */
-  .step-meta { font-size: .7rem; margin-bottom: 6px }
-  .progress { margin-bottom: 16px; height: 5px }
+  .step-meta { font-size: .74rem; margin-bottom: 6px }
+  .progress { margin-bottom: 18px; height: 5px }
 
-  /* — Form fields — */
-  .field { margin-bottom: 10px; padding-left: 0 }
+  .field { margin-bottom: 20px; padding-left: 0 }
   .field.indent { padding-left: 0 }
-  .field label { font-size: .82rem; margin-bottom: 4px }
+  .field label { font-size: 15px; margin-bottom: 6px }
   .field label.mobile-hide { display: none }
-  .field input, .field select { height: 44px; font-size: .98rem; padding: 0 12px }
-  .field select { padding-right: 28px }
+  .field input, .field select { min-height: 48px; font-size: 16px; padding: 10px 14px }
+  .field select { padding-right: 32px }
 
-  /* — TCPA box — tighter — */
+  /* Keep the landing state dropdown bold on mobile */
+  .state-select-wrap select#state { min-height: 56px; font-size: 16px; padding: 0 60px 0 16px }
+  .state-select-wrap::after { width: 48px; background-size: 22px 22px }
+  .section-title { font-size: .96rem; margin: 16px 0 4px; gap: 8px }
+  .section-title .n { width: 24px; height: 24px; font-size: .82rem }
+
   .tcpa-box { padding: 12px 14px; margin-top: 10px }
   .tcpa-box label { font-size: .74rem; line-height: 1.45; gap: 8px }
   .tcpa-box input[type=checkbox] { width: 16px; height: 16px }
 
-  /* — Action buttons — */
-  .actions { margin-top: 14px; padding-left: 0 }
+  .actions { margin-top: 24px; padding-left: 0 }
   .actions.landing { padding-left: 0 }
-  .btn-continue.lg { height: 48px; font-size: 1rem }
-  .btn-continue { height: 44px; font-size: .96rem }
-  .btn-back { height: 44px; padding: 0 12px; font-size: .86rem }
+  .btn-continue { min-height: 48px; font-size: 16px; padding: 12px 20px }
+  .btn-back { min-height: 48px; padding: 0 14px; font-size: 14px }
 
-  /* — Trust row + microcopy — */
-  .trust-row { gap: 10px; font-size: .76rem; margin-top: 12px }
-  .trust-row .item { gap: 4px }
+  /* Mobile: keep 3 trust items on a single line at iPhone widths (375-414).
+     Sized to fit Free & Confidential + No SSN needed + Takes 2 minutes
+     within ~330px usable card width. */
+  .trust-row { gap: 8px; font-size: 11px; margin-top: 14px; flex-wrap: nowrap; letter-spacing: -.01em }
+  .trust-row .item { gap: 3px; white-space: nowrap }
+  .trust-row .check { font-size: 12px }
+  .trust-copy { font-size: 14px; margin-top: 14px }
+  .trust-context { font-size: 13px }
   .micro { font-size: .76rem; margin-top: 10px; line-height: 1.4 }
 
-  /* — Reviewed-by — hide on mobile of dense pages — saves ~60px — */
   .reviewed-by { font-size: .72rem; padding: 10px 14px }
   .reviewed-by.mobile-hide { display: none }
 
-  /* — Sticky call bar — slim — */
-  .lp-sticky-call { padding: 8px 12px }
-}
+  body:has(.funnel-main) .lp-sticky-call{padding:12px 14px}
+  body:has(.funnel-main) .lp-sticky-call .meta{font-size:13px}
+  body:has(.funnel-main) .lp-sticky-call .call{padding:10px 16px;font-size:15px;white-space:nowrap}
 
-/* ============================================================
-   Step-card "pop" — accent stripe + deeper shadow + punchy active CTA.
-   Applies to every inner step page across all funnels (.funnel-card.step).
-   Landing cards stay flat by design.
-   ============================================================ */
-.funnel-card.step {
-  box-shadow:
-    0 14px 36px -10px rgba(10,31,46,.20),
-    0 2px 6px rgba(10,31,46,.06);
-  position: relative;
+  /* Step 4 compact spacing — mobile */
+  .funnel-card.compact{padding:18px 18px 16px}
+  .funnel-card.compact .field{margin-bottom:10px}
+  .funnel-card.compact .row2{gap:8px}
+  .funnel-card.compact h2{font-size:22px;margin:4px 0 12px}
+  .funnel-card.compact .tcpa-box{margin-top:8px;padding:10px 12px}
+  .funnel-card.compact .tcpa-box label{font-size:.72rem;line-height:1.4}
+  .funnel-card.compact .actions{margin-top:14px}
 }
-.funnel-card.step::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--emerald) 0%, var(--emerald-deep) 100%);
-  border-radius: 14px 14px 0 0;
-}
-@media (max-width: 560px) {
-  .funnel-card.step::before { border-radius: 0 }
-}
-
-/* Active CTA gets a stronger emerald glow + tactile hover lift.
-   Disabled stays neutral so the activation moment feels rewarding. */
-.btn-continue:not(:disabled) {
-  box-shadow: 0 8px 24px rgba(14,142,92,.40), 0 2px 4px rgba(14,142,92,.18);
-  transition: background .15s, transform .12s, box-shadow .15s;
-}
-.btn-continue:not(:disabled):hover {
-  background: var(--emerald-deep);
-  transform: translateY(-1px);
-  box-shadow: 0 12px 30px rgba(14,142,92,.50), 0 2px 4px rgba(14,142,92,.20);
-}
-.btn-continue:not(:disabled):active {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(14,142,92,.35);
-}
-
