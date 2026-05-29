@@ -7,30 +7,62 @@
 
 body{background:var(--bg)}
 
+/* ============================================================
+   Funnel-scoped typeface — DM Sans for a rounder, friendlier feel
+   that diverges from the model funnel's typical Inter setup.
+   Scoped via :has() so the rest of the site is unaffected.
+   ============================================================ */
+body:has(.funnel-main),
+body:has(.funnel-main) input,
+body:has(.funnel-main) select,
+body:has(.funnel-main) textarea,
+body:has(.funnel-main) button{
+  font-family:'DM Sans','Inter',system-ui,sans-serif;
+  letter-spacing:-.005em;
+}
+body:has(.funnel-main) h1,
+body:has(.funnel-main) h2,
+body:has(.funnel-main) h3{
+  font-family:'DM Sans','Inter',system-ui,sans-serif;
+}
+
+/* ============================================================
+   Live indicator pulse — subtle, infinite, scoped to funnel.
+   Animates the existing .lp-utility .left::before dot.
+   ============================================================ */
+@keyframes ub-live-pulse{
+  0%  { box-shadow: 0 0 0 0 rgba(14,142,92,0.65); }
+  70% { box-shadow: 0 0 0 10px rgba(14,142,92,0); }
+  100%{ box-shadow: 0 0 0 0 rgba(14,142,92,0); }
+}
+body:has(.funnel-main) .lp-utility .left::before{
+  width:9px;height:9px;
+  animation:ub-live-pulse 1.8s ease-out infinite;
+}
+
 .funnel-main{padding:28px 0 90px}
 
 /* Editorial eyebrow chip — hidden per CRO 1.3 (kept in CSS for reuse) */
 .hero-eyebrow{display:none}
 
-/* The central card all steps live inside */
-.funnel-card{max-width:600px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:32px;box-shadow:var(--shadow-md)}
-@media(max-width:560px){.funnel-card{padding:24px 20px;border-radius:0;border-left:0;border-right:0;margin:0}}
+/* The central card — softer, rounder treatment than the model funnel.
+   18px radius + soft single-layer shadow. */
+.funnel-card{max-width:600px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+@media(max-width:560px){.funnel-card{padding:24px 20px;border-radius:18px;border-left:1px solid var(--line);border-right:1px solid var(--line);margin:0 12px}}
 
-/* Steps 1-4 — deeper shadow, no accent stripe (CRO 3.3) */
+/* Steps 1-4 — same soft treatment */
 .funnel-card.step{
   max-width:560px;
   padding:32px;
-  box-shadow:
-    0 14px 36px -10px rgba(10,31,46,.20),
-    0 2px 6px rgba(10,31,46,.06);
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
 }
 
-/* Headings — CRO 3.1 — large, near-black, dominant */
+/* Headings — large, near-black, dominant. Typeface inherits the DM Sans
+   override from the funnel-scoped body rule above. */
 .funnel-card h1,
 .funnel-card h2{
-  font-family:'Source Serif 4',serif;
   font-weight:700;
-  letter-spacing:-.018em;
+  letter-spacing:-.022em;
   text-align:center;
   color:#1A1A1A;
   line-height:1.2;
@@ -40,20 +72,25 @@ body{background:var(--bg)}
 .funnel-card .lede{text-align:center;color:var(--ink-2);font-size:.96rem;margin:0 auto 22px;max-width:460px}
 
 /* Step header (progress bar block) — % hidden per CRO 3.4 */
-.step-meta{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
+.step-meta{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
 .step-meta .pct{display:none}
-.progress{height:6px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin-bottom:24px}
+
+/* Segmented progress — four discrete stepping-stone segments.
+   Each step page emits 4 .seg spans, the first N have .filled. */
+.progress{display:flex;gap:6px;background:transparent;height:7px;margin-bottom:24px;overflow:visible;border-radius:0}
+.progress .seg{flex:1;height:100%;background:var(--line-soft);border-radius:99px;transition:background .25s ease}
+.progress .seg.filled{background:linear-gradient(90deg,#1B5E20,#14491A)}
+/* Legacy .bar (continuous fill) kept around in case any reference still uses it */
 .progress .bar{height:100%;background:linear-gradient(90deg,#1B5E20,#14491A);border-radius:99px;transition:width .35s ease}
 
-/* Landing's two numbered sections */
-.section-title{font-size:1rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;display:flex;align-items:center;gap:10px;margin:22px 0 6px;text-transform:none}
-.section-title .n{width:28px;height:28px;border-radius:50%;background:var(--emerald);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.92rem;font-weight:700;letter-spacing:0;flex-shrink:0}
-.section-sub{font-size:.86rem;color:var(--ink-2);margin:0 0 12px;padding-left:30px}
-@media(max-width:520px){.section-sub{padding-left:0}}
+/* Landing section headings — numbered circles dropped; type-only treatment. */
+.section-title{font-size:1.08rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;margin:24px 0 6px}
+.section-title .n{display:none}
+.section-sub{font-size:.92rem;color:var(--ink-2);margin:0 0 12px;padding-left:0}
 
-/* Intent picker (landing) — CRO 3.9 enlarged */
-.picker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 8px;padding-left:30px}
-@media(max-width:520px){.picker{grid-template-columns:repeat(2,1fr);padding-left:0}}
+/* Intent picker (landing) */
+.picker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 8px;padding-left:0}
+@media(max-width:520px){.picker{grid-template-columns:repeat(2,1fr)}}
 .picker label{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:22px 8px 18px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:var(--ink);text-align:center;line-height:1.2;transition:border-color .15s,background .15s,box-shadow .15s;min-height:108px;box-shadow:0 1px 2px rgba(10,31,46,.04)}
 .picker label:hover{border-color:#1B5E20;background:#E8F5E9;box-shadow:0 2px 8px rgba(27,94,32,.10)}
 .picker input{position:absolute;opacity:0;pointer-events:none}
@@ -66,11 +103,10 @@ body{background:var(--bg)}
 
 /* Form fields — CRO 3.6 — bigger inputs, bigger labels */
 .field{margin:0 0 24px}
-.field.indent{padding-left:30px}
-@media(max-width:520px){.field.indent{padding-left:0}}
+.field.indent{padding-left:0}
 .field label{display:block;font-size:16px;font-weight:600;color:#333;margin-bottom:6px}
 .field input,
-.field select{width:100%;min-height:52px;padding:12px 16px;font-size:16px;font-family:'Inter',sans-serif;border:1.5px solid #CCC;border-radius:8px;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s;box-sizing:border-box}
+.field select{width:100%;min-height:52px;padding:12px 16px;font-size:16px;border:1.5px solid #CCC;border-radius:8px;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s;box-sizing:border-box}
 .field input:focus,
 .field select:focus{outline:0;border-color:#1B5E20;box-shadow:0 0 0 3px rgba(27,94,32,.15)}
 .field select{padding-right:36px}
@@ -133,12 +169,11 @@ body{background:var(--bg)}
 /* Action row — CRO 3.2 — 32px gap above buttons */
 .actions{margin-top:32px}
 .actions.split{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
-.actions.landing{padding-left:30px}
-@media(max-width:520px){.actions.landing{padding-left:0}}
+.actions.landing{padding-left:0}
 .btn-back{min-height:52px;padding:0 18px;border:1.5px solid var(--line);background:#fff;color:var(--ink-2);font-size:15px;font-weight:600;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:border-color .15s}
 .btn-back:hover{border-color:var(--ink-2);text-decoration:none;color:var(--ink-2)}
 
-/* Continue / Complete CTAs — CRO 1.1 / 3.7 — #1B5E20 dark green */
+/* Continue / Complete CTAs — #1B5E20 dark green. Inherits DM Sans. */
 .btn-continue{
   min-height:52px;
   padding:16px 32px;
@@ -147,10 +182,9 @@ body{background:var(--bg)}
   color:#fff;
   font-size:17px;
   font-weight:700;
-  font-family:'Source Serif 4',serif;
   border-radius:8px;
   cursor:pointer;
-  letter-spacing:-.01em;
+  letter-spacing:-.005em;
   transition:background .15s,transform .12s,box-shadow .15s;
   box-shadow:0 8px 24px rgba(27,94,32,.40),0 2px 4px rgba(27,94,32,.18);
 }
