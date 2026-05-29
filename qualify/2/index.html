@@ -158,8 +158,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var advanceFired = false;  // one-shot guard
 
   function isReady(){
-    var intents = form.querySelectorAll('input[name=intent]:checked').length;
-    return intents > 0 && !!stateSel.value;
+    // State alone advances the user; intent picks are optional context.
+    return !!stateSel.value;
   }
 
   function check(){
