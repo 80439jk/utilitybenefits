@@ -330,3 +330,57 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;fo
   .funnel-card.compact .tcpa-box label{font-size:.72rem;line-height:1.4}
   .funnel-card.compact .actions{margin-top:14px}
 }
+
+/* ============================================================
+   Trust / context content sections (below the funnel card).
+   Modeled in PURPOSE/STRUCTURE (not design) on the higher-
+   converting model funnel. Rendered in UB's emerald/navy theme.
+   All class names are new + only loaded by /qualify/2/ pages,
+   so nothing existing is overridden. Single conversion path is
+   preserved — lower CTAs scroll back to the state selector.
+   ============================================================ */
+
+/* 1. Trust-badge row */
+.ub-trustbar{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0}
+.ub-trustbar__grid{max-width:780px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.ub-badge{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.ub-badge__ico{width:36px;height:36px;border-radius:50%;background:var(--emerald-soft);color:var(--emerald-deep);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ub-badge__ico svg{width:18px;height:18px}
+.ub-badge__lbl{font-size:13px;font-weight:600;color:var(--navy);line-height:1.3}
+
+/* 2. Programs / context card */
+.ub-programs{background:var(--bg);padding:48px 0}
+.ub-programs__card{max-width:640px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.ub-programs__intro{font-size:1rem;color:var(--ink-2);line-height:1.65;margin:0 0 18px}
+.ub-programs__intro strong{color:var(--ink);font-weight:600}
+.ub-programs__title{font-size:24px;font-weight:700;letter-spacing:-.02em;color:var(--ink);margin:0 0 18px;line-height:1.25}
+.ub-checklist{list-style:none;margin:0 0 26px;padding:0}
+.ub-checklist li{position:relative;padding:7px 0 7px 34px;font-size:1rem;color:var(--ink);line-height:1.5}
+.ub-checklist li svg{position:absolute;left:0;top:8px;width:22px;height:22px;color:var(--emerald)}
+.ub-checklist li strong{font-weight:600}
+.ub-programs__cta-wrap{text-align:center}
+.ub-cta{display:inline-block;background:#1B5E20;color:#fff;font-size:17px;font-weight:700;padding:15px 34px;border-radius:8px;text-decoration:none;border:0;cursor:pointer;box-shadow:0 8px 24px rgba(27,94,32,.40),0 2px 4px rgba(27,94,32,.18);transition:background .15s,transform .12s,box-shadow .15s}
+.ub-cta:hover{background:#14491A;transform:translateY(-1px);color:#fff;text-decoration:none}
+.ub-programs__call{margin:14px 0 0;font-size:14px;color:var(--ink-2);text-align:center}
+.ub-programs__call a{color:var(--navy);font-weight:700;text-decoration:underline}
+
+/* 3. What to expect */
+.ub-expect{background:#fff;padding:48px 0}
+.ub-expect__head{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);text-align:center;margin:0 0 22px;line-height:1.2}
+.ub-expect__card{max-width:640px;margin:0 auto 18px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 30px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.ub-expect__list{list-style:none;margin:0;padding:0}
+.ub-expect__list li{position:relative;padding:9px 0 9px 34px;font-size:1rem;color:var(--ink);line-height:1.5}
+.ub-expect__list li svg{position:absolute;left:0;top:10px;width:22px;height:22px;color:var(--emerald)}
+.ub-expect__list li strong{font-weight:600}
+.ub-expect__band{max-width:640px;margin:0 auto;background:var(--emerald-soft);border:1px solid #BFE3D2;border-radius:12px;padding:16px 20px;text-align:center}
+.ub-expect__band strong{display:block;color:var(--ink);font-size:1.02rem;font-weight:700;margin-bottom:2px}
+.ub-expect__band span{color:var(--ink-2);font-size:.95rem}
+
+/* Mobile */
+@media(max-width:560px){
+  .ub-trustbar__grid{grid-template-columns:repeat(2,1fr);gap:18px 14px}
+  .ub-programs,.ub-expect{padding:36px 0}
+  .ub-programs__card,.ub-expect__card{padding:24px 20px;border-radius:14px}
+  .ub-programs__title{font-size:21px}
+  .ub-expect__head{font-size:22px}
+}
