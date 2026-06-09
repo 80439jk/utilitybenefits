@@ -358,29 +358,45 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;fo
 .ub-checklist li{position:relative;padding:7px 0 7px 34px;font-size:1rem;color:var(--ink);line-height:1.5}
 .ub-checklist li svg{position:absolute;left:0;top:8px;width:22px;height:22px;color:var(--emerald)}
 .ub-checklist li strong{font-weight:600}
-.ub-programs__cta-wrap{text-align:center}
+.ub-programs__cta-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
 .ub-cta{display:inline-block;background:#1B5E20;color:#fff;font-size:17px;font-weight:700;padding:15px 34px;border-radius:8px;text-decoration:none;border:0;cursor:pointer;box-shadow:0 8px 24px rgba(27,94,32,.40),0 2px 4px rgba(27,94,32,.18);transition:background .15s,transform .12s,box-shadow .15s}
 .ub-cta:hover{background:#14491A;transform:translateY(-1px);color:#fff;text-decoration:none}
-.ub-programs__call{margin:14px 0 0;font-size:14px;color:var(--ink-2);text-align:center}
-.ub-programs__call a{color:var(--navy);font-weight:700;text-decoration:underline}
+/* Prominent call CTA — drives phone conversions */
+.ub-callbtn{display:inline-flex;align-items:center;justify-content:center;gap:14px;background:var(--navy);color:#fff;padding:14px 30px;border-radius:10px;text-decoration:none;box-shadow:0 8px 24px rgba(10,37,64,.28),0 2px 4px rgba(10,37,64,.16);transition:background .15s,transform .12s,box-shadow .15s;max-width:100%}
+.ub-callbtn:hover{background:var(--navy-2);transform:translateY(-1px);color:#fff;text-decoration:none}
+.ub-callbtn svg{width:28px;height:28px;flex-shrink:0}
+.ub-callbtn__inner{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15;text-align:left}
+.ub-callbtn__lead{font-size:12.5px;font-weight:600;opacity:.85;letter-spacing:.01em}
+.ub-callbtn__num{font-size:23px;font-weight:700;letter-spacing:.01em}
 
 /* 3. What to expect */
 .ub-expect{background:#fff;padding:48px 0}
 .ub-expect__head{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);text-align:center;margin:0 0 22px;line-height:1.2}
-.ub-expect__card{max-width:640px;margin:0 auto 18px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 30px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.ub-expect__list{list-style:none;margin:0;padding:0}
-.ub-expect__list li{position:relative;padding:9px 0 9px 34px;font-size:1rem;color:var(--ink);line-height:1.5}
-.ub-expect__list li svg{position:absolute;left:0;top:10px;width:22px;height:22px;color:var(--emerald)}
-.ub-expect__list li strong{font-weight:600}
+/* Horizontal tiles — visually distinct from the checklist above */
+.ub-expect__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:960px;margin:0 auto 20px}
+.ub-expect-tile{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px 18px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center;gap:14px}
+.ub-expect-tile__ico{width:46px;height:46px;border-radius:50%;background:var(--emerald-soft);color:var(--emerald-deep);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ub-expect-tile__ico svg{width:23px;height:23px}
+.ub-expect-tile p{margin:0;font-size:.95rem;color:var(--ink);line-height:1.45}
+.ub-expect-tile strong{font-weight:700;color:var(--ink)}
 .ub-expect__band{max-width:640px;margin:0 auto;background:var(--emerald-soft);border:1px solid #BFE3D2;border-radius:12px;padding:16px 20px;text-align:center}
 .ub-expect__band strong{display:block;color:var(--ink);font-size:1.02rem;font-weight:700;margin-bottom:2px}
 .ub-expect__band span{color:var(--ink-2);font-size:.95rem}
+
+/* Tablet — expect tiles drop to 2 across */
+@media(max-width:860px){
+  .ub-expect__grid{grid-template-columns:repeat(2,1fr)}
+}
 
 /* Mobile */
 @media(max-width:560px){
   .ub-trustbar__grid{grid-template-columns:repeat(2,1fr);gap:18px 14px}
   .ub-programs,.ub-expect{padding:36px 0}
-  .ub-programs__card,.ub-expect__card{padding:24px 20px;border-radius:14px}
+  .ub-programs__card{padding:24px 20px;border-radius:14px}
   .ub-programs__title{font-size:21px}
   .ub-expect__head{font-size:22px}
+  .ub-expect__grid{gap:12px}
+  .ub-expect-tile{padding:18px 14px}
+  .ub-callbtn{width:100%}
+  .ub-callbtn__num{font-size:21px}
 }

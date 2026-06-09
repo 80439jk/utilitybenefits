@@ -55,7 +55,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
 
     <form class="funnel-card" id="funnel-form" method="get" action="/qualify/2/step-1-dob-citizen/" novalidate>
-      <h1>Find programs that can lower your bills &mdash; in 60 seconds</h1>
+      <h1>Find programs that can help with bills &mdash; in 60 seconds</h1>
       <p class="lede"><strong>Free check</strong> &mdash; no SSN needed, no commitment.</p>
 
       <div class="section-title">What do you need help with?</div>
@@ -174,8 +174,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><strong>Help with rent and utilities</strong> and other household essentials</li>
       </ul>
       <div class="ub-programs__cta-wrap">
-        <button type="button" class="ub-cta" onclick="document.getElementById('state').scrollIntoView({behavior:'smooth',block:'center'})">See if I qualify</button>
-        <p class="ub-programs__call">or call <a href="tel:+18138204157">(813) 820-4157</a> to speak with a specialist now</p>
+        <button type="button" class="ub-cta" onclick="document.getElementById('state').scrollIntoView({behavior:'smooth',block:'center'})">Find programs</button>
+        <a href="tel:+18138204157" class="ub-callbtn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+          <span class="ub-callbtn__inner">
+            <span class="ub-callbtn__lead">Or call to speak with a specialist now</span>
+            <span class="ub-callbtn__num">(813) 820-4157</span>
+          </span>
+        </a>
       </div>
     </div>
   </div>
@@ -185,13 +191,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="ub-expect">
   <div class="container">
     <h2 class="ub-expect__head">What to expect</h2>
-    <div class="ub-expect__card">
-      <ul class="ub-expect__list">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>A quick, guided eligibility check &mdash; a few simple questions, about a minute</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>We match you to the utility bill help and assistance programs that fit your state</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Talk to a specialist who answers your questions and walks you through next steps</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><strong>Need financial help right away?</strong> You can call and speak with someone now</li>
-      </ul>
+    <div class="ub-expect__grid">
+      <div class="ub-expect-tile">
+        <span class="ub-expect-tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><path d="M9 12h6M9 16h4"/></svg></span>
+        <p>A quick, guided eligibility check &mdash; a few simple questions, about a minute</p>
+      </div>
+      <div class="ub-expect-tile">
+        <span class="ub-expect-tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></span>
+        <p>We match you to the utility bill help and assistance programs that fit your state</p>
+      </div>
+      <div class="ub-expect-tile">
+        <span class="ub-expect-tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-5a9 9 0 0 1 18 0v5"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></span>
+        <p>Talk to a specialist who answers your questions and walks you through next steps</p>
+      </div>
+      <div class="ub-expect-tile">
+        <span class="ub-expect-tile__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.07 8.81 19.79 19.79 0 0 1 .12 2.18 2 2 0 0 1 2.06 0h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L6.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+        <p><strong>Need financial help right away?</strong> You can call and speak with someone now</p>
+      </div>
     </div>
     <div class="ub-expect__band">
       <strong>Always free. No SSN needed to start.</strong>
