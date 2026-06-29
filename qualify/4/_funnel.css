@@ -1,0 +1,540 @@
+/* ============================================================
+   /qualify/4/ — multi-step funnel
+   Layered on top of /lp/_shared.css (Direction D tokens).
+   CRO baseline applied (cro-audit branch).
+   Spec: outputs/UtilityBenefits_CRO-Implementation-Spec.md
+   ============================================================ */
+
+body{background:var(--bg)}
+
+/* ============================================================
+   Funnel-scoped typeface — DM Sans for a rounder, friendlier feel
+   that diverges from the model funnel's typical Inter setup.
+   Scoped via :has() so the rest of the site is unaffected.
+   ============================================================ */
+body:has(.funnel-main),
+body:has(.funnel-main) input,
+body:has(.funnel-main) select,
+body:has(.funnel-main) textarea,
+body:has(.funnel-main) button{
+  font-family:'DM Sans','Inter',system-ui,sans-serif;
+  letter-spacing:-.005em;
+}
+body:has(.funnel-main) h1,
+body:has(.funnel-main) h2,
+body:has(.funnel-main) h3{
+  font-family:'DM Sans','Inter',system-ui,sans-serif;
+}
+
+/* ============================================================
+   Live indicator pulse — subtle, infinite, scoped to funnel.
+   Animates the existing .lp-utility .left::before dot.
+   ============================================================ */
+@keyframes ub-live-pulse{
+  0%  { box-shadow: 0 0 0 0 rgba(14,142,92,0.65); }
+  70% { box-shadow: 0 0 0 10px rgba(14,142,92,0); }
+  100%{ box-shadow: 0 0 0 0 rgba(14,142,92,0); }
+}
+body:has(.funnel-main) .lp-utility .left::before{
+  width:9px;height:9px;
+  animation:ub-live-pulse 1.8s ease-out infinite;
+}
+
+.funnel-main{padding:28px 0 90px}
+
+/* Editorial eyebrow chip — hidden per CRO 1.3 (kept in CSS for reuse) */
+.hero-eyebrow{display:none}
+
+/* The central card — softer, rounder treatment than the model funnel.
+   18px radius + soft single-layer shadow. */
+.funnel-card{max-width:600px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+@media(max-width:560px){.funnel-card{padding:24px 20px;border-radius:18px;border-left:1px solid var(--line);border-right:1px solid var(--line);margin:0 12px}}
+
+/* Steps 1-4 — same soft treatment */
+.funnel-card.step{
+  max-width:560px;
+  padding:32px;
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+
+/* Headings — large, near-black, dominant. Typeface inherits the DM Sans
+   override from the funnel-scoped body rule above. */
+.funnel-card h1,
+.funnel-card h2{
+  font-weight:700;
+  letter-spacing:-.022em;
+  text-align:center;
+  color:#1A1A1A;
+  line-height:1.2;
+}
+.funnel-card h1{font-size:32px;margin:0 0 12px}
+.funnel-card h2{font-size:28px;margin:8px 0 24px}
+.funnel-card .lede{text-align:center;color:var(--ink-2);font-size:.96rem;margin:0 auto 22px;max-width:460px}
+
+/* Step header (progress bar block) — % hidden per CRO 3.4 */
+.step-meta{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.step-meta .pct{display:none}
+
+/* Segmented progress — four discrete stepping-stone segments.
+   Each step page emits 4 .seg spans, the first N have .filled. */
+.progress{display:flex;gap:6px;background:transparent;height:7px;margin-bottom:24px;overflow:visible;border-radius:0}
+.progress .seg{flex:1;height:100%;background:var(--line-soft);border-radius:99px;transition:background .25s ease}
+.progress .seg.filled{background:linear-gradient(90deg,#1B5E20,#14491A)}
+/* Legacy .bar (continuous fill) kept around in case any reference still uses it */
+.progress .bar{height:100%;background:linear-gradient(90deg,#1B5E20,#14491A);border-radius:99px;transition:width .35s ease}
+
+/* Landing section headings — numbered circles dropped; type-only treatment. */
+.section-title{font-size:1.08rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;margin:24px 0 6px}
+.section-title .n{display:none}
+.section-sub{font-size:.92rem;color:var(--ink-2);margin:0 0 12px;padding-left:0}
+
+/* Intent picker (landing) */
+.picker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 8px;padding-left:0}
+@media(max-width:520px){.picker{grid-template-columns:repeat(2,1fr)}}
+.picker label{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:22px 8px 18px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:15px;font-weight:600;color:var(--ink);text-align:center;line-height:1.2;transition:border-color .15s,background .15s,box-shadow .15s;min-height:108px;box-shadow:0 1px 2px rgba(10,31,46,.04)}
+.picker label:hover{border-color:#1B5E20;background:#E8F5E9;box-shadow:0 2px 8px rgba(27,94,32,.10)}
+.picker input{position:absolute;opacity:0;pointer-events:none}
+.picker .ico{width:28px;height:28px;color:#1B5E20}
+.picker label:has(input:checked){border-color:#1B5E20;background:#E8F5E9;box-shadow:0 0 0 2px #1B5E20 inset}
+/* Faint gray radio dot — makes each card read as a selectable button */
+.picker .dot{position:absolute;top:10px;right:10px;width:20px;height:20px;border:2px solid #BFC4CC;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+.picker label:has(input:checked) .dot{background:#1B5E20;border-color:#1B5E20}
+.picker label:has(input:checked) .dot::after{content:"";width:8px;height:8px;background:#fff;border-radius:50%}
+
+/* Form fields — CRO 3.6 — bigger inputs, bigger labels */
+.field{margin:0 0 24px}
+.field.indent{padding-left:0}
+.field label{display:block;font-size:16px;font-weight:600;color:#333;margin-bottom:6px}
+.field input,
+.field select{width:100%;min-height:52px;padding:12px 16px;font-size:16px;border:1.5px solid #CCC;border-radius:8px;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s;box-sizing:border-box}
+.field input:focus,
+.field select:focus{outline:0;border-color:#1B5E20;box-shadow:0 0 0 3px rgba(27,94,32,.15)}
+.field select{padding-right:36px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.row2.addr{grid-template-columns:1.4fr 1fr}
+/* Only stack on tiny phones */
+@media(max-width:360px){.row2,.row2.addr{grid-template-columns:1fr}}
+
+/* ============================================================
+   Landing state dropdown — high-impact NBA-reference treatment.
+   Replaces the CTA button (auto-advances on select).
+   Amber background + orange border + orange chevron button.
+   ============================================================ */
+.state-field{margin-bottom:18px}
+.state-select-wrap{position:relative;display:block;box-shadow:0 6px 18px rgba(14,142,92,.22);border-radius:10px}
+.state-select-wrap::after{
+  content:"";
+  position:absolute;
+  right:0;top:0;bottom:0;
+  width:56px;
+  background:var(--emerald);
+  border-radius:0 8px 8px 0;
+  pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23fff'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:26px 26px;
+}
+.state-select-wrap select#state{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  width:100%;
+  background:var(--emerald-soft);
+  border:2.5px solid var(--emerald);
+  border-radius:10px;
+  color:#0A1F2E;
+  font-weight:700;
+  font-size:17px;
+  padding:0 70px 0 18px;
+  min-height:60px;
+  cursor:pointer;
+  box-sizing:border-box;
+}
+.state-select-wrap select#state:focus{
+  outline:0;
+  border-color:var(--emerald-deep);
+  box-shadow:0 0 0 3px rgba(14,142,92,.20);
+}
+.state-select-wrap select#state:hover{
+  background:#D4ECDE;
+}
+
+/* TCPA consent box */
+.tcpa-box{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:14px}
+.tcpa-box label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:.78rem;color:var(--ink-2);line-height:1.55}
+.tcpa-box input[type=checkbox]{flex-shrink:0;width:18px;height:18px;margin-top:1px;accent-color:#1B5E20}
+.tcpa-box a{color:var(--navy);text-decoration:underline}
+
+/* Action row — CRO 3.2 — 32px gap above buttons */
+.actions{margin-top:32px}
+.actions.split{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
+.actions.landing{padding-left:0}
+.btn-back{min-height:52px;padding:0 18px;border:1.5px solid var(--line);background:#fff;color:var(--ink-2);font-size:15px;font-weight:600;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:border-color .15s}
+.btn-back:hover{border-color:var(--ink-2);text-decoration:none;color:var(--ink-2)}
+
+/* Continue / Complete CTAs — #1B5E20 dark green. Inherits DM Sans. */
+.btn-continue{
+  min-height:52px;
+  padding:16px 32px;
+  border:0;
+  background:#1B5E20;
+  color:#fff;
+  font-size:17px;
+  font-weight:700;
+  border-radius:8px;
+  cursor:pointer;
+  letter-spacing:-.005em;
+  transition:background .15s,transform .12s,box-shadow .15s;
+  box-shadow:0 8px 24px rgba(27,94,32,.40),0 2px 4px rgba(27,94,32,.18);
+}
+.btn-continue.lg{width:100%}
+.btn-continue:hover{background:#14491A;transform:translateY(-1px);box-shadow:0 12px 30px rgba(27,94,32,.50),0 2px 4px rgba(27,94,32,.20)}
+.btn-continue:active{transform:translateY(0);box-shadow:0 4px 12px rgba(27,94,32,.35)}
+.btn-continue:disabled{background:#1B5E20;color:#fff;opacity:.55;cursor:not-allowed;box-shadow:none;transform:none}
+
+/* Trust copy — consistent line under every CTA. Navy + larger for readability. */
+.trust-copy{font-size:15px;font-weight:600;color:var(--navy);text-align:center;margin-top:18px;line-height:1.45;margin-bottom:0}
+.trust-context{font-size:14px;color:var(--navy);text-align:center;margin-top:10px;line-height:1.5;margin-bottom:0}
+
+/* Legacy classes left intact for non-funnel reuse */
+.micro{text-align:center;font-size:.82rem;color:var(--muted);margin-top:14px;line-height:1.5}
+.micro strong{color:var(--ink-2);font-weight:600}
+.trust-row{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:15px;font-weight:600;color:var(--navy)}
+.trust-row .item{display:inline-flex;align-items:center;gap:6px}
+.trust-row .check{color:#1B5E20;font-weight:700;font-size:16px}
+
+/* Editorial review byline — hidden on step pages per CRO 3.5; shown on landing */
+.reviewed-by{max-width:600px;margin:14px auto 0;display:flex;align-items:center;gap:10px;font-size:.78rem;color:var(--muted);padding:12px 16px}
+.reviewed-by .ub-mark{width:24px;height:24px;border-radius:5px;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;flex-shrink:0}
+.reviewed-by strong{color:var(--ink);font-weight:600}
+.reviewed-by .sep{color:var(--line-strong);margin:0 6px}
+/* Hide review byline when it follows a step card (steps 1-4) */
+.funnel-card.step ~ .reviewed-by{display:none}
+
+/* ============================================================
+   Step 4 (.compact) — tight enough that Submit sits above the fold
+   on both 768px desktop viewports and 390x844 iPhones.
+   ============================================================ */
+.funnel-card.compact{padding:24px 32px 20px}
+.funnel-card.compact h2{font-size:24px;margin:2px 0 14px}
+.funnel-card.compact .lede{display:none}
+.funnel-card.compact .field{margin-bottom:10px}
+.funnel-card.compact .field label{margin-bottom:4px}
+.funnel-card.compact .row2{gap:10px}
+.funnel-card.compact .tcpa-box{margin-top:8px;padding:10px 12px}
+.funnel-card.compact .tcpa-box label{font-size:.72rem;line-height:1.4}
+.funnel-card.compact .actions{margin-top:14px}
+.funnel-card.compact .trust-copy{margin-top:12px;font-size:14px}
+.funnel-card.compact .trust-context{margin-top:6px;font-size:13px}
+
+/* ============================================================
+   Sticky footer — funnel pages only. Tall enough to read the phone
+   number clearly; scoped via :has() to avoid affecting /lp/* pages.
+   ============================================================ */
+body:has(.funnel-main) .lp-sticky-call{padding:14px 16px}
+body:has(.funnel-main) .lp-sticky-call .meta{font-size:14px;font-weight:600}
+body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;font-weight:700;min-height:auto;white-space:nowrap}
+
+/* ============================================================
+   Mobile tightening (≤ 560px) — keep CTA above the fold.
+   ============================================================ */
+@media (max-width: 560px) {
+
+  .lp-utility { padding: 10px 0; font-size: .92rem }
+  .lp-utility strong { font-size: .98rem }
+  .lp-header { padding: 8px 0 }
+  .lp-header .container { gap: 8px }
+  .lp-logo { font-size: .94rem; gap: 7px }
+  .lp-logo .mark { width: 28px; height: 28px; font-size: .8rem }
+  .lp-header .phone { padding: 7px 11px; font-size: .82rem }
+  .lp-header .phone svg { width: 13px; height: 13px }
+
+  .funnel-main { padding: 12px 0 88px }
+
+  .funnel-card,
+  .funnel-card.step { padding: 22px 18px; border-radius: 0 }
+
+  .funnel-card h1 { font-size: 24px; margin: 0 0 8px }
+  .funnel-card h2 { font-size: 22px; margin: 6px 0 20px }
+  .funnel-card h2.mobile-hide { display: none }
+
+  .funnel-card .lede { font-size: .9rem; margin: 0 auto 16px; line-height: 1.42 }
+  .funnel-card .lede.mobile-hide { display: none }
+
+  .section-title { font-size: .72rem; margin: 12px 0 4px; gap: 6px }
+  .section-title .n { width: 18px; height: 18px; font-size: .66rem }
+  .section-sub { font-size: .8rem; margin-bottom: 8px; padding-left: 0 }
+  .section-sub.mobile-hide { display: none }
+
+  .picker { gap: 10px; padding-left: 0 }
+  .picker label {
+    min-height: 92px;
+    padding: 18px 8px 14px;
+    font-size: 14px;
+    gap: 8px;
+    border-radius: 10px;
+  }
+  .picker .ico { width: 26px; height: 26px }
+  .picker .dot { width: 18px; height: 18px; top: 8px; right: 8px; border-width: 2px }
+  .picker label:has(input:checked) .dot::after { width: 7px; height: 7px }
+
+  .step-meta { font-size: .74rem; margin-bottom: 6px }
+  .progress { margin-bottom: 18px; height: 5px }
+
+  .field { margin-bottom: 20px; padding-left: 0 }
+  .field.indent { padding-left: 0 }
+  .field label { font-size: 15px; margin-bottom: 6px }
+  .field label.mobile-hide { display: none }
+  .field input, .field select { min-height: 48px; font-size: 16px; padding: 10px 14px }
+  .field select { padding-right: 32px }
+
+  /* Keep the landing state dropdown bold on mobile */
+  .state-select-wrap select#state { min-height: 56px; font-size: 16px; padding: 0 60px 0 16px }
+  .state-select-wrap::after { width: 48px; background-size: 22px 22px }
+  .section-title { font-size: .96rem; margin: 16px 0 4px; gap: 8px }
+  .section-title .n { width: 24px; height: 24px; font-size: .82rem }
+
+  .tcpa-box { padding: 12px 14px; margin-top: 10px }
+  .tcpa-box label { font-size: .74rem; line-height: 1.45; gap: 8px }
+  .tcpa-box input[type=checkbox] { width: 16px; height: 16px }
+
+  .actions { margin-top: 24px; padding-left: 0 }
+  .actions.landing { padding-left: 0 }
+  .btn-continue { min-height: 48px; font-size: 16px; padding: 12px 20px }
+  .btn-back { min-height: 48px; padding: 0 14px; font-size: 14px }
+
+  /* Mobile: keep 3 trust items on a single line at iPhone widths (375-414).
+     Sized to fit Free & Confidential + No SSN needed + Takes 2 minutes
+     within ~330px usable card width. */
+  .trust-row { gap: 8px; font-size: 11px; margin-top: 14px; flex-wrap: nowrap; letter-spacing: -.01em }
+  .trust-row .item { gap: 3px; white-space: nowrap }
+  .trust-row .check { font-size: 12px }
+  .trust-copy { font-size: 14px; margin-top: 14px }
+  .trust-context { font-size: 13px }
+  .micro { font-size: .76rem; margin-top: 10px; line-height: 1.4 }
+
+  .reviewed-by { font-size: .72rem; padding: 10px 14px }
+  .reviewed-by.mobile-hide { display: none }
+
+  body:has(.funnel-main) .lp-sticky-call{padding:12px 14px}
+  body:has(.funnel-main) .lp-sticky-call .meta{font-size:13px}
+  body:has(.funnel-main) .lp-sticky-call .call{padding:10px 16px;font-size:15px;white-space:nowrap}
+
+  /* Step 4 compact spacing — mobile */
+  .funnel-card.compact{padding:18px 18px 16px}
+  .funnel-card.compact .field{margin-bottom:10px}
+  .funnel-card.compact .row2{gap:8px}
+  .funnel-card.compact h2{font-size:22px;margin:4px 0 12px}
+  .funnel-card.compact .tcpa-box{margin-top:8px;padding:10px 12px}
+  .funnel-card.compact .tcpa-box label{font-size:.72rem;line-height:1.4}
+  .funnel-card.compact .actions{margin-top:14px}
+}
+
+/* ============================================================
+   Trust / context content sections (below the funnel card).
+   Modeled in PURPOSE/STRUCTURE (not design) on the higher-
+   converting model funnel. Rendered in UB's emerald/navy theme.
+   All class names are new + only loaded by /qualify/4/ pages,
+   so nothing existing is overridden. Single conversion path is
+   preserved — lower CTAs scroll back to the state selector.
+   ============================================================ */
+
+/* 1. Trust-badge row */
+.ub-trustbar{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0}
+.ub-trustbar__grid{max-width:780px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.ub-badge{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.ub-badge__ico{width:36px;height:36px;border-radius:50%;background:var(--emerald-soft);color:var(--emerald-deep);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ub-badge__ico svg{width:18px;height:18px}
+.ub-badge__lbl{font-size:13px;font-weight:600;color:var(--navy);line-height:1.3}
+
+/* 2. Programs / context card */
+.ub-programs{background:var(--bg);padding:48px 0}
+.ub-programs__card{max-width:640px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.ub-programs__intro{font-size:1rem;color:var(--ink-2);line-height:1.65;margin:0 0 18px}
+.ub-programs__intro strong{color:var(--ink);font-weight:600}
+.ub-programs__title{font-size:24px;font-weight:700;letter-spacing:-.02em;color:var(--ink);margin:0 0 18px;line-height:1.25}
+.ub-checklist{list-style:none;margin:0 0 26px;padding:0}
+.ub-checklist li{position:relative;padding:7px 0 7px 34px;font-size:1rem;color:var(--ink);line-height:1.5}
+.ub-checklist li svg{position:absolute;left:0;top:8px;width:22px;height:22px;color:var(--emerald)}
+.ub-checklist li strong{font-weight:600}
+.ub-programs__cta-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+.ub-cta{display:inline-block;background:#1B5E20;color:#fff;font-size:17px;font-weight:700;padding:15px 34px;border-radius:8px;text-decoration:none;border:0;cursor:pointer;box-shadow:0 8px 24px rgba(27,94,32,.40),0 2px 4px rgba(27,94,32,.18);transition:background .15s,transform .12s,box-shadow .15s}
+.ub-cta:hover{background:#14491A;transform:translateY(-1px);color:#fff;text-decoration:none}
+/* Prominent call CTA — drives phone conversions */
+.ub-callbtn{display:inline-flex;align-items:center;justify-content:center;gap:14px;background:var(--navy);color:#fff;padding:14px 30px;border-radius:10px;text-decoration:none;box-shadow:0 8px 24px rgba(10,37,64,.28),0 2px 4px rgba(10,37,64,.16);transition:background .15s,transform .12s,box-shadow .15s;max-width:100%}
+.ub-callbtn:hover{background:var(--navy-2);transform:translateY(-1px);color:#fff;text-decoration:none}
+.ub-callbtn svg{width:28px;height:28px;flex-shrink:0}
+.ub-callbtn__inner{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15;text-align:left}
+.ub-callbtn__lead{font-size:12.5px;font-weight:600;opacity:.85;letter-spacing:.01em}
+.ub-callbtn__num{font-size:23px;font-weight:700;letter-spacing:.01em}
+
+/* 3. What to expect */
+.ub-expect{background:#fff;padding:48px 0}
+.ub-expect__head{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);text-align:center;margin:0 0 22px;line-height:1.2}
+/* Horizontal tiles — visually distinct from the checklist above */
+.ub-expect__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:960px;margin:0 auto 20px}
+.ub-expect-tile{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px 18px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center;gap:14px}
+.ub-expect-tile__ico{width:46px;height:46px;border-radius:50%;background:var(--emerald-soft);color:var(--emerald-deep);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ub-expect-tile__ico svg{width:23px;height:23px}
+.ub-expect-tile p{margin:0;font-size:.95rem;color:var(--ink);line-height:1.45}
+.ub-expect-tile strong{font-weight:700;color:var(--ink)}
+.ub-expect__band{max-width:640px;margin:0 auto;background:var(--emerald-soft);border:1px solid #BFE3D2;border-radius:12px;padding:16px 20px;text-align:center}
+.ub-expect__band strong{display:block;color:var(--ink);font-size:1.02rem;font-weight:700;margin-bottom:2px}
+.ub-expect__band span{color:var(--ink-2);font-size:.95rem}
+
+/* Tablet — expect tiles drop to 2 across */
+@media(max-width:860px){
+  .ub-expect__grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* Mobile */
+@media(max-width:560px){
+  .ub-trustbar__grid{grid-template-columns:repeat(2,1fr);gap:18px 14px}
+  .ub-programs,.ub-expect{padding:36px 0}
+  .ub-programs__card{padding:24px 20px;border-radius:14px}
+  .ub-programs__title{font-size:21px}
+  .ub-expect__head{font-size:22px}
+  .ub-expect__grid{gap:12px}
+  .ub-expect-tile{padding:18px 14px}
+  .ub-callbtn{width:100%}
+  .ub-callbtn__num{font-size:21px}
+}
+
+/* ============================================================
+   qualify/4 — utility-bills landing hero (Task 1 variant).
+   New copy + value-prop bullets in place of the intent picker.
+   Only loaded by /qualify/4/ pages, so qualify/2 is unaffected.
+   The state dropdown (.state-select-wrap) is reused unchanged and
+   remains the sole conversion trigger (auto-advances on select).
+   ============================================================ */
+/* Headline + subheadline sit ABOVE the tile (outside .funnel-card). */
+.ub-hero-head{max-width:600px;margin:0 auto 18px;text-align:center}
+.ub-hero-head h1{font-weight:700;letter-spacing:-.022em;color:#1A1A1A;line-height:1.2;font-size:32px;margin:0 0 12px}
+.ub-hero-head .ub-sub{color:var(--ink-2);font-size:1.02rem;line-height:1.5;margin:0 auto;max-width:540px}
+
+/* Bullets now sit at the bottom of the tile, under the call link. */
+.ub-hero-points{list-style:none;margin:20px auto 0;padding:18px 0 0;max-width:470px;border-top:1px solid var(--line)}
+.ub-hero-points li{position:relative;padding:7px 0 7px 32px;font-size:1rem;color:var(--ink);line-height:1.5}
+.ub-hero-points li svg{position:absolute;left:0;top:8px;width:21px;height:21px;color:var(--emerald)}
+.ub-hero-points li strong{font-weight:700;color:var(--ink)}
+
+/* CTA block leads the tile: heading -> reassurance line -> state dropdown. */
+.ub-hero-cta{margin-top:0}
+.ub-cta-head{text-align:center;font-size:1.28rem;font-weight:700;color:var(--ink);margin:0 0 6px}
+.ub-cta-sub{text-align:center;font-size:.85rem;color:var(--muted);margin:0 0 14px;line-height:1.5}
+
+.ub-hero-call{text-align:center;font-size:.95rem;color:var(--ink-2);margin:16px 0 0}
+.ub-hero-call a{color:var(--navy);font-weight:700;text-decoration:none;white-space:nowrap}
+.ub-hero-call a:hover{text-decoration:underline}
+
+@media(max-width:560px){
+  .ub-hero-head{margin-bottom:14px}
+  .ub-hero-head h1{font-size:24px;margin:0 0 8px}
+  .ub-hero-head .ub-sub{font-size:.92rem}
+  .ub-hero-points{margin-bottom:18px}
+  .ub-hero-points li{font-size:.95rem;padding:6px 0 6px 30px}
+  .ub-cta-head{font-size:1.12rem}
+  .ub-hero-call{font-size:.9rem}
+}
+
+/* ============================================================
+   qualify/4 — below-the-tile content sections (Task 1 cont.)
+   Deliberately varied layouts; shared helpers first.
+   ============================================================ */
+.ub4-eyebrow{display:inline-block;font-size:.76rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--emerald-deep);background:var(--emerald-soft);padding:5px 12px;border-radius:99px;margin-bottom:14px}
+.ub4-h2{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);text-align:center;margin:0 0 12px;line-height:1.22}
+.ub4-intro{font-size:1.02rem;color:var(--ink-2);line-height:1.6;text-align:center;max-width:680px;margin:0 auto 26px}
+.ub4-list{list-style:none;margin:0;padding:0}
+.ub4-list li{position:relative;padding:7px 0 7px 30px;font-size:.98rem;color:var(--ink);line-height:1.5}
+.ub4-list li::before{content:"";position:absolute;left:0;top:10px;width:18px;height:18px;border-radius:50%;background:var(--emerald-soft) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230E8E5C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") center/12px no-repeat}
+.ub4-list--tight li{padding-top:4px;padding-bottom:4px;font-size:.94rem}
+
+.ub4-cta-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 22px;margin-top:28px}
+.ub4-call-inline{color:var(--navy);font-weight:600;text-decoration:none;font-size:.98rem}
+.ub4-call-inline strong{white-space:nowrap}
+.ub4-call-inline:hover{text-decoration:underline;color:var(--navy)}
+.ub4-call-note{font-size:.92rem;color:var(--ink-2)}
+.ub4-call-note a{color:var(--navy);font-weight:600;text-decoration:none;white-space:nowrap}
+.ub4-call-note a:hover{text-decoration:underline}
+
+/* 1. You're not alone — centered intro band */
+.ub4-alone{background:#fff;padding:48px 0;text-align:center;border-top:1px solid var(--line)}
+.ub4-alone .ub4-h2{max-width:740px;margin-left:auto;margin-right:auto}
+.ub4-alone__lede{font-size:1.05rem;color:var(--ink-2);line-height:1.65;max-width:680px;margin:14px auto 26px}
+
+/* 2. Two-track — 2-up cards */
+.ub4-tracks{background:var(--bg);padding:48px 0}
+.ub4-track-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:880px;margin:0 auto}
+.ub4-track-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.ub4-track-card__tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--emerald);padding:4px 12px;border-radius:6px;margin-bottom:12px}
+.ub4-track-card__tag--alt{background:var(--navy)}
+.ub4-track-card__title{font-size:1.24rem;font-weight:700;color:var(--ink);margin:0 0 8px;line-height:1.25}
+.ub4-track-card__sub{font-size:.95rem;color:var(--ink-2);margin:0 0 12px;line-height:1.5}
+.ub4-trackfoot{font-size:1rem;color:var(--ink);font-weight:600;text-align:center;max-width:660px;margin:24px auto 0;line-height:1.55}
+
+/* 3. Steps — 3 across */
+.ub4-steps{background:#fff;padding:48px 0}
+.ub4-steps__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:960px;margin:0 auto}
+.ub4-step{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:26px 22px}
+.ub4-step__num{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--emerald);color:#fff;font-weight:700;font-size:1.1rem;margin-bottom:14px}
+.ub4-step__title{font-size:1.12rem;font-weight:700;color:var(--ink);margin:0 0 8px;line-height:1.3}
+.ub4-step p{font-size:.95rem;color:var(--ink-2);line-height:1.55;margin:0 0 8px}
+
+/* 4. Impact — stat tiles on an emerald band */
+.ub4-impact{background:var(--emerald-soft);padding:48px 0;text-align:center}
+.ub4-impact__grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:620px;margin:0 auto 24px}
+.ub4-stat{background:#fff;border-radius:16px;padding:26px 18px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.ub4-stat__big{display:block;font-size:2.6rem;font-weight:800;color:var(--emerald-deep);line-height:1;letter-spacing:-.02em}
+.ub4-stat__lbl{display:block;font-size:.95rem;color:var(--ink-2);margin-top:8px;line-height:1.4}
+.ub4-stat__lbl strong{color:var(--ink)}
+.ub4-impact__copy{font-size:1rem;color:var(--ink-2);line-height:1.6;max-width:640px;margin:0 auto 8px}
+.ub4-impact__free{font-weight:700;color:var(--ink);margin:0 auto 22px}
+
+/* 5. Works even if — 2-col item grid */
+.ub4-evenif{background:var(--bg);padding:48px 0;text-align:center}
+.ub4-evenif__grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 22px;max-width:820px;margin:0 auto;text-align:left}
+.ub4-evenif__item{position:relative;padding:13px 14px 13px 44px;background:#fff;border:1px solid var(--line);border-radius:10px;font-size:.96rem;color:var(--ink);line-height:1.45}
+.ub4-evenif__item::before{content:"";position:absolute;left:14px;top:13px;width:20px;height:20px;border-radius:50%;background:var(--emerald-soft) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230E8E5C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") center/13px no-repeat}
+.ub4-evenif__foot{margin-top:28px;margin-bottom:0}
+
+/* 6. Free, safe — trust grid */
+.ub4-safe{background:#fff;padding:48px 0;text-align:center}
+.ub4-safe__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:920px;margin:0 auto 24px}
+.ub4-safe__item{padding:20px 16px;background:var(--bg);border:1px solid var(--line);border-radius:12px;font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.4;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.ub4-safe__item svg{width:24px;height:24px;color:var(--emerald);flex-shrink:0}
+
+/* 7. FAQ — accordion */
+.ub4-faq{background:var(--bg);padding:48px 0}
+.ub4-faq__list{max-width:760px;margin:0 auto}
+.ub4-faq__item{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.ub4-faq__item summary{cursor:pointer;list-style:none;padding:16px 48px 16px 18px;font-size:1rem;font-weight:600;color:var(--ink);position:relative;line-height:1.4}
+.ub4-faq__item summary::-webkit-details-marker{display:none}
+.ub4-faq__item summary::after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:1.5rem;font-weight:400;color:var(--emerald);line-height:1}
+.ub4-faq__item[open] summary::after{content:"\2212"}
+.ub4-faq__a{padding:0 18px 16px;font-size:.96rem;color:var(--ink-2);line-height:1.6}
+
+/* 8. Final CTA — navy band */
+.ub4-final{background:var(--navy);padding:52px 0;text-align:center}
+.ub4-final__head{font-size:24px;font-weight:700;color:#fff;max-width:720px;margin:0 auto 12px;line-height:1.3;letter-spacing:-.01em}
+.ub4-final__sub{font-size:1.02rem;color:rgba(255,255,255,.85);margin:0 auto 24px;max-width:560px;line-height:1.5}
+.ub4-final__cta{font-size:18px;padding:16px 38px}
+.ub4-final__need{color:rgba(255,255,255,.85);font-weight:600;margin:26px 0 12px}
+.ub4-final__call{display:inline-flex}
+
+/* Responsive — content sections */
+@media(max-width:860px){
+  .ub4-steps__grid{grid-template-columns:1fr}
+  .ub4-safe__grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:620px){
+  .ub4-track-grid,.ub4-impact__grid,.ub4-evenif__grid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .ub4-h2{font-size:22px}
+  .ub4-alone,.ub4-tracks,.ub4-steps,.ub4-impact,.ub4-evenif,.ub4-safe,.ub4-faq{padding:36px 0}
+  .ub4-final{padding:40px 0}
+  .ub4-final__head{font-size:21px}
+  .ub4-stat__big{font-size:2.2rem}
+  .ub4-cta-row{flex-direction:column;gap:12px}
+}
