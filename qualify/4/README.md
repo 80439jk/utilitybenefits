@@ -27,7 +27,7 @@ New hero CSS lives at the bottom of `qualify/4/_funnel.css` (this is the cloned 
 
 Eight new sections with deliberately varied layouts (so it doesn't read as one long list):
 1. **You're not alone** — centered intro band
-2. **What is the Two-Track Check?** — two side-by-side track cards (Assistance / Savings)
+2. **What is the 2-Track Check?** — two side-by-side track cards (Assistance / Savings)
 3. **How it works** — three-across numbered step tiles
 4. **Real-world impact** — two big savings-stat tiles on an emerald band ($480 / $1,560 a year)
 5. **Works even if…** — two-column item grid
