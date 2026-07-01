@@ -31,14 +31,20 @@ body:has(.funnel-main) h3{
    Animates the existing .lp-utility .left::before dot.
    ============================================================ */
 @keyframes ub-live-pulse{
-  0%  { box-shadow: 0 0 0 0 rgba(14,142,92,0.65); }
-  70% { box-shadow: 0 0 0 10px rgba(14,142,92,0); }
+  0%  { box-shadow: 0 0 0 0 rgba(14,142,92,0.78); }
+  70% { box-shadow: 0 0 0 13px rgba(14,142,92,0); }
   100%{ box-shadow: 0 0 0 0 rgba(14,142,92,0); }
 }
 body:has(.funnel-main) .lp-utility .left::before{
-  width:9px;height:9px;
-  animation:ub-live-pulse 1.8s ease-out infinite;
+  width:11px;height:11px;
+  animation:ub-live-pulse 1.6s ease-out infinite;
 }
+/* Business-hours toggle: html.oh-closed is set pre-paint by the inline head script.
+   Open = Mon-Fri 9:30a-6p ET (live pulsing dot); Closed = gray static dot + "Call M-F" text. */
+.lp-utility .left .hrs-closed{display:none}
+html.oh-closed .lp-utility .left .hrs-open{display:none}
+html.oh-closed .lp-utility .left .hrs-closed{display:inline}
+html.oh-closed body:has(.funnel-main) .lp-utility .left::before{background:#9CA8B5;animation:none;box-shadow:none}
 
 .funnel-main{padding:28px 0 90px}
 
