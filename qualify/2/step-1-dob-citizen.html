@@ -69,7 +69,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="field">
         <label for="dob">Date of birth</label>
-        <input type="text" inputmode="numeric" id="dob" name="dob" placeholder="MM / DD / YYYY" autocomplete="bday" required />
+        <input type="text" inputmode="numeric" id="dob" name="dob" placeholder="MM / DD / YYYY" autocomplete="bday" maxlength="14" required />
+        <p class="v-error" id="dob-error" style="display:none;color:#c0392b;font-size:.8rem;margin:.4rem 0 0;line-height:1.3;"></p>
       </div>
 
       <div class="field">
@@ -126,8 +127,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var dob = document.getElementById('dob');
   var cit = document.getElementById('citizen');
   var cta = document.getElementById('cta');
+  var err = document.getElementById('dob-error');
   dob.value = sessionStorage.getItem('ub2_dob') || '';
   cit.value = sessionStorage.getItem('ub2_citizen') || '';
+
+  // DOB safety nets — mirrors NBA: require a real calendar date (round-trip
+  // rejects 02/30, 13/45, etc.) and an age between 18 and 110. Returns
+  // 'incomplete' before 8 digits, an error string when invalid, or null.
+  function dobProblem(val){
+    var digits = val.replace(/\D/g,'');
+    if (digits.length !== 8) return 'incomplete';
+    var m = parseInt(digits.slice(0,2),10),
+        d = parseInt(digits.slice(2,4),10),
+        y = parseInt(digits.slice(4,8),10);
+    var dt = new Date(y, m-1, d);
+    if (dt.getFullYear() !== y || dt.getMonth() !== m-1 || dt.getDate() !== d) {
+      return 'Please enter a valid date of birth.';
+    }
+    var today = new Date();
+    var age = today.getFullYear() - y;
+    var mDiff = today.getMonth() - (m-1);
+    if (mDiff < 0 || (mDiff === 0 && today.getDate() < d)) age--;
+    if (age < 18) return 'You must be 18 or older to apply.';
+    if (age > 110) return 'Please enter a valid date of birth.';
+    return null;
+  }
+
   dob.addEventListener('input', function(){
     var v = dob.value.replace(/\D/g,'').slice(0,8);
     if (v.length >= 5) v = v.slice(0,2)+' / '+v.slice(2,4)+' / '+v.slice(4);
@@ -136,12 +161,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     check();
   });
   cit.addEventListener('change', check);
-  function check(){ cta.disabled = !(dob.value.replace(/\D/g,'').length === 8 && cit.value); }
-  document.getElementById('funnel-form').addEventListener('submit', function(){
+
+  function check(){
+    var prob = dobProblem(dob.value);
+    cta.disabled = !!(prob || !cit.value);
+    if (prob && prob !== 'incomplete') { err.textContent = prob; err.style.display = 'block'; }
+    else { err.style.display = 'none'; }
+  }
+
+  document.getElementById('funnel-form').addEventListener('submit', function(e){
+    if (dobProblem(dob.value) || !cit.value) { e.preventDefault(); check(); return; }
     try {
       sessionStorage.setItem('ub2_dob', dob.value);
       sessionStorage.setItem('ub2_citizen', cit.value);
-    } catch(e){}
+    } catch(e2){}
   });
   check();
 })();
