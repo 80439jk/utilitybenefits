@@ -23,8 +23,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/lp/_shared.css" />
-<link rel="stylesheet" href="/qualify/2/_funnel.css?v=2" />
+<link rel="stylesheet" href="/qualify/2/_funnel.css?v=3" />
 <script src="/qualify/2/_attribution.js"></script>
+<!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
+<script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -35,7 +37,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="lp-utility">
   <div class="container row">
-    <span class="left"><strong>Live</strong> &mdash; agents available now</span>
+    <span class="left"><span class="hrs-open"><strong>Live</strong> &mdash; agents available now</span><span class="hrs-closed">Call M-F 9:30am&ndash;6pm ET</span></span>
     <span class="right"><a href="tel:+18138204157">(813) 820-4157</a></span>
   </div>
 </div>

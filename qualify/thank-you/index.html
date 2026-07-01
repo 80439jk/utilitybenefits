@@ -95,6 +95,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     0%,100%{opacity:1;transform:scale(1)}
     50%{opacity:.45;transform:scale(.85)}
   }
+  /* Business-hours toggle (html.oh-closed set pre-paint by the inline head script).
+     Open = Mon-Fri 9:30a-6p ET: bigger/ring pulses. Closed: text swaps, no pulse. */
+  .lp-utility .left::before{width:10px;height:10px;box-shadow:0 0 0 0 rgba(14,142,92,.78);animation:ty-live-pulse 1.6s ease-out infinite}
+  @keyframes ty-live-pulse{0%{box-shadow:0 0 0 0 rgba(14,142,92,.78)}70%{box-shadow:0 0 0 12px rgba(14,142,92,0)}100%{box-shadow:0 0 0 0 rgba(14,142,92,0)}}
+  .lp-utility .left .hrs-closed{display:none}
+  html.oh-closed .lp-utility .left .hrs-open{display:none}
+  html.oh-closed .lp-utility .left .hrs-closed{display:inline}
+  html.oh-closed .lp-utility .left::before{background:#9CA8B5;animation:none;box-shadow:none}
+  .ty-call-eyebrow .pulse{width:9px;height:9px;box-shadow:0 0 0 0 rgba(211,47,47,.55);animation:ty-ring 1.5s ease-out infinite}
+  @keyframes ty-ring{0%{box-shadow:0 0 0 0 rgba(211,47,47,.55)}70%{box-shadow:0 0 0 9px rgba(211,47,47,0)}100%{box-shadow:0 0 0 0 rgba(211,47,47,0)}}
+  .ty-call-eyebrow .hrs-closed{display:none}
+  html.oh-closed .ty-call-eyebrow .hrs-open{display:none}
+  html.oh-closed .ty-call-eyebrow .hrs-closed{display:inline}
   .ty-action-line{
     font-family:'DM Sans','Inter',system-ui,sans-serif;font-weight:600;font-size:1.05rem;
     color:var(--ink);margin-bottom:14px;letter-spacing:-.012em;
@@ -124,10 +137,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     color:var(--muted);font-size:.84rem;
   }
   .ty-availability strong{color:var(--ink);font-weight:600}
-  .ty-availability .live-dot{
-    display:inline-block;width:7px;height:7px;background:var(--emerald);
-    border-radius:50%;margin-right:6px;animation:pulse-r 2s infinite;vertical-align:1px;
-  }
   .ty-availability .sep{color:var(--line-strong)}
   @media(max-width:520px){.ty-availability{font-size:.8rem;gap:8px}.ty-availability .sep{display:none}}
 
@@ -176,6 +185,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   .ty-trust-row .lbl{color:var(--muted);font-size:.76rem;display:block;margin-top:2px}
 </style>
+<!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
+<script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -187,7 +198,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- Top utility bar -->
 <div class="lp-utility">
   <div class="container row">
-    <span class="left"><strong>Live</strong> &mdash; agents available now</span>
+    <span class="left"><span class="hrs-open"><strong>Live</strong> &mdash; agents available now</span><span class="hrs-closed">Call M-F 9:30am&ndash;6pm ET</span></span>
     <span class="right"><a href="tel:+18138204158">(813) 820-4158</a></span>
   </div>
 </div>
@@ -229,7 +240,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- Action eyebrow + phone CTA -->
     <div>
-      <span class="ty-call-eyebrow"><span class="pulse"></span> Agent waiting &mdash; call now</span>
+      <span class="ty-call-eyebrow"><span class="pulse hrs-open"></span><span class="hrs-open">Agent waiting &mdash; call now</span><span class="hrs-closed">Agents available M-F 9:30am&ndash;6pm ET</span></span>
       <div class="ty-action-line">Reference your case number when you call:</div>
       <a href="tel:+18138204158" class="ty-phone-button" id="ty-call-cta">
         <span class="label">Call your case manager</span>
@@ -238,10 +249,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <div class="ty-availability">
-      <span><span class="live-dot"></span><strong>Agents available now</strong></span>
-      <span class="sep">|</span>
-      <span><strong>8am &ndash; 9pm ET, 7 days</strong></span>
-      <span class="sep">|</span>
       <span><strong>~4 min</strong> avg call</span>
     </div>
 
