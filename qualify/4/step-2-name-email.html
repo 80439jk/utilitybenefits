@@ -81,6 +81,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="field">
         <label for="email">Email address</label>
         <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required />
+        <p class="v-error" id="email-error" style="display:none;color:#c0392b;font-size:.8rem;margin:.4rem 0 0;line-height:1.3;">Please enter a valid email address.</p>
       </div>
 
       <div class="actions split">
@@ -127,6 +128,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var last = document.getElementById('last');
   var email = document.getElementById('email');
   var cta = document.getElementById('cta');
+  var emailErr = document.getElementById('email-error');
   [first,last,email].forEach(function(el){
     el.value = sessionStorage.getItem('ub2_'+el.name) || '';
     el.addEventListener('input', function(){
@@ -134,10 +136,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       check();
     });
   });
-  function check(){
-    cta.disabled = !(first.value.trim() && last.value.trim()
-      && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value));
+
+  // Strict email check — mirrors NBA: standard pattern PLUS reject the
+  // consecutive-dot / dot-adjacent-@ typos that real submissions produced
+  // (e.g. "name@gmal..com", "name.@x.com", "name@.com").
+  function emailValid(v){
+    var e = (v||'').trim();
+    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(e)) return false;
+    if (e.indexOf('..') !== -1 || e.indexOf('.@') !== -1 || e.indexOf('@.') !== -1) return false;
+    return true;
   }
+
+  function check(){
+    var eOk = emailValid(email.value);
+    cta.disabled = !(first.value.trim() && last.value.trim() && eOk);
+    // Show the email error only once they've started entering an address.
+    if (email.value.trim() && !eOk) emailErr.style.display = 'block';
+    else emailErr.style.display = 'none';
+  }
+
+  document.getElementById('funnel-form').addEventListener('submit', function(e){
+    if (!(first.value.trim() && last.value.trim() && emailValid(email.value))) {
+      e.preventDefault(); check();
+    }
+  });
   check();
 })();
 </script>
