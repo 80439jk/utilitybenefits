@@ -61,7 +61,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="ub-sub">Find out in minutes which utility assistance programs, discounts, and lower rates you qualify for</p>
     </div>
 
-    <form class="funnel-card" id="funnel-form" method="get" action="/qualify/4/step-1-dob-citizen/" novalidate>
+    <form class="funnel-card" id="funnel-form" method="get" action="/qualify/4/step-1-dob/" novalidate>
       <div class="ub-hero-cta">
         <div class="section-title ub-cta-head">Start Your 2-Track Eligibility Check</div>
         <p class="ub-cta-sub">Most callers finish their check in about 2 minutes. No cost. No obligation. No SSN.</p>
@@ -351,11 +351,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     } catch(e){}
   });
 
-  // If user comes back via browser-back, cancel any pending advance
+  // On return to this landing (Back button, incl. bfcache restore): reset the
+  // State selector so the user must reselect — which re-fires the auto-advance.
+  // Without this, a bfcache-restored page keeps the old selection but never
+  // advances, stranding the user with no way forward. Clearing ub2_state keeps
+  // sessionStorage in sync with the reset UI.
   window.addEventListener('pageshow', function(e){
-    if (e.persisted) {
-      advanceFired = false;
-    }
+    advanceFired = false;
+    userTouched = false;
+    stateSel.value = '';
+    try { sessionStorage.removeItem('ub2_state'); } catch(err){}
   });
 })();
 </script>

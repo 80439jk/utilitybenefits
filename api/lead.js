@@ -143,6 +143,31 @@ function nullable(v) {
   return v === undefined || v === null || v === '' ? null : v;
 }
 
+// Remove null / undefined / '' / empty-array leaves from the payload so we never
+// send a blank that could OVERWRITE an existing CRM value on a repeat contact
+// (Caliber upserts/merges on phone+email). Booleans (incl. false) and numbers
+// (incl. 0) are preserved. Nested objects are pruned in place and kept even if
+// they end up empty, so the payload keeps its consent/contact/attribution/extended
+// shape. Full funnels (qualify2) populate every field, so nothing is stripped for
+// them — this only drops the fields the reduced funnel (qualify4) no longer asks.
+function pruneEmpty(obj) {
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return obj;
+  const out = {};
+  Object.keys(obj).forEach(function (k) {
+    const v = obj[k];
+    if (v === null || v === undefined || v === '') return;
+    if (Array.isArray(v)) {
+      if (v.length === 0) return;
+      out[k] = v;
+    } else if (typeof v === 'object') {
+      out[k] = pruneEmpty(v);
+    } else {
+      out[k] = v;
+    }
+  });
+  return out;
+}
+
 function maskCaseHash(s) {
   if (!s) return '';
   return String(s).slice(0, 4) + '…';
@@ -273,8 +298,9 @@ module.exports = async function handler(req, res) {
     return res.redirect(302, thankYou());
   }
 
-  // Sign + POST
-  const body = JSON.stringify(payload);
+  // Sign + POST. Prune empty leaves first so uncollected fields are omitted (not
+  // sent as null/blank) and can't overwrite a repeat contact's existing CRM data.
+  const body = JSON.stringify(pruneEmpty(payload));
   const ts = new Date().toISOString();
   const sig = 'sha256=' + crypto.createHmac('sha256', HMAC_SECRET).update(ts + '.' + body).digest('hex');
 
