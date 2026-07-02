@@ -16,7 +16,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="robots" content="noindex,nofollow" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<link rel="preconnect" href="https://www.googletagmanager.com" />
+<link rel="preconnect" href="https://cdn.trustedform.com" crossorigin />
+<link rel="dns-prefetch" href="https://api.trustedform.com" />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
 <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
@@ -25,7 +28,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/lp/_shared.css" />
 <link rel="stylesheet" href="/qualify/4/_funnel.css?v=3" />
-<script src="/qualify/4/_attribution.js"></script>
+<script defer src="/qualify/4/_attribution.js"></script>
 <!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
 <script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
 </head>
@@ -61,7 +64,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="ub-sub">Find out in minutes which utility assistance programs, discounts, and lower rates you qualify for</p>
     </div>
 
-    <form class="funnel-card" id="funnel-form" method="get" action="/qualify/4/step-1-dob-citizen/" novalidate>
+    <form class="funnel-card" id="funnel-form" method="get" action="/qualify/4/step-1-dob/" novalidate>
       <div class="ub-hero-cta">
         <div class="section-title ub-cta-head">Start Your 2-Track Eligibility Check</div>
         <p class="ub-cta-sub">Most callers finish their check in about 2 minutes. No cost. No obligation. No SSN.</p>
@@ -351,11 +354,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     } catch(e){}
   });
 
-  // If user comes back via browser-back, cancel any pending advance
+  // On return to this landing (Back button, incl. bfcache restore): reset the
+  // State selector so the user must reselect — which re-fires the auto-advance.
+  // Without this, a bfcache-restored page keeps the old selection but never
+  // advances, stranding the user with no way forward. Clearing ub2_state keeps
+  // sessionStorage in sync with the reset UI.
   window.addEventListener('pageshow', function(e){
-    if (e.persisted) {
-      advanceFired = false;
-    }
+    advanceFired = false;
+    userTouched = false;
+    stateSel.value = '';
+    try { sessionStorage.removeItem('ub2_state'); } catch(err){}
   });
 })();
 </script>
@@ -375,6 +383,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End TrustedForm -->
 
 <!-- Inactivity popup ("Before you go...") — dedicated call line -->
-<script src="/qualify/popup.js"></script>
+<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
 </body>
 </html>

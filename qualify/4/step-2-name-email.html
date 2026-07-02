@@ -11,7 +11,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Step 3: Household & income — UtilityBenefits</title>
+<title>Step 2: Your name & email — UtilityBenefits</title>
 <meta name="robots" content="noindex,nofollow" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,8 +26,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/lp/_shared.css" />
-<link rel="stylesheet" href="/qualify/2/_funnel.css?v=3" />
-<script defer src="/qualify/2/_attribution.js"></script>
+<link rel="stylesheet" href="/qualify/4/_funnel.css?v=3" />
+<script defer src="/qualify/4/_attribution.js"></script>
 <!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
 <script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
 </head>
@@ -57,52 +57,43 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <main class="funnel-main">
   <div class="container">
-    <form class="funnel-card step" id="funnel-form" method="get" action="/qualify/2/step-4-contact/" novalidate>
+    <!-- REDUCED FUNNEL (qualify/4) — Step 2 of 3: Name + email. See REDUCE-FUNNEL-README.md -->
+    <form class="funnel-card step" id="funnel-form" method="get" action="/qualify/4/step-3-phone-tcpa/" novalidate>
       <div class="step-meta">
-        <span>Step 3 of 4</span>
+        <span>Step 2 of 3</span>
       </div>
       <div class="progress">
-        <span class="seg filled"></span>
         <span class="seg filled"></span>
         <span class="seg filled"></span>
         <span class="seg"></span>
       </div>
 
-      <h2>Household &amp; income</h2>
+      <h2>Your name &amp; email</h2>
 
-      <div class="field">
-        <label for="income">Approximate household annual income (before taxes)</label>
-        <select id="income" name="income" required>
-          <option value="">Select&hellip;</option>
-          <option>Under $20,000</option>
-          <option>$20,000 &ndash; $35,000</option>
-          <option>$35,000 &ndash; $55,000</option>
-          <option>$55,000 &ndash; $80,000</option>
-          <option>Over $80,000</option>
-        </select>
+      <div class="row2">
+        <div class="field">
+          <label for="first">First name</label>
+          <input type="text" id="first" name="first" autocomplete="given-name" required />
+        </div>
+        <div class="field">
+          <label for="last">Last name</label>
+          <input type="text" id="last" name="last" autocomplete="family-name" required />
+        </div>
       </div>
 
       <div class="field">
-        <label for="employ">Current employment status</label>
-        <select id="employ" name="employ" required>
-          <option value="">Select&hellip;</option>
-          <option>Employed (full-time)</option>
-          <option>Employed (part-time)</option>
-          <option>Self-employed</option>
-          <option>Unemployed</option>
-          <option>Retired</option>
-          <option>Disabled / unable to work</option>
-          <option>Student</option>
-        </select>
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required />
+        <p class="v-error" id="email-error" style="display:none;color:#c0392b;font-size:.8rem;margin:.4rem 0 0;line-height:1.3;">Please enter a valid email address.</p>
       </div>
 
       <div class="actions split">
-        <a href="/qualify/2/step-2-address/" class="btn-back">&lsaquo; Back</a>
+        <a href="/qualify/4/step-1-dob/" class="btn-back">&lsaquo; Back</a>
         <button type="submit" class="btn-continue" id="cta" disabled>Continue &rarr;</button>
       </div>
 
       <p class="trust-copy">No credit check. No commitment. 100% free and confidential.</p>
-      <p class="trust-context">LIHEAP and state programs use income brackets, not exact figures.</p>
+      <p class="trust-context">We use your email only to send program info &mdash; we don&rsquo;t resell.</p>
     </form>
 
     <div class="reviewed-by">
@@ -124,7 +115,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <p class="lp-tcpa">UtilityBenefits.com is an independent comparison and information service operated by UtilityBenefits Research LLC. We are not a government agency.</p>
     <div class="copyright">
-      <span>&copy; 2026 UtilityBenefits Research LLC.</span>
+      <span>&copy; 2026 UtilityBenefits Research LLC. All rights reserved.</span>
       <span class="legal-links">
         <a href="/legal/privacy/">Privacy</a>
         <a href="/legal/terms/">Terms</a>
@@ -136,18 +127,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script>
 (function(){
-  var income = document.getElementById('income');
-  var employ = document.getElementById('employ');
+  var first = document.getElementById('first');
+  var last = document.getElementById('last');
+  var email = document.getElementById('email');
   var cta = document.getElementById('cta');
-  income.value = sessionStorage.getItem('ub2_income') || '';
-  employ.value = sessionStorage.getItem('ub2_employ') || '';
-  [income, employ].forEach(function(el){
-    el.addEventListener('change', function(){
+  var emailErr = document.getElementById('email-error');
+  [first,last,email].forEach(function(el){
+    el.value = sessionStorage.getItem('ub2_'+el.name) || '';
+    el.addEventListener('input', function(){
       sessionStorage.setItem('ub2_'+el.name, el.value);
       check();
     });
   });
-  function check(){ cta.disabled = !(income.value && employ.value); }
+
+  // Strict email check — mirrors NBA: standard pattern PLUS reject the
+  // consecutive-dot / dot-adjacent-@ typos that real submissions produced
+  // (e.g. "name@gmal..com", "name.@x.com", "name@.com").
+  function emailValid(v){
+    var e = (v||'').trim();
+    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(e)) return false;
+    if (e.indexOf('..') !== -1 || e.indexOf('.@') !== -1 || e.indexOf('@.') !== -1) return false;
+    return true;
+  }
+
+  function check(){
+    var eOk = emailValid(email.value);
+    cta.disabled = !(first.value.trim() && last.value.trim() && eOk);
+    // Show the email error only once they've started entering an address.
+    if (email.value.trim() && !eOk) emailErr.style.display = 'block';
+    else emailErr.style.display = 'none';
+  }
+
+  document.getElementById('funnel-form').addEventListener('submit', function(e){
+    if (!(first.value.trim() && last.value.trim() && emailValid(email.value))) {
+      e.preventDefault(); check();
+    }
+  });
   check();
 })();
 </script>

@@ -110,12 +110,25 @@ function mapIntentToPrimaryInterest(v) {
   return Array.from(new Set(out));
 }
 
+// DOB safety net (server) — mirrors the client checks in step-1-dob: require a
+// real calendar date (round-trip) and a plausible age (18–110). Returns the ISO
+// date when valid, or null when invalid so we OMIT a bad DOB rather than forward
+// garbage like "9999-13-45" to the CRM. Does not reject the lead — just the field.
 function normalizeDob(v) {
   if (!v) return null;
-  const d = String(v).replace(/[^0-9]/g, '');
-  if (d.length !== 8) return null;
-  const mm = d.substring(0, 2), dd = d.substring(2, 4), yyyy = d.substring(4, 8);
-  return yyyy + '-' + mm + '-' + dd;
+  const s = String(v).replace(/[^0-9]/g, '');
+  if (s.length !== 8) return null;
+  const mm = parseInt(s.substring(0, 2), 10),
+        dd = parseInt(s.substring(2, 4), 10),
+        yyyy = parseInt(s.substring(4, 8), 10);
+  const dt = new Date(yyyy, mm - 1, dd);
+  if (dt.getFullYear() !== yyyy || dt.getMonth() !== mm - 1 || dt.getDate() !== dd) return null;
+  const today = new Date();
+  let age = today.getFullYear() - yyyy;
+  const mDiff = today.getMonth() - (mm - 1);
+  if (mDiff < 0 || (mDiff === 0 && today.getDate() < dd)) age--;
+  if (age < 18 || age > 110) return null;
+  return s.substring(4, 8) + '-' + s.substring(0, 2) + '-' + s.substring(2, 4);
 }
 
 function normalizePhone(v) {
@@ -123,6 +136,32 @@ function normalizePhone(v) {
   const d = String(v).replace(/[^0-9]/g, '');
   if (d.length !== 10) return null;
   return '+1' + d;
+}
+
+// US area-code allowlist (50 states + DC only) — kept IN LOCKSTEP with the client
+// copy in qualify/4/step-3-phone-tcpa.html and NBA's submit-lead function.
+const VALID_NANP_AREA_CODES = new Set(['201','202','203','205','206','207','208','209','210','212','213','214','215','216','217','218','219','220','223','224','225','228','229','231','234','235','239','240','248','251','252','253','254','256','260','262','267','269','270','272','274','276','278','279','281','283','301','302','303','304','305','307','308','309','310','312','313','314','315','316','317','318','319','320','321','323','324','325','326','327','329','330','331','332','334','336','337','339','341','346','347','350','351','352','353','357','360','361','363','364','369','380','385','386','401','402','404','405','406','407','408','409','410','412','413','414','415','417','419','423','424','425','430','432','434','435','436','440','442','443','445','447','448','457','458','463','464','469','470','471','472','475','478','479','480','483','484','501','502','503','504','505','507','508','509','510','512','513','515','516','517','518','520','521','522','525','530','531','534','539','540','541','551','557','559','561','562','563','564','567','570','571','573','574','575','580','585','586','601','602','603','605','606','607','608','609','610','612','614','615','616','617','618','619','620','623','626','628','629','630','631','636','641','645','646','650','651','657','659','660','661','662','667','669','678','680','681','682','689','701','702','703','704','706','707','708','712','713','714','715','716','717','718','719','720','724','725','726','727','728','729','731','732','734','737','738','740','743','747','754','757','760','762','763','765','769','770','771','772','773','774','775','776','779','781','783','785','786','801','802','803','804','805','806','808','810','812','813','814','815','816','817','818','820','828','830','831','832','833','838','839','840','843','844','845','847','848','850','854','855','856','857','858','859','860','861','862','863','864','865','866','870','872','877','878','888','903','904','906','907','908','909','910','912','913','914','915','916','917','918','919','920','925','928','929','930','931','934','936','937','938','940','941','943','945','947','948','949','951','952','954','956','959','970','971','972','973','978','979','980','983','984','985','986','989']);
+
+// Server-side phone validation (NANP + US-only area-code allowlist). Mirrors the
+// client validator so direct-POSTs that bypass the form get the same rejection.
+// Returns a reason string when invalid, or null when valid.
+function validatePhone(v) {
+  let d = String(v || '').replace(/[^0-9]/g, '');
+  if (d.length === 11 && d[0] === '1') d = d.slice(1);
+  if (d.length !== 10) return 'wrong_length';
+  if (d[0] < '2' || d[3] < '2') return 'nanp_violation';
+  if (/^(\d)\1{9}$/.test(d)) return 'all_same_digit';
+  if (!VALID_NANP_AREA_CODES.has(d.slice(0, 3))) return 'bad_area_code';
+  return null;
+}
+
+// Server-side email validation — mirrors the client check (strict pattern plus
+// consecutive-dot / dot-adjacent-@ rejects). Returns a reason or null.
+function validateEmail(v) {
+  const e = String(v || '').trim();
+  if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(e)) return 'invalid_email';
+  if (e.includes('..') || e.includes('.@') || e.includes('@.')) return 'invalid_email';
+  return null;
 }
 
 function genCaseNumber() {
@@ -141,6 +180,31 @@ function bool(v) {
 
 function nullable(v) {
   return v === undefined || v === null || v === '' ? null : v;
+}
+
+// Remove null / undefined / '' / empty-array leaves from the payload so we never
+// send a blank that could OVERWRITE an existing CRM value on a repeat contact
+// (Caliber upserts/merges on phone+email). Booleans (incl. false) and numbers
+// (incl. 0) are preserved. Nested objects are pruned in place and kept even if
+// they end up empty, so the payload keeps its consent/contact/attribution/extended
+// shape. Full funnels (qualify2) populate every field, so nothing is stripped for
+// them — this only drops the fields the reduced funnel (qualify4) no longer asks.
+function pruneEmpty(obj) {
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return obj;
+  const out = {};
+  Object.keys(obj).forEach(function (k) {
+    const v = obj[k];
+    if (v === null || v === undefined || v === '') return;
+    if (Array.isArray(v)) {
+      if (v.length === 0) return;
+      out[k] = v;
+    } else if (typeof v === 'object') {
+      out[k] = pruneEmpty(v);
+    } else {
+      out[k] = v;
+    }
+  });
+  return out;
 }
 
 function maskCaseHash(s) {
@@ -261,6 +325,21 @@ module.exports = async function handler(req, res) {
     return url;
   }
 
+  // Server-side validation safety net (mirrors NBA). Catches direct-POSTs that
+  // bypass the form's client validation. On invalid phone/email we skip the CRM
+  // call entirely — no junk lead — but still redirect to thank-you so the flow
+  // looks identical (same contract as the env-missing bail-out below).
+  const phoneFail = validatePhone(b.phone);
+  const emailFail = validateEmail(b.email);
+  if (phoneFail || emailFail) {
+    console.warn('caliber-skip', {
+      reason: phoneFail ? ('invalid_phone:' + phoneFail) : emailFail,
+      case: caseNum,
+      x_request_id: reqId
+    });
+    return res.redirect(302, thankYou());
+  }
+
   // Bail out early if env vars not configured — still redirect to thank-you
   if (!HMAC_SECRET || !ANON_KEY) {
     console.warn('caliber-skip', {
@@ -273,8 +352,9 @@ module.exports = async function handler(req, res) {
     return res.redirect(302, thankYou());
   }
 
-  // Sign + POST
-  const body = JSON.stringify(payload);
+  // Sign + POST. Prune empty leaves first so uncollected fields are omitted (not
+  // sent as null/blank) and can't overwrite a repeat contact's existing CRM data.
+  const body = JSON.stringify(pruneEmpty(payload));
   const ts = new Date().toISOString();
   const sig = 'sha256=' + crypto.createHmac('sha256', HMAC_SECRET).update(ts + '.' + body).digest('hex');
 

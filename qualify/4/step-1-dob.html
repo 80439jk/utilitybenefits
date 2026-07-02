@@ -11,7 +11,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Step 3: Household & income — UtilityBenefits</title>
+<title>Step 1: Date of birth — UtilityBenefits</title>
 <meta name="robots" content="noindex,nofollow" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,8 +26,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/lp/_shared.css" />
-<link rel="stylesheet" href="/qualify/2/_funnel.css?v=3" />
-<script defer src="/qualify/2/_attribution.js"></script>
+<link rel="stylesheet" href="/qualify/4/_funnel.css?v=3" />
+<script defer src="/qualify/4/_attribution.js"></script>
 <!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
 <script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
 </head>
@@ -57,57 +57,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <main class="funnel-main">
   <div class="container">
-    <form class="funnel-card step" id="funnel-form" method="get" action="/qualify/2/step-4-contact/" novalidate>
+    <!-- REDUCED FUNNEL (qualify/4) — Step 1 of 3: Date of birth.
+         Citizenship/address/income were removed to cut friction. See REDUCE-FUNNEL-README.md -->
+    <form class="funnel-card step" id="funnel-form" method="get" action="/qualify/4/step-2-name-email/" novalidate>
       <div class="step-meta">
-        <span>Step 3 of 4</span>
+        <span>Step 1 of 3</span>
       </div>
       <div class="progress">
         <span class="seg filled"></span>
-        <span class="seg filled"></span>
-        <span class="seg filled"></span>
+        <span class="seg"></span>
         <span class="seg"></span>
       </div>
 
-      <h2>Household &amp; income</h2>
+      <h2>Your date of birth</h2>
 
       <div class="field">
-        <label for="income">Approximate household annual income (before taxes)</label>
-        <select id="income" name="income" required>
-          <option value="">Select&hellip;</option>
-          <option>Under $20,000</option>
-          <option>$20,000 &ndash; $35,000</option>
-          <option>$35,000 &ndash; $55,000</option>
-          <option>$55,000 &ndash; $80,000</option>
-          <option>Over $80,000</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="employ">Current employment status</label>
-        <select id="employ" name="employ" required>
-          <option value="">Select&hellip;</option>
-          <option>Employed (full-time)</option>
-          <option>Employed (part-time)</option>
-          <option>Self-employed</option>
-          <option>Unemployed</option>
-          <option>Retired</option>
-          <option>Disabled / unable to work</option>
-          <option>Student</option>
-        </select>
+        <label for="dob">Date of birth</label>
+        <input type="text" inputmode="numeric" id="dob" name="dob" placeholder="MM / DD / YYYY" autocomplete="bday" maxlength="14" required />
+        <p class="v-error" id="dob-error" style="display:none;color:#c0392b;font-size:.8rem;margin:.4rem 0 0;line-height:1.3;"></p>
       </div>
 
       <div class="actions split">
-        <a href="/qualify/2/step-2-address/" class="btn-back">&lsaquo; Back</a>
+        <a href="/qualify/4/" class="btn-back">&lsaquo; Back</a>
         <button type="submit" class="btn-continue" id="cta" disabled>Continue &rarr;</button>
       </div>
 
       <p class="trust-copy">No credit check. No commitment. 100% free and confidential.</p>
-      <p class="trust-context">LIHEAP and state programs use income brackets, not exact figures.</p>
     </form>
 
     <div class="reviewed-by">
       <span class="ub-mark">UB</span>
-      <span><strong>Reviewed by UtilityBenefits Editorial Team</strong> <span class="sep">|</span> Last reviewed May 2026</span>
+      <span><strong>Reviewed by UtilityBenefits Editorial Team</strong> <span class="sep">|</span> Last reviewed May 2026 <span class="sep">|</span> Cites HHS, FCC, CMS</span>
     </div>
   </div>
 </main>
@@ -124,7 +104,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container">
     <p class="lp-tcpa">UtilityBenefits.com is an independent comparison and information service operated by UtilityBenefits Research LLC. We are not a government agency.</p>
     <div class="copyright">
-      <span>&copy; 2026 UtilityBenefits Research LLC.</span>
+      <span>&copy; 2026 UtilityBenefits Research LLC. All rights reserved.</span>
       <span class="legal-links">
         <a href="/legal/privacy/">Privacy</a>
         <a href="/legal/terms/">Terms</a>
@@ -136,18 +116,57 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script>
 (function(){
-  var income = document.getElementById('income');
-  var employ = document.getElementById('employ');
+  var dob = document.getElementById('dob');
   var cta = document.getElementById('cta');
-  income.value = sessionStorage.getItem('ub2_income') || '';
-  employ.value = sessionStorage.getItem('ub2_employ') || '';
-  [income, employ].forEach(function(el){
-    el.addEventListener('change', function(){
-      sessionStorage.setItem('ub2_'+el.name, el.value);
-      check();
-    });
+  var err = document.getElementById('dob-error');
+  dob.value = sessionStorage.getItem('ub2_dob') || '';
+
+  // DOB safety nets — mirrors NBA apply/2 step-1: require a real calendar date
+  // (round-trip check rejects 02/30, 13/45, etc.) and an age between 18 and 110.
+  // Returns 'incomplete' before 8 digits are entered, an error string when the
+  // completed date is invalid, or null when it's valid.
+  function dobProblem(val){
+    var digits = val.replace(/\D/g,'');
+    if (digits.length !== 8) return 'incomplete';
+    var m = parseInt(digits.slice(0,2),10),
+        d = parseInt(digits.slice(2,4),10),
+        y = parseInt(digits.slice(4,8),10);
+    var dt = new Date(y, m-1, d);
+    if (dt.getFullYear() !== y || dt.getMonth() !== m-1 || dt.getDate() !== d) {
+      return 'Please enter a valid date of birth.';
+    }
+    var today = new Date();
+    var age = today.getFullYear() - y;
+    var mDiff = today.getMonth() - (m-1);
+    if (mDiff < 0 || (mDiff === 0 && today.getDate() < d)) age--;
+    if (age < 18) return 'You must be 18 or older to apply.';
+    if (age > 110) return 'Please enter a valid date of birth.';
+    return null;
+  }
+
+  dob.addEventListener('input', function(){
+    var v = dob.value.replace(/\D/g,'').slice(0,8);
+    if (v.length >= 5) v = v.slice(0,2)+' / '+v.slice(2,4)+' / '+v.slice(4);
+    else if (v.length >= 3) v = v.slice(0,2)+' / '+v.slice(2);
+    dob.value = v;
+    check();
   });
-  function check(){ cta.disabled = !(income.value && employ.value); }
+
+  function check(){
+    var prob = dobProblem(dob.value);
+    cta.disabled = !!prob;
+    // Only surface a message once they've typed a full date but it's invalid —
+    // don't nag mid-typing.
+    if (prob && prob !== 'incomplete') { err.textContent = prob; err.style.display = 'block'; }
+    else { err.style.display = 'none'; }
+  }
+
+  document.getElementById('funnel-form').addEventListener('submit', function(e){
+    if (dobProblem(dob.value)) { e.preventDefault(); check(); return; }
+    try {
+      sessionStorage.setItem('ub2_dob', dob.value);
+    } catch(err2){}
+  });
   check();
 })();
 </script>
