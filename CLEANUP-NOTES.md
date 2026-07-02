@@ -5,6 +5,30 @@ trust-content work). **Nothing here has been changed or deleted.** This is a ref
 list so you can clean up safely later. Verify each item against live ad destinations and
 Vercel analytics before removing — some may still be used as fallbacks or in active tests.
 
+## Added by the `qualify4-reduced-funnel` branch (reduced 3-step funnel, went live 2026-07)
+
+The reduced funnel replaced qualify/4's old 4-step flow. The old step files were **kept in
+place, not deleted**, so we can roll back qualify/4 to the 4-step flow instantly if the
+reduced funnel underperforms. They are now orphaned (no inbound links — the landing points
+at `step-1-dob`). See `qualify/4/REDUCE-FUNNEL-README.md` for full context.
+
+| Path | Status | Suggested action before removing |
+|---|---|---|
+| `qualify/4/step-1-dob-citizen.html` | Superseded by `qualify/4/step-1-dob.html` | Rollback-only. Keep until the reduced funnel is proven, then delete. |
+| `qualify/4/step-2-address.html` | Dropped from the reduced funnel | Same — rollback-only. |
+| `qualify/4/step-3-income-employ.html` | Dropped from the reduced funnel | Same — rollback-only. |
+| `qualify/4/step-4-contact.html` | Superseded by `qualify/4/step-3-phone-tcpa.html` | Same — rollback-only. **Note:** still has the TCPA checkbox + full field set; the reduced funnel removed the checkbox. |
+| `_perf_funnel_head.py` (repo root) | One-off idempotent codemod (mobile-perf head tweaks) | Local one-off, not committed / not runtime. Safe to delete anytime. |
+
+**Also note (follow-ups, not orphans):**
+- **DOB→age reconciliation (next task):** a prior *dirty* prod deploy `2af3c4bc`
+  ("feat(api/lead): add extended.age computed from DOB", not in git) was reverted; current
+  `api/lead.js` has no `extended.age`. If age is wanted in Caliber, add it fresh in the repo.
+- The reduced-funnel steps still use the shared `ub2_*` sessionStorage keys — fine (one funnel
+  per session), but rename to `ub4_*` if qualify/4 ever needs isolated analytics.
+
+---
+
 ## Likely orphaned (no inbound links found in the repo)
 
 | Path | Why it looks orphaned | Suggested action before removing |
