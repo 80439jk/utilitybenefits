@@ -1,16 +1,20 @@
 /* ============================================================
-   UtilityBenefits — inactivity "Before you go..." popup
+   UtilityBenefits — inactivity "Are you still there?" popup
    Loaded on the live funnels (/qualify/2/ and /qualify/4/,
    landing + steps) and the thank-you page (/qualify/thank-you/).
    Single shared file, so every funnel behaves identically.
 
-   Behavior mirrors the NBA funnel popup (apply/popup.js):
+   Behavior mirrors the NBA funnel popup (apply/popup.js) — keep
+   the two in sync (see each repo's CLAUDE.md "Popup behavior"):
    - Fires after 30s of mouse/touch inactivity, well after any
      crawler has scored the page. Underlying HTML is identical
      for everyone (not cloaking).
    - Shows once per session (sessionStorage flag) and, once it
      fires or is dismissed, tears down its timer + listeners so
      it never re-pops on the same page.
+   - On the thank-you page it surfaces the case number inside the
+     card (reassurance pattern from NBA) so the caller has it to
+     reference — it deliberately overlaps the on-page number.
    - Pre-rendered hidden so the tel: anchor is in the DOM for
      GTM / Google Forwarding Number scans on page load.
    - Plain tel: anchor — no onclick / preventDefault — so call
@@ -49,7 +53,10 @@
       '.ub-popup-icon{flex-shrink:0;width:2.5rem;height:2.5rem;background:#E5F4EE;border:2px solid #C9E8DA;border-radius:50%;display:flex;align-items:center;justify-content:center}',
       '.ub-popup-icon svg{width:1.25rem;height:1.25rem;color:#0E8E5C}',
       '.ub-popup-title{font-family:"DM Sans","Inter",system-ui,sans-serif;font-size:1.35rem;font-weight:700;color:#0A1F2E;margin:0;line-height:1.2;letter-spacing:-.022em}',
-      '.ub-popup-text{font-size:.96rem;color:#333;line-height:1.6;margin:0 0 1.25rem}',
+      '.ub-popup-text{font-size:.96rem;color:#333;line-height:1.6;margin:0 0 1rem}',
+      // Case-number reassurance line (thank-you only). Mirrors NBA .nba-popup-ref.
+      '.ub-popup-ref{font-size:.875rem;color:#6B7280;line-height:1.5;margin:0 0 1.25rem}',
+      '.ub-popup-ref strong{color:#0A1F2E;font-weight:700}',
       // Call button mirrors the funnel CTA: #1B5E20 dark green, white text.
       // Single tel: anchor — same GTM trigger / Call Conversion behavior.
       '.ub-popup-call-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;width:100%;box-sizing:border-box;padding:.95rem 1rem;background:#1B5E20;color:#fff;font-family:"DM Sans","Inter",system-ui,sans-serif;font-weight:700;border-radius:8px;text-decoration:none;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(27,94,32,.40),0 2px 4px rgba(27,94,32,.18);transition:background .15s,box-shadow .15s,transform .12s;line-height:1.15}',
@@ -65,31 +72,37 @@
       '  .ub-popup-call-btn__cta{font-size:1.15rem}',
       '  .ub-popup-call-btn__phone-row{font-size:1.05rem;gap:.35rem}',
       '  .ub-popup-call-btn__phone-row svg{width:18px;height:18px}',
-      '}',
-      // Thank-you variant: dock the card to the bottom (the case number sits at
-      // the top, so a bottom card never covers it) and lighten the backdrop so
-      // the number stays readable behind it.
-      '.ub-popup-overlay.ub-popup--ty{align-items:flex-end;background:rgba(10,37,64,.5);backdrop-filter:none}',
-      '.ub-popup--ty .ub-popup-card{max-width:400px;margin-bottom:1rem}',
-      // On mobile, clear the fixed sticky call bar (~72px + safe area) at the bottom.
-      '@media(max-width:760px){.ub-popup-overlay.ub-popup--ty{padding-bottom:88px}}'
+      '}'
     ].join('');
     document.head.appendChild(style);
+  }
+
+  // Real case number from the thank-you page (set by its inline script before
+  // this runs). Returns null on funnel/landing pages (no case number yet) or
+  // while it's still the 'UB-2026-0000000' placeholder, so the ref line is only
+  // shown where a genuine number exists.
+  function getCaseNumber() {
+    var el = document.getElementById('ty-case-number');
+    if (!el) return null;
+    var v = (el.textContent || '').trim();
+    return /^UB-2026-\d{7}$/.test(v) && v !== 'UB-2026-0000000' ? v : null;
   }
 
   function buildPopup() {
     var phoneIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.21 12 19.79 19.79 0 0 1 1.14 3.38 2 2 0 0 1 3.11 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
     var closeIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
+    // Case-number reassurance line — thank-you only.
+    var caseNum = getCaseNumber();
+    var refHtml = caseNum
+      ? '<p class="ub-popup-ref">Your case number: <strong>' + caseNum + '</strong></p>'
+      : '';
+
     overlay = document.createElement('div');
     overlay.className = 'ub-popup-overlay';
-    // On the thank-you page, dock to the bottom so the case number stays visible.
-    if (location.pathname.indexOf('/qualify/thank-you') !== -1) {
-      overlay.className += ' ub-popup--ty';
-    }
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-label', 'Before you go');
+    overlay.setAttribute('aria-label', 'Are you still there?');
     // Pre-render: in DOM but hidden until the inactivity trigger fires.
     // GFN's initial DOM scan finds the tel: anchor on page load.
     overlay.style.display = 'none';
@@ -101,9 +114,10 @@
         '<div class="ub-popup-body">' +
           '<div class="ub-popup-header">' +
             '<div class="ub-popup-icon">' + phoneIcon + '</div>' +
-            '<h2 class="ub-popup-title">Before you go...</h2>' +
+            '<h2 class="ub-popup-title">Are you still there?</h2>' +
           '</div>' +
           '<p class="ub-popup-text">Call now and speak with a case manager who can help you find what options may be available to you.</p>' +
+          refHtml +
           '<a href="' + PHONE_TEL + '" class="ub-popup-call-btn">' +
             '<span class="ub-popup-call-btn__cta">Call Now</span>' +
             '<span class="ub-popup-call-btn__phone-row">' + phoneIcon + '<span>' + PHONE_DISPLAY + '</span></span>' +
