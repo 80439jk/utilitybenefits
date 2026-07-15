@@ -17,11 +17,12 @@ Once it fires (or is dismissed), `teardown()` clears the timer and removes the
 mouse/touch listeners, so it **never re-pops on the same page**. (Before this fix
 the inactivity timer kept re-arming on mouse movement and re-showed every 30s.)
 
-On the **thank-you page** the overlay gets a `ub-popup--ty` modifier: it docks to
-the bottom of the screen with a lighter backdrop so the case number stays visible,
-and clears the mobile sticky call bar. The `tel:` anchor is unchanged.
+On the **thank-you page** the popup reads `#ty-case-number` and shows a
+"Your case number: …" line inside the card (NBA's reassurance pattern). Because the
+number is inside the popup, it no longer matters that the modal overlaps the on-page
+number. The `tel:` anchor is unchanged.
 
-- Headline: **Before you go...**
+- Headline: **Are you still there?**
 - Body: *Call now and speak with a case manager who can help you find what options may be available to you.*
 - Call button: **(813) 820-4146** → `tel:+18138204146` (a **dedicated popup line**)
 

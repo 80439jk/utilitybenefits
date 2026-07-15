@@ -33,3 +33,25 @@ that retires one). GTM container: `GTM-WRGCMJLR`. Started-funnel phone: `(813) 8
   underlying HTML is identical for everyone.
 - The lead endpoint `/api/lead/` runs only on a Vercel deploy (not a static local preview); a real
   submit on a deploy creates a real CRM lead.
+
+## Inactivity popup behavior (KEEP IN SYNC WITH NBA)
+
+`qualify/popup.js` is the "Are you still there?" inactivity popup. It is a sibling of NBA's
+`apply/popup.js` and the two must stay behaviorally identical — only brand skin (UB emerald/green
++ DM Sans vs NBA amber/navy + Poppins) and the phone number differ. When you change one, change the
+other and update both CLAUDE.md files. Canonical behavior:
+
+- **Trigger:** fires after **30s** of mouse/touch inactivity (`DELAY = 30000`). Never shorten this.
+- **Once per session:** guarded by `sessionStorage` (`ub_popup_shown` / NBA `nba_popup_shown`).
+- **No re-pop:** on first show/dismiss, `teardown()` clears the timer and removes the inactivity
+  listeners so it **never re-appears on the same page**. (NBA carries the same `teardown()`.)
+- **Runs on:** landing + every funnel step + thank-you — for **both** funnels (`qualify/2/` and
+  `qualify/4/`). Funnel/landing pages lazy-load it (`requestIdleCallback`); thank-you loads it
+  synchronously. Any new funnel must load it on every page.
+- **Case number on thank-you:** the popup reads `#ty-case-number` and shows a "Your case number:"
+  line inside the card (NBA reassurance pattern; NBA reads `#refNumber`). It intentionally overlaps
+  the on-page number — the number is inside the popup, so the caller always has it.
+- **Dedicated phone line:** popup uses its own `tel:` number (UB `+18138204146`) for clean call
+  attribution — never reuse another stage's number here. Plain `tel:` anchor, no `onclick`.
+- **Cache-busting:** `popup.js` is referenced with `?v=N`; bump `N` on every content change (CSS/JS
+  are served `max-age=86400, stale-while-revalidate`, so a stale copy lingers ~1 day otherwise).
