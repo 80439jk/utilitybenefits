@@ -43,8 +43,10 @@ other and update both CLAUDE.md files. Canonical behavior:
 
 - **Trigger:** fires after **30s** of mouse/touch inactivity (`DELAY = 30000`). Never shorten this.
 - **Once per session:** guarded by `sessionStorage` (`ub_popup_shown` / NBA `nba_popup_shown`).
-- **No re-pop:** on first show/dismiss, `teardown()` clears the timer and removes the inactivity
-  listeners so it **never re-appears on the same page**. (NBA carries the same `teardown()`.)
+- **Re-pops after close:** once shown per session, the popup **re-appears 30s after the visitor
+  closes it** on that page (the inactivity timer re-arms on mouse/touch — there is intentionally no
+  teardown). This matches the long-standing NBA behavior. Owner asked for this on 2026-07 after a
+  brief experiment with a once-and-done teardown; do not re-add teardown without owner sign-off.
 - **Runs on:** landing + every funnel step + thank-you — for **both** funnels (`qualify/2/` and
   `qualify/4/`). Funnel/landing pages lazy-load it (`requestIdleCallback`); thank-you loads it
   synchronously. Any new funnel must load it on every page.

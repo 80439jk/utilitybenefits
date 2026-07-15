@@ -13,9 +13,10 @@ After **30 seconds** of no mouse/touch activity, a modal slides in inviting the
 visitor to call. Shows **once per session** (`sessionStorage` key
 `ub_popup_shown`). Dismissed by the close button or clicking the backdrop.
 
-Once it fires (or is dismissed), `teardown()` clears the timer and removes the
-mouse/touch listeners, so it **never re-pops on the same page**. (Before this fix
-the inactivity timer kept re-arming on mouse movement and re-showed every 30s.)
+Shown once per session across page loads, but on the page where it appears it
+**re-appears 30s after the visitor closes it** (the inactivity timer re-arms on
+mouse/touch — intentionally no teardown). This matches the long-standing NBA
+behavior and is what the owner asked for.
 
 On the **thank-you page** the popup reads `#ty-case-number` and shows a
 "Your case number: …" line inside the card (NBA's reassurance pattern). Because the

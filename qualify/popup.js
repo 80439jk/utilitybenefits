@@ -9,9 +9,10 @@
    - Fires after 30s of mouse/touch inactivity, well after any
      crawler has scored the page. Underlying HTML is identical
      for everyone (not cloaking).
-   - Shows once per session (sessionStorage flag) and, once it
-     fires or is dismissed, tears down its timer + listeners so
-     it never re-pops on the same page.
+   - Shows once per session across page loads (sessionStorage
+     flag), but on the page where it appears it RE-POPS 30s after
+     the visitor closes it (the timer re-arms on mouse/touch).
+     This is intentional — matches the long-standing NBA behavior.
    - On the thank-you page it surfaces the case number inside the
      card (reassurance pattern from NBA) so the caller has it to
      reference — it deliberately overlaps the on-page number.
@@ -133,19 +134,8 @@
     document.body.appendChild(overlay);
   }
 
-  // Stop the popup from ever re-arming this page-load: clear the pending timer
-  // and drop the inactivity listeners. Without this, after the popup is shown or
-  // dismissed the timer keeps resetting on mouse/touch and re-fires every 30s.
-  function teardown() {
-    clearTimeout(timer);
-    document.removeEventListener('mousemove', resetTimer);
-    document.removeEventListener('touchstart', resetTimer);
-    document.removeEventListener('touchmove', resetTimer);
-  }
-
   function show() {
     if (!overlay) return;
-    teardown();                 // fire exactly once — never re-arm this session
     sessionStorage.setItem(SESSION_KEY, '1');
     overlay.style.display = 'flex';
     // restart entry animation
