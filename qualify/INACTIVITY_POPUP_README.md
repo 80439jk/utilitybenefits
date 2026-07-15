@@ -1,6 +1,8 @@
 # Inactivity popup ("Before you go...") — UtilityBenefits funnel
 
-Branch: **`pop-up`** (off `main`). Nothing committed/deployed yet pending review.
+Originally built on branch `pop-up`; now live on `main`. `qualify/popup.js` is a
+single shared file loaded by **both live funnels** (`qualify/2/` and `qualify/4/`)
+plus the shared thank-you page, so every funnel behaves identically.
 
 Mirrors the NBA funnel's 30-second inactivity popup (`apply/popup.js`), restyled
 to the UtilityBenefits visual identity (DM Sans + emerald / dark-green).
@@ -10,6 +12,14 @@ to the UtilityBenefits visual identity (DM Sans + emerald / dark-green).
 After **30 seconds** of no mouse/touch activity, a modal slides in inviting the
 visitor to call. Shows **once per session** (`sessionStorage` key
 `ub_popup_shown`). Dismissed by the close button or clicking the backdrop.
+
+Once it fires (or is dismissed), `teardown()` clears the timer and removes the
+mouse/touch listeners, so it **never re-pops on the same page**. (Before this fix
+the inactivity timer kept re-arming on mouse movement and re-showed every 30s.)
+
+On the **thank-you page** the overlay gets a `ub-popup--ty` modifier: it docks to
+the bottom of the screen with a lighter backdrop so the case number stays visible,
+and clears the mobile sticky call bar. The `tel:` anchor is unchanged.
 
 - Headline: **Before you go...**
 - Body: *Call now and speak with a case manager who can help you find what options may be available to you.*
@@ -26,18 +36,33 @@ anchor — no `onclick`/`preventDefault` — so call tracking fires natively.
 | `qualify/popup.js` | The popup (self-contained IIFE, ~150 lines). All styles injected inline under a `ub-popup-` class prefix. |
 | `scripts/install_inactivity_popup.py` | Idempotent installer — injects the `<script>` tag and applies the `tel:` E.164 fix below. Re-running is a no-op. |
 
-### Pages the popup runs on (6 — the live funnel + thank-you, exactly like NBA)
-- `qualify/2/index.html` (landing)
-- `qualify/2/step-1-dob-citizen.html`
-- `qualify/2/step-2-address.html`
-- `qualify/2/step-3-income-employ.html`
-- `qualify/2/step-4-contact.html`
+### Pages the popup runs on (both live funnels + the shared thank-you)
+**Funnel 2 (`qualify/2/`):**
+- `index.html` (landing)
+- `step-1-dob-citizen.html`
+- `step-2-address.html`
+- `step-3-income-employ.html`
+- `step-4-contact.html`
+
+**Funnel 4 (`qualify/4/`, reduced 3-step):**
+- `index.html` (landing)
+- `step-1-dob.html`
+- `step-2-name-email.html`
+- `step-3-phone-tcpa.html`
+
+**Shared:**
 - `qualify/thank-you/index.html`
 
-Each loads it via `<script src="/qualify/popup.js"></script>` placed just before
-`</body>`. On the thank-you page it sits **after** the existing `tel:` click
-tracker so the dedicated popup number is not swept into the `lp_thank_you_call`
-dataLayer event (keeps its attribution separate).
+The funnel/landing/step pages **lazy-load** it (via `requestIdleCallback` / a
+short post-`load` timeout) so it stays off the critical render path. The thank-you
+page loads it with a plain `<script src="/qualify/popup.js"></script>` just before
+`</body>`, placed **after** the existing `tel:` click tracker so the dedicated
+popup number is not swept into the `lp_thank_you_call` dataLayer event (keeps its
+attribution separate).
+
+> Funnel 4's rollback-only orphan step files (`step-1-dob-citizen.html`,
+> `step-2-address.html`, `step-3-income-employ.html`, `step-4-contact.html`) also
+> still contain the loader but are **not linked** by the live reduced funnel.
 
 ### Why `qualify/popup.js` (not a `_`-prefixed file inside `qualify/2/`)
 The repo convention is `_`-prefixed shared files *inside* the funnel folder
