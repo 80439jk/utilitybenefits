@@ -169,6 +169,8 @@ html.oh-closed body:has(.funnel-main) .lp-utility .left::before{background:#9CA8
 /* TCPA consent box */
 .tcpa-box{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:14px}
 .tcpa-box label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:.78rem;color:var(--ink-2);line-height:1.55}
+/* Checkbox-free consent text (<p>) — match funnel 2's label sizing exactly */
+.tcpa-box p{margin:0;font-size:.78rem;color:var(--ink-2);line-height:1.55}
 .tcpa-box input[type=checkbox]{flex-shrink:0;width:18px;height:18px;margin-top:1px;accent-color:#1B5E20}
 .tcpa-box a{color:var(--navy);text-decoration:underline}
 
@@ -229,7 +231,7 @@ html.oh-closed body:has(.funnel-main) .lp-utility .left::before{background:#9CA8
 .funnel-card.compact .field label{margin-bottom:4px}
 .funnel-card.compact .row2{gap:10px}
 .funnel-card.compact .tcpa-box{margin-top:8px;padding:10px 12px}
-.funnel-card.compact .tcpa-box label{font-size:.72rem;line-height:1.4}
+.funnel-card.compact .tcpa-box label,.funnel-card.compact .tcpa-box p{font-size:.72rem;line-height:1.4}
 .funnel-card.compact .actions{margin-top:14px}
 .funnel-card.compact .trust-copy{margin-top:12px;font-size:14px}
 .funnel-card.compact .trust-context{margin-top:6px;font-size:13px}
@@ -303,6 +305,7 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;fo
 
   .tcpa-box { padding: 12px 14px; margin-top: 10px }
   .tcpa-box label { font-size: .74rem; line-height: 1.45; gap: 8px }
+  .tcpa-box p { font-size: .74rem; line-height: 1.45 }
   .tcpa-box input[type=checkbox] { width: 16px; height: 16px }
 
   .actions { margin-top: 24px; padding-left: 0 }

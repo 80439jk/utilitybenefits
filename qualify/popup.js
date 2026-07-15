@@ -1,13 +1,16 @@
 /* ============================================================
    UtilityBenefits — inactivity "Before you go..." popup
-   Loaded on the live funnel (/qualify/2/ landing + 4 steps)
-   and the thank-you page (/qualify/thank-you/).
+   Loaded on the live funnels (/qualify/2/ and /qualify/4/,
+   landing + steps) and the thank-you page (/qualify/thank-you/).
+   Single shared file, so every funnel behaves identically.
 
    Behavior mirrors the NBA funnel popup (apply/popup.js):
    - Fires after 30s of mouse/touch inactivity, well after any
      crawler has scored the page. Underlying HTML is identical
      for everyone (not cloaking).
-   - Shows once per session (sessionStorage flag).
+   - Shows once per session (sessionStorage flag) and, once it
+     fires or is dismissed, tears down its timer + listeners so
+     it never re-pops on the same page.
    - Pre-rendered hidden so the tel: anchor is in the DOM for
      GTM / Google Forwarding Number scans on page load.
    - Plain tel: anchor — no onclick / preventDefault — so call
@@ -62,7 +65,14 @@
       '  .ub-popup-call-btn__cta{font-size:1.15rem}',
       '  .ub-popup-call-btn__phone-row{font-size:1.05rem;gap:.35rem}',
       '  .ub-popup-call-btn__phone-row svg{width:18px;height:18px}',
-      '}'
+      '}',
+      // Thank-you variant: dock the card to the bottom (the case number sits at
+      // the top, so a bottom card never covers it) and lighten the backdrop so
+      // the number stays readable behind it.
+      '.ub-popup-overlay.ub-popup--ty{align-items:flex-end;background:rgba(10,37,64,.5);backdrop-filter:none}',
+      '.ub-popup--ty .ub-popup-card{max-width:400px;margin-bottom:1rem}',
+      // On mobile, clear the fixed sticky call bar (~72px + safe area) at the bottom.
+      '@media(max-width:760px){.ub-popup-overlay.ub-popup--ty{padding-bottom:88px}}'
     ].join('');
     document.head.appendChild(style);
   }
@@ -73,6 +83,10 @@
 
     overlay = document.createElement('div');
     overlay.className = 'ub-popup-overlay';
+    // On the thank-you page, dock to the bottom so the case number stays visible.
+    if (location.pathname.indexOf('/qualify/thank-you') !== -1) {
+      overlay.className += ' ub-popup--ty';
+    }
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-label', 'Before you go');
@@ -105,8 +119,19 @@
     document.body.appendChild(overlay);
   }
 
+  // Stop the popup from ever re-arming this page-load: clear the pending timer
+  // and drop the inactivity listeners. Without this, after the popup is shown or
+  // dismissed the timer keeps resetting on mouse/touch and re-fires every 30s.
+  function teardown() {
+    clearTimeout(timer);
+    document.removeEventListener('mousemove', resetTimer);
+    document.removeEventListener('touchstart', resetTimer);
+    document.removeEventListener('touchmove', resetTimer);
+  }
+
   function show() {
     if (!overlay) return;
+    teardown();                 // fire exactly once — never re-arm this session
     sessionStorage.setItem(SESSION_KEY, '1');
     overlay.style.display = 'flex';
     // restart entry animation

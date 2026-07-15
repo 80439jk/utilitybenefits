@@ -26,7 +26,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/lp/_shared.css" />
-<link rel="stylesheet" href="/qualify/4/_funnel.css?v=3" />
+<link rel="stylesheet" href="/qualify/4/_funnel.css?v=4" />
 <script defer src="/qualify/4/_attribution.js"></script>
 <!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
 <script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
@@ -85,7 +85,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
 
       <div class="tcpa-box">
-        <p id="tcpa-text">By clicking the button below, I confirm I&rsquo;m 18+ and consent to be contacted by UtilityBenefits and its partners via autodialed calls, prerecorded/AI voice, and SMS at the number provided, even if on a Do Not Call list. Consent is not a condition of any service. Message and data rates may apply. Reply STOP to opt out. I agree to the <a href="/legal/terms/">Terms</a> and <a href="/legal/privacy/">Privacy Policy</a>.</p>
+        <p id="tcpa-text">By clicking the button below, you confirm that you are 18 years of age or older. You agree to the UtilityBenefits.com <a href="/legal/terms/">Terms of Use</a> and <a href="/legal/privacy/">Privacy Policy</a> and provide your express consent to be contacted by UtilityBenefits, its service providers, and marketing partners, and that your information may be shared with and used by such partners to contact you, via telephone calls and text messages, including through the use of an automatic telephone dialing system, artificial or prerecorded voice, and AI-generated voice, at the number you provided, even if your number is listed on any federal or state Do Not Call registry. You understand that these communications may include marketing messages. Consent is not a condition of purchase. Message and data rates may apply. Reply STOP to opt out.</p>
       </div>
 
       <!-- Consent is given by submitting (no checkbox). -->
@@ -265,6 +265,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End TrustedForm -->
 
 <!-- Inactivity popup ("Before you go...") — dedicated call line -->
-<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
+<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=2';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
 </body>
 </html>
