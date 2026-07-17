@@ -147,6 +147,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     color:var(--ink);display:block;letter-spacing:-.012em;
   }
   .ty-trust-row .lbl{color:var(--muted);font-size:.76rem;display:block;margin-top:2px}
+
+  /* Tablet/desktop: keep the content in a focused ~560px column (NBA-style),
+     instead of the shared 680px .container-narrow. Mobile is unaffected —
+     below 560px these already span the viewport, so this only tightens the
+     look on wider screens. Header/utility bar stay full-width (standard). */
+  .ty-hero .container-narrow,
+  .ty-helps .container-narrow,
+  .ty-trust .container-narrow{ max-width:560px; }
 </style>
 <!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
 <script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
