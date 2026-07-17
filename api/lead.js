@@ -322,6 +322,7 @@ module.exports = async function handler(req, res) {
     var base = (b.lp === 'qualify4') ? '/qualify/thank-you-4/' : '/qualify/thank-you/';
     let url = base + '?case=' + encodeURIComponent(caseNum)
       + '&zip=' + encodeURIComponent(b.zip || '')
+      + '&state=' + encodeURIComponent(b.state || '')  // funnel 4 personalizes region from state (no zip collected)
       + '&lp='  + encodeURIComponent(b.lp || 'qualify2')
       + '&v='   + encodeURIComponent(b.v  || 'A');
     if (extra && extra.lead_id) url += '&lead_id=' + encodeURIComponent(extra.lead_id);

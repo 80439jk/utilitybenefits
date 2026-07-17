@@ -193,7 +193,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="ty-action">
       <h2>Action Needed</h2>
-      <p>A benefits case manager has been assigned to your file. Call the number below to verify your identity and discuss the assistance programs you may qualify for. This call is <strong>completely free</strong> and can connect you to help right away.<strong class="state-line" id="ty-state-line">A specialist familiar with programs in your area will be on the line.</strong></p>
+      <p><strong>A specialist familiar with programs in your area<span id="ty-region"> (xx/xx)</span> has been assigned to your file.</strong> Call the number below to verify your identity and discuss your available savings options. This call is completely free and there is no commitment.</p>
 
       <a href="tel:+18138204158" class="ty-cta-button" id="ty-call-cta">
         <span class="label">
@@ -312,19 +312,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (el) el.textContent = caseNum;
     });
 
-    // State personalization (zip prefix → region)
+    // Region personalization — funnel 4 collects STATE (not zip). Prefer the
+    // state's 2-letter code; fall back to a zip prefix; if neither is known, drop
+    // the parenthetical entirely so the sentence still reads cleanly.
+    var STATE_ABBR = {
+      'alabama':'AL','alaska':'AK','arizona':'AZ','arkansas':'AR','california':'CA',
+      'colorado':'CO','connecticut':'CT','delaware':'DE','florida':'FL','georgia':'GA',
+      'hawaii':'HI','idaho':'ID','illinois':'IL','indiana':'IN','iowa':'IA',
+      'kansas':'KS','kentucky':'KY','louisiana':'LA','maine':'ME','maryland':'MD',
+      'massachusetts':'MA','michigan':'MI','minnesota':'MN','mississippi':'MS','missouri':'MO',
+      'montana':'MT','nebraska':'NE','nevada':'NV','new hampshire':'NH','new jersey':'NJ',
+      'new mexico':'NM','new york':'NY','north carolina':'NC','north dakota':'ND','ohio':'OH',
+      'oklahoma':'OK','oregon':'OR','pennsylvania':'PA','rhode island':'RI','south carolina':'SC',
+      'south dakota':'SD','tennessee':'TN','texas':'TX','utah':'UT','vermont':'VT',
+      'virginia':'VA','washington':'WA','west virginia':'WV','wisconsin':'WI','wyoming':'WY',
+      'district of columbia':'DC'
+    };
     var ZIP_PREFIX_TO_STATE = {
       '0':'MA/NH/ME','1':'NY/PA','2':'VA/DC/MD','3':'FL/GA','4':'KY/IN/MI/OH',
       '5':'IA/MN/WI','6':'IL/KS/MO','7':'TX/LA','8':'CO/AZ/NM/UT','9':'CA/OR/WA'
     };
-    var zip = params.get('zip') || '';
-    if (/^\d{5}$/.test(zip)) {
-      var region = ZIP_PREFIX_TO_STATE[zip[0]];
-      if (region) {
-        var sl = document.getElementById('ty-state-line');
-        if (sl) sl.textContent = 'A specialist familiar with programs in your area (' + region + ') will be on the line.';
-      }
+    var region = '';
+    var st = (params.get('state') || '').trim();
+    if (st) region = /^[A-Za-z]{2}$/.test(st) ? st.toUpperCase() : (STATE_ABBR[st.toLowerCase()] || '');
+    if (!region) {
+      var zip = params.get('zip') || '';
+      if (/^\d{5}$/.test(zip)) region = ZIP_PREFIX_TO_STATE[zip[0]] || '';
     }
+    var rg = document.getElementById('ty-region');
+    if (rg) rg.textContent = region ? (' (' + region + ')') : '';
 
     // GA4 / dataLayer — view
     window.dataLayer = window.dataLayer || [];
