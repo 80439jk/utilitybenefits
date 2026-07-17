@@ -33,7 +33,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      ============================================================ */
 
   .ty-hero{
-    background:linear-gradient(180deg,var(--emerald-soft) 0%,#F4FAF6 55%,#fff 100%);
+    background:#fff;
     border-bottom:1px solid var(--line);
     padding:30px 0 34px;text-align:center;
   }
@@ -193,7 +193,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="container-narrow">
 
     <span class="ty-medallion">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
     </span>
 
     <h1>Congratulations!</h1>
@@ -211,7 +211,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="num">(813) 820-4158</span>
       </a>
 
-      <p class="ty-reassure"><strong>Reference your case number when you call.</strong> Held 48 hrs &middot; ~4 min avg call</p>
+      <p class="ty-reassure">Held 48 hrs &middot; ~4 min avg call</p>
     </div>
 
   </div>
@@ -220,34 +220,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- What case manager will help with (UB reassurance) -->
 <section class="ty-helps">
   <div class="container-narrow">
-    <h2>What your case manager will help with</h2>
+    <h2>How it works</h2>
     <div class="ty-helps-list">
       <div class="item">
         <div class="icon">1</div>
         <div class="text">
-          <strong>Confirm what you qualify for</strong>
-          Federal programs (LIHEAP, Lifeline, Medicaid HCBS waivers) plus state-specific supplements based on your household.
+          <strong>Confirm savings &amp; discount options</strong>
+          Check eligibility for programs and cheaper plans.
         </div>
       </div>
       <div class="item">
         <div class="icon">2</div>
         <div class="text">
-          <strong>Walk you through enrollment</strong>
-          State-agency forms, utility hardship apps, Lifeline carrier sign-up &mdash; handled live with you on the phone.
+          <strong>Get personal guidance</strong>
+          A specialist will help with enrollment and answer all your questions.
         </div>
       </div>
       <div class="item">
         <div class="icon">3</div>
         <div class="text">
-          <strong>Coordinate with the right office</strong>
-          We hand the file to whichever agency processes it. You don't have to chase paperwork across departments.
-        </div>
-      </div>
-      <div class="item">
-        <div class="icon">4</div>
-        <div class="text">
-          <strong>Email a copy for your records</strong>
-          A written summary, the case manager's name, and what to do if anything needs follow-up.
+          <strong>Access your discounts and savings</strong>
+          100% free service. No hidden fees. No charges. No obligation.
         </div>
       </div>
     </div>
@@ -273,19 +266,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
   <a href="tel:+18138204158" class="call" id="ty-call-sticky">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
-    Call now
+    Call (813) 820-4158
   </a>
 </div>
 
 <!-- TCPA footer -->
 <footer class="lp-footer">
   <div class="container">
-    <p class="lp-tcpa">
-      <strong>TCPA notice.</strong> By submitting your application, you consented to receive autodialed and pre-recorded calls and SMS messages from UtilityBenefits.com and its partner network at the phone number you provided, including for marketing purposes. Reply STOP to opt out at any time. See our <a href="/legal/privacy/">Privacy Policy</a> and <a href="/legal/tcpa/">TCPA Notice</a>.
-    </p>
-    <p class="lp-tcpa">
-      UtilityBenefits.com is an independent comparison and information service operated by UtilityBenefits Research LLC. We are not a government agency and not affiliated with the FCC, USAC, the Lifeline program, LIHEAP, Medicaid, or any other federal or state program. The "reference number" above is an internal tracking reference assigned by UtilityBenefits.com to organize your inquiry; it is not a government file number, claim number, or program-specific application identifier.
-    </p>
     <div class="copyright">
       <span>&copy; 2026 UtilityBenefits Research LLC. All rights reserved.</span>
       <span class="legal-links">
@@ -315,9 +302,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       n = n.slice(-7);
       caseNum = 'UB-2026-' + n;
     }
+    // Display just the 7-digit suffix (drop the "UB-2026-" prefix). Full caseNum
+    // is still used for tracking / CRM correlation below.
+    var shortNum = caseNum.replace(/^UB-2026-/, '');
     ['ty-case-number','ty-case-sticky'].forEach(function(id){
       var el = document.getElementById(id);
-      if (el) el.textContent = caseNum;
+      if (el) el.textContent = shortNum;
     });
 
     // Region personalization — funnel 4 collects STATE (not zip). Prefer the
@@ -379,6 +369,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </script>
 
 <!-- Inactivity popup ("Before you go...") — dedicated call line -->
-<script src="/qualify/popup.js?v=4"></script>
+<script src="/qualify/popup.js?v=5"></script>
 </body>
 </html>

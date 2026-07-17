@@ -117,7 +117,7 @@
             '<div class="ub-popup-icon">' + phoneIcon + '</div>' +
             '<h2 class="ub-popup-title">Are you still there?</h2>' +
           '</div>' +
-          '<p class="ub-popup-text">Call now and speak with a case manager who can help you find what options may be available to you.</p>' +
+          '<p class="ub-popup-text">Call now and speak with a specialist assigned to your area.</p>' +
           refHtml +
           '<a href="' + PHONE_TEL + '" class="ub-popup-call-btn">' +
             '<span class="ub-popup-call-btn__cta">Call Now</span>' +
