@@ -315,10 +315,14 @@ module.exports = async function handler(req, res) {
   // thank-you page. Caliber uses x-request-id for idempotency + audit.
   const reqId = caseNum;
 
-  // Build redirect URL first — we always redirect, even on Caliber failure
+  // Build redirect URL first — we always redirect, even on Caliber failure.
+  // A/B test: funnel 4 (lp='qualify4') gets the NBA-style thank-you page at
+  // /qualify/thank-you-4/; every other funnel keeps the control /qualify/thank-you/.
   function thankYou(extra) {
-    let url = '/qualify/thank-you/?case=' + encodeURIComponent(caseNum)
+    var base = (b.lp === 'qualify4') ? '/qualify/thank-you-4/' : '/qualify/thank-you/';
+    let url = base + '?case=' + encodeURIComponent(caseNum)
       + '&zip=' + encodeURIComponent(b.zip || '')
+      + '&state=' + encodeURIComponent(b.state || '')  // funnel 4 personalizes region from state (no zip collected)
       + '&lp='  + encodeURIComponent(b.lp || 'qualify2')
       + '&v='   + encodeURIComponent(b.v  || 'A');
     if (extra && extra.lead_id) url += '&lead_id=' + encodeURIComponent(extra.lead_id);

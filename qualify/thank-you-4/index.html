@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WRGCMJLR');</script>
+<!-- End Google Tag Manager -->
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Congratulations — Call Your Case Manager Now | UtilityBenefits</title>
+<meta name="description" content="Your benefits application has been received. Call your assigned case manager now to confirm eligibility and complete enrollment." />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="stylesheet" href="/lp/_shared.css" />
+<style>
+  /* ============================================================
+     NBA-STYLE thank-you (funnel-4 A/B test) — UtilityBenefits skin.
+     Celebratory single-focus hero (Congrats -> Reference # -> one
+     "Action Needed" card -> one call button), then UB reassurance below.
+     All GTM / phone / dataLayer tracking is identical to the control page
+     at /qualify/thank-you/.  Design tag: d_nba_congrats.
+     ============================================================ */
+
+  .ty-hero{
+    background:linear-gradient(180deg,var(--emerald-soft) 0%,#F4FAF6 55%,#fff 100%);
+    border-bottom:1px solid var(--line);
+    padding:30px 0 34px;text-align:center;
+  }
+
+  /* Big celebratory check medallion */
+  .ty-medallion{
+    width:104px;height:104px;border-radius:50%;
+    background:#fff;border:6px solid var(--emerald);
+    display:inline-flex;align-items:center;justify-content:center;
+    margin:0 auto 18px;box-shadow:0 10px 30px rgba(14,142,92,.22);
+  }
+  .ty-medallion svg{width:52px;height:52px;color:var(--emerald)}
+  @media(max-width:520px){
+    .ty-medallion{width:88px;height:88px;border-width:5px}
+    .ty-medallion svg{width:44px;height:44px}
+  }
+
+  .ty-hero h1{
+    font-family:'DM Sans','Inter',system-ui,sans-serif;font-weight:700;color:var(--ink);
+    font-size:clamp(2rem,7vw,2.6rem);margin:0 0 12px;line-height:1.05;letter-spacing:-.02em;
+  }
+
+  /* Reference number */
+  .ty-refnum{
+    font-size:clamp(1rem,3vw,1.15rem);color:var(--ink-2);margin:0 0 22px;
+  }
+  .ty-refnum .num{
+    font-family:'DM Sans','Inter',system-ui,sans-serif;font-weight:700;color:var(--navy);
+    font-variant-numeric:tabular-nums;letter-spacing:.02em;
+  }
+
+  /* "Action Needed" card */
+  .ty-action{
+    max-width:520px;margin:0 auto;text-align:center;
+    background:var(--emerald-soft);border:1px solid #C0DFCE;border-radius:14px;
+    padding:24px 22px 26px;
+  }
+  .ty-action h2{
+    font-family:'DM Sans','Inter',system-ui,sans-serif;font-weight:700;color:var(--ink);
+    font-size:clamp(1.25rem,4vw,1.45rem);margin:0 0 12px;letter-spacing:-.015em;
+  }
+  .ty-action p{
+    color:var(--ink-2);font-size:clamp(.95rem,2.5vw,1.02rem);line-height:1.55;
+    margin:0 auto 6px;max-width:440px;
+  }
+  .ty-action p strong{color:var(--ink);font-weight:600}
+  .ty-action .state-line{display:block;margin-top:8px}
+
+  /* Big call button (the single primary action) */
+  .ty-cta-button{
+    display:flex;flex-direction:column;align-items:center;gap:2px;
+    background:var(--emerald);color:#fff;
+    padding:15px 24px 13px;border-radius:10px;margin:18px auto 0;max-width:440px;
+    font-family:'DM Sans','Inter',system-ui,sans-serif;font-weight:700;text-decoration:none;
+    box-shadow:0 10px 30px rgba(14,142,92,.42);
+    transition:background .15s,transform .1s;font-variant-numeric:tabular-nums;
+  }
+  .ty-cta-button:hover{background:var(--emerald-deep);color:#fff;text-decoration:none}
+  .ty-cta-button:active{transform:translateY(1px)}
+  .ty-cta-button .label{
+    display:flex;align-items:center;gap:9px;
+    font-size:clamp(1.02rem,3.2vw,1.18rem);letter-spacing:-.01em;
+  }
+  .ty-cta-button .label svg{width:20px;height:20px}
+  .ty-cta-button .num{font-size:clamp(1.5rem,5.5vw,1.9rem);line-height:1.05;letter-spacing:-.018em}
+
+  .ty-reassure{margin:12px 0 0;color:var(--muted);font-size:.82rem}
+  .ty-reassure strong{color:var(--ink);font-weight:600}
+
+  /* Business-hours toggle (html.oh-closed set pre-paint by the inline head script). */
+  .lp-utility .left::before{width:10px;height:10px;box-shadow:0 0 0 0 rgba(14,142,92,.78);animation:ty-live-pulse 1.6s ease-out infinite}
+  @keyframes ty-live-pulse{0%{box-shadow:0 0 0 0 rgba(14,142,92,.78)}70%{box-shadow:0 0 0 12px rgba(14,142,92,0)}100%{box-shadow:0 0 0 0 rgba(14,142,92,0)}}
+  .lp-utility .left .hrs-closed{display:none}
+  html.oh-closed .lp-utility .left .hrs-open{display:none}
+  html.oh-closed .lp-utility .left .hrs-closed{display:inline}
+  html.oh-closed .lp-utility .left::before{background:#9CA8B5;animation:none;box-shadow:none}
+
+  /* What case manager helps with (UB reassurance, kept below the fold) */
+  .ty-helps{
+    padding:32px 0;background:var(--bg);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .ty-helps h2{
+    font-family:'DM Sans','Inter',system-ui,sans-serif;font-size:1.2rem;
+    color:var(--ink);margin:0 0 18px;text-align:center;letter-spacing:-.012em;
+  }
+  .ty-helps-list{
+    max-width:640px;margin:0 auto;background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:6px 0;
+  }
+  .ty-helps-list .item{
+    display:flex;gap:13px;padding:13px 22px;border-bottom:1px solid var(--line);
+  }
+  .ty-helps-list .item:last-child{border-bottom:0}
+  .ty-helps-list .icon{
+    flex-shrink:0;width:26px;height:26px;border-radius:6px;
+    background:var(--emerald-soft);color:var(--emerald-deep);
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;
+  }
+  .ty-helps-list .text{font-size:.92rem;line-height:1.5;color:var(--ink-2)}
+  .ty-helps-list .text strong{color:var(--ink);display:block;margin-bottom:2px;font-weight:600}
+
+  /* Trust strip (kept) */
+  .ty-trust{padding:24px 0;background:var(--bg);border-top:1px solid var(--line)}
+  .ty-trust-row{
+    display:flex;justify-content:space-around;flex-wrap:wrap;gap:16px;text-align:center;
+  }
+  .ty-trust-row .item{flex:1;min-width:140px}
+  .ty-trust-row .num{
+    font-family:'DM Sans','Inter',system-ui,sans-serif;font-size:1.05rem;font-weight:700;
+    color:var(--ink);display:block;letter-spacing:-.012em;
+  }
+  .ty-trust-row .lbl{color:var(--muted);font-size:.76rem;display:block;margin-top:2px}
+</style>
+<!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
+<script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRGCMJLR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<!-- Top utility bar -->
+<div class="lp-utility">
+  <div class="container row">
+    <span class="left"><span class="hrs-open"><strong>Live</strong> &mdash; agents available now</span><span class="hrs-closed">Call M-F 9:30am&ndash;6pm ET</span></span>
+    <span class="right"><a href="tel:+18138204158">(813) 820-4158</a></span>
+  </div>
+</div>
+
+<!-- Stripped header -->
+<header class="lp-header">
+  <div class="container">
+    <a href="/" class="lp-logo"><span class="mark">UB</span> UtilityBenefits</a>
+    <a href="tel:+18138204158" class="phone">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+      (813) 820-4158
+    </a>
+  </div>
+</header>
+
+<!-- ============================================================
+     ABOVE-THE-FOLD HERO (NBA-style)
+     medallion -> Congratulations -> Reference # -> Action Needed card -> call
+     ============================================================ -->
+<section class="ty-hero">
+  <div class="container-narrow">
+
+    <span class="ty-medallion">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    </span>
+
+    <h1>Congratulations!</h1>
+    <p class="ty-refnum">Your Reference Number: <span class="num" id="ty-case-number">UB-2026-0000000</span></p>
+
+    <div class="ty-action">
+      <h2>Action Needed</h2>
+      <p><strong>A specialist familiar with programs in your area<span id="ty-region"> (xx/xx)</span> has been assigned to your file.</strong> Call the number below to verify your identity and discuss your available savings options. This call is completely free and there is no commitment.</p>
+
+      <a href="tel:+18138204158" class="ty-cta-button" id="ty-call-cta">
+        <span class="label">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+          Call Now to Get Started
+        </span>
+        <span class="num">(813) 820-4158</span>
+      </a>
+
+      <p class="ty-reassure"><strong>Reference your case number when you call.</strong> Held 48 hrs &middot; ~4 min avg call</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- What case manager will help with (UB reassurance) -->
+<section class="ty-helps">
+  <div class="container-narrow">
+    <h2>What your case manager will help with</h2>
+    <div class="ty-helps-list">
+      <div class="item">
+        <div class="icon">1</div>
+        <div class="text">
+          <strong>Confirm what you qualify for</strong>
+          Federal programs (LIHEAP, Lifeline, Medicaid HCBS waivers) plus state-specific supplements based on your household.
+        </div>
+      </div>
+      <div class="item">
+        <div class="icon">2</div>
+        <div class="text">
+          <strong>Walk you through enrollment</strong>
+          State-agency forms, utility hardship apps, Lifeline carrier sign-up &mdash; handled live with you on the phone.
+        </div>
+      </div>
+      <div class="item">
+        <div class="icon">3</div>
+        <div class="text">
+          <strong>Coordinate with the right office</strong>
+          We hand the file to whichever agency processes it. You don't have to chase paperwork across departments.
+        </div>
+      </div>
+      <div class="item">
+        <div class="icon">4</div>
+        <div class="text">
+          <strong>Email a copy for your records</strong>
+          A written summary, the case manager's name, and what to do if anything needs follow-up.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust strip -->
+<section class="ty-trust">
+  <div class="container-narrow">
+    <div class="ty-trust-row">
+      <div class="item"><span class="num">100%</span><span class="lbl">Free service</span></div>
+      <div class="item"><span class="num">Independent</span><span class="lbl">Not a government agency</span></div>
+      <div class="item"><span class="num">Encrypted</span><span class="lbl">Your info stays secure</span></div>
+      <div class="item"><span class="num">No spam</span><span class="lbl">We don't resell your info</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Mobile sticky bottom call bar -->
+<div class="lp-sticky-call" role="region" aria-label="Call your case manager">
+  <div class="meta">
+    Case #<strong id="ty-case-sticky">UB-2026-0000000</strong>
+  </div>
+  <a href="tel:+18138204158" class="call" id="ty-call-sticky">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+    Call now
+  </a>
+</div>
+
+<!-- TCPA footer -->
+<footer class="lp-footer">
+  <div class="container">
+    <p class="lp-tcpa">
+      <strong>TCPA notice.</strong> By submitting your application, you consented to receive autodialed and pre-recorded calls and SMS messages from UtilityBenefits.com and its partner network at the phone number you provided, including for marketing purposes. Reply STOP to opt out at any time. See our <a href="/legal/privacy/">Privacy Policy</a> and <a href="/legal/tcpa/">TCPA Notice</a>.
+    </p>
+    <p class="lp-tcpa">
+      UtilityBenefits.com is an independent comparison and information service operated by UtilityBenefits Research LLC. We are not a government agency and not affiliated with the FCC, USAC, the Lifeline program, LIHEAP, Medicaid, or any other federal or state program. The "reference number" above is an internal tracking reference assigned by UtilityBenefits.com to organize your inquiry; it is not a government file number, claim number, or program-specific application identifier.
+    </p>
+    <div class="copyright">
+      <span>&copy; 2026 UtilityBenefits Research LLC. All rights reserved.</span>
+      <span class="legal-links">
+        <a href="/legal/privacy/">Privacy</a>
+        <a href="/legal/terms/">Terms</a>
+        <a href="/legal/tcpa/">TCPA</a>
+        <a href="/legal/do-not-sell/">Do Not Sell My Info</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Hydrate from URL params (case, zip, lp, v, utm_*).
+  // If no case param, generate one (so direct hits still look right).
+  // IDENTICAL tracking contract to the control page /qualify/thank-you/ —
+  // only the 'design' tag differs so GA can compare call rates.
+  (function(){
+    var params = new URLSearchParams(window.location.search);
+
+    // Case / reference number
+    var caseNum = params.get('case');
+    if (!caseNum || !/^UB-2026-\d{7}$/.test(caseNum)) {
+      var seed = Date.now() % 1000000;
+      var rand = Math.floor(Math.random() * 9000) + 1000;
+      var n = String(seed).padStart(4,'0') + String(rand).slice(-3);
+      n = n.slice(-7);
+      caseNum = 'UB-2026-' + n;
+    }
+    ['ty-case-number','ty-case-sticky'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.textContent = caseNum;
+    });
+
+    // Region personalization — funnel 4 collects STATE (not zip). Prefer the
+    // state's 2-letter code; fall back to a zip prefix; if neither is known, drop
+    // the parenthetical entirely so the sentence still reads cleanly.
+    var STATE_ABBR = {
+      'alabama':'AL','alaska':'AK','arizona':'AZ','arkansas':'AR','california':'CA',
+      'colorado':'CO','connecticut':'CT','delaware':'DE','florida':'FL','georgia':'GA',
+      'hawaii':'HI','idaho':'ID','illinois':'IL','indiana':'IN','iowa':'IA',
+      'kansas':'KS','kentucky':'KY','louisiana':'LA','maine':'ME','maryland':'MD',
+      'massachusetts':'MA','michigan':'MI','minnesota':'MN','mississippi':'MS','missouri':'MO',
+      'montana':'MT','nebraska':'NE','nevada':'NV','new hampshire':'NH','new jersey':'NJ',
+      'new mexico':'NM','new york':'NY','north carolina':'NC','north dakota':'ND','ohio':'OH',
+      'oklahoma':'OK','oregon':'OR','pennsylvania':'PA','rhode island':'RI','south carolina':'SC',
+      'south dakota':'SD','tennessee':'TN','texas':'TX','utah':'UT','vermont':'VT',
+      'virginia':'VA','washington':'WA','west virginia':'WV','wisconsin':'WI','wyoming':'WY',
+      'district of columbia':'DC'
+    };
+    var ZIP_PREFIX_TO_STATE = {
+      '0':'MA/NH/ME','1':'NY/PA','2':'VA/DC/MD','3':'FL/GA','4':'KY/IN/MI/OH',
+      '5':'IA/MN/WI','6':'IL/KS/MO','7':'TX/LA','8':'CO/AZ/NM/UT','9':'CA/OR/WA'
+    };
+    var region = '';
+    var st = (params.get('state') || '').trim();
+    if (st) region = /^[A-Za-z]{2}$/.test(st) ? st.toUpperCase() : (STATE_ABBR[st.toLowerCase()] || '');
+    if (!region) {
+      var zip = params.get('zip') || '';
+      if (/^\d{5}$/.test(zip)) region = ZIP_PREFIX_TO_STATE[zip[0]] || '';
+    }
+    var rg = document.getElementById('ty-region');
+    if (rg) rg.textContent = region ? (' (' + region + ')') : '';
+
+    // GA4 / dataLayer — view
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'event': 'lp_thank_you_view',
+      'design': 'd_nba_congrats',
+      'case_number': caseNum,
+      'lp_slug': params.get('lp') || '',
+      'lp_variant': params.get('v') || sessionStorage.getItem('lp_v') || 'A',
+      'utm_source': params.get('utm_source') || '',
+      'utm_medium': params.get('utm_medium') || '',
+      'utm_campaign': params.get('utm_campaign') || ''
+    });
+
+    // Phone-click tracking — fires the call conversion (same event as control)
+    document.querySelectorAll('a[href^="tel:"]').forEach(function(a){
+      a.addEventListener('click', function(){
+        window.dataLayer.push({
+          'event': 'lp_thank_you_call',
+          'case_number': caseNum,
+          'cta_location': a.id || 'header_or_footer'
+        });
+      });
+    });
+
+    try { sessionStorage.setItem('ub_case', caseNum); } catch(e) {}
+  })();
+</script>
+
+<!-- Inactivity popup ("Before you go...") — dedicated call line -->
+<script src="/qualify/popup.js?v=4"></script>
+</body>
+</html>
