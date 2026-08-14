@@ -319,7 +319,9 @@ module.exports = async function handler(req, res) {
   // A/B test: funnel 4 (lp='qualify4') gets the NBA-style thank-you page at
   // /qualify/thank-you-4/; every other funnel keeps the control /qualify/thank-you/.
   function thankYou(extra) {
-    var base = (b.lp === 'qualify4') ? '/qualify/thank-you-4/' : '/qualify/thank-you/';
+    var base = '/qualify/thank-you/';
+    if (b.lp === 'qualify4') base = '/qualify/thank-you-4/';
+    else if (b.lp === 'qualify5') base = '/qualify/thank-you-5/';  // lean phone-first variant
     let url = base + '?case=' + encodeURIComponent(caseNum)
       + '&zip=' + encodeURIComponent(b.zip || '')
       + '&state=' + encodeURIComponent(b.state || '')  // funnel 4 personalizes region from state (no zip collected)
