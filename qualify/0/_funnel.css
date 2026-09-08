@@ -167,7 +167,7 @@ html.oh-closed body:has(.funnel-main) .lp-utility .left::before{background:#9CA8
 }
 
 /* TCPA consent box */
-.tcpa-box{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:14px}
+.tcpa-box{margin-top:14px}
 .tcpa-box label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:.78rem;color:var(--ink-2);line-height:1.55}
 /* Checkbox-free consent text (<p>) — match funnel 2's label sizing exactly */
 .tcpa-box p{margin:0;font-size:.78rem;color:var(--ink-2);line-height:1.55}
@@ -230,7 +230,7 @@ html.oh-closed body:has(.funnel-main) .lp-utility .left::before{background:#9CA8
 .funnel-card.compact .field{margin-bottom:10px}
 .funnel-card.compact .field label{margin-bottom:4px}
 .funnel-card.compact .row2{gap:10px}
-.funnel-card.compact .tcpa-box{margin-top:8px;padding:10px 12px}
+.funnel-card.compact .tcpa-box{margin-top:8px}
 .funnel-card.compact .tcpa-box label,.funnel-card.compact .tcpa-box p{font-size:.72rem;line-height:1.4}
 .funnel-card.compact .actions{margin-top:14px}
 .funnel-card.compact .trust-copy{margin-top:12px;font-size:14px}
@@ -303,7 +303,7 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;fo
   .section-title { font-size: .96rem; margin: 16px 0 4px; gap: 8px }
   .section-title .n { width: 24px; height: 24px; font-size: .82rem }
 
-  .tcpa-box { padding: 12px 14px; margin-top: 10px }
+  .tcpa-box { margin-top: 10px }
   .tcpa-box label { font-size: .74rem; line-height: 1.45; gap: 8px }
   .tcpa-box p { font-size: .74rem; line-height: 1.45 }
   .tcpa-box input[type=checkbox] { width: 16px; height: 16px }
@@ -335,7 +335,7 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;fo
   .funnel-card.compact .field{margin-bottom:10px}
   .funnel-card.compact .row2{gap:8px}
   .funnel-card.compact h2{font-size:22px;margin:4px 0 12px}
-  .funnel-card.compact .tcpa-box{margin-top:8px;padding:10px 12px}
+  .funnel-card.compact .tcpa-box{margin-top:8px}
   .funnel-card.compact .tcpa-box label{font-size:.72rem;line-height:1.4}
   .funnel-card.compact .actions{margin-top:14px}
 }
