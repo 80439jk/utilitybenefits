@@ -57,6 +57,31 @@ user agreed. The user could not disagree.
 The consent text now starts with "By checking this box and clicking the button
 below". This sentence agrees with the action that the user does.
 
+## Consent language — different from the other funnels
+
+`/qualify/0/` does **not** use the consent text from `/qualify/2/`, `/qualify/4/`
+or `/qualify/5/`. Those funnels are lead generation. They ask the user to agree
+that UtilityBenefits, **its service providers and its marketing partners** can
+call, and that the telephone number **can be given to those partners**.
+
+A carrier does not accept that text for 10DLC. SMS consent must name **one
+sender**, and it must not permit the sale or transfer of the number.
+
+The text on this page is the same as NBA `/apply/0/`, with the UB brand name:
+
+- Consent is to be contacted by **UtilityBenefits only**. The text does not name
+  service providers or marketing partners, and the number is not shared.
+- The text does not say that the messages can include marketing messages.
+- It says **express written consent**, not "express consent".
+- It gives the message frequency: **up to 10 messages per month**.
+- It gives both keywords: **STOP** to stop, and **HELP** for help.
+
+The last two sentences are about **email** marketing. They are permitted to name
+partners, because they are not part of the SMS consent.
+
+**Do not copy the text from another funnel to this page.** Do not copy this text
+to another funnel — the other funnels need their broader permission.
+
 ## Consent behavior (by design)
 
 The checkbox is **clear by default**. The checkbox is **not `required`**. The
