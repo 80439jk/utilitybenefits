@@ -4,9 +4,25 @@ UtilityBenefits.com is a content-led lead-generation site (utility assistance + 
 electricity, gas, internet, cell phone, water, security) deployed on Vercel (project
 `utilitybenefits`, domain utilitybenefits.com). Static HTML + a Vercel serverless lead endpoint
 at `/api/lead/`. The conversion funnel lives under `/qualify/` as **flat step `.html` files** plus a
-shared `_funnel.css` / `_attribution.js`. `/qualify/2/` and `/qualify/4/` are live A/B variants
-(paid traffic is split by ad destination, so **both must stay reachable** — don't add a redirect
-that retires one). GTM container: `GTM-WRGCMJLR`. Started-funnel phone: `(813) 820-4157`.
+shared `_funnel.css` / `_attribution.js`.
+
+**Funnel map (confirmed 2026-09-08):**
+- `/qualify/2/` and `/qualify/5/` are the **live paid** A/B variants (paid traffic is split by ad
+  destination, so **both must stay reachable** — don't add a redirect that retires one).
+- `/qualify/0/` is the **10DLC / SMS compliance funnel**. Every main-site CTA points here. It is a
+  clone of the `/qualify/4/` 3-step chain with a real consent checkbox. See `qualify/0/README.md`.
+- `/qualify/4/` **no longer receives paid traffic** and no longer receives main-site CTAs. It stays
+  live as a safety net for any ad that still points at it. Retirement candidate — see
+  `ORPHANS-10DLC.md`.
+- `/qualify/3/` is inactive.
+
+**Consent is a real checkbox on every live funnel.** `/qualify/0/`, `/qualify/2/`, `/qualify/4/` and
+`/qualify/5/` each render the TCPA text as the label of an `#tcpa` checkbox. Never replace one with a
+hidden `tcpa=1` field — that records consent the user never gave. Only `/qualify/2/` marks the box
+`required`; on the others the box is optional and does **not** gate the submit button, so an
+unchecked box still submits a lead with `consent.given: false` (do not SMS those leads).
+
+GTM container: `GTM-WRGCMJLR`. Started-funnel phone: `(813) 820-4157`.
 
 ## Working rules (always follow)
 
@@ -47,8 +63,9 @@ other and update both CLAUDE.md files. Canonical behavior:
   closes it** on that page (the inactivity timer re-arms on mouse/touch — there is intentionally no
   teardown). This matches the long-standing NBA behavior. Owner asked for this on 2026-07 after a
   brief experiment with a once-and-done teardown; do not re-add teardown without owner sign-off.
-- **Runs on:** landing + every funnel step + thank-you — for **both** funnels (`qualify/2/` and
-  `qualify/4/`). Funnel/landing pages lazy-load it (`requestIdleCallback`); thank-you loads it
+- **Runs on:** landing + every funnel step + thank-you — for **every** funnel (`qualify/0/`,
+  `qualify/2/`, `qualify/4/`, `qualify/5/`). Funnel/landing pages lazy-load it
+  (`requestIdleCallback`); thank-you loads it
   synchronously. Any new funnel must load it on every page.
 - **Case number on thank-you:** the popup reads `#ty-case-number` and shows a "Your case number:"
   line inside the card (NBA reassurance pattern; NBA reads `#refNumber`). It intentionally overlaps

@@ -85,11 +85,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
 
       <div class="tcpa-box">
-        <p id="tcpa-text">By clicking the button below, you confirm that you are 18 years of age or older. You agree to the UtilityBenefits.com <a href="/legal/terms/">Terms of Use</a> and <a href="/legal/privacy/">Privacy Policy</a> and provide your express consent to be contacted by UtilityBenefits, its service providers, and marketing partners, and that your information may be shared with and used by such partners to contact you, via telephone calls and text messages, including through the use of an automatic telephone dialing system, artificial or prerecorded voice, and AI-generated voice, at the number you provided, even if your number is listed on any federal or state Do Not Call registry. You understand that these communications may include marketing messages. Consent is not a condition of purchase. Message and data rates may apply. Reply STOP to opt out.</p>
+        <label for="tcpa">
+          <input type="checkbox" id="tcpa" name="tcpa" value="1" />
+          <span id="tcpa-text">By checking this box and clicking the button below, you confirm that you are 18 years of age or older. You agree to the UtilityBenefits.com <a href="/legal/terms/">Terms of Use</a> and <a href="/legal/privacy/">Privacy Policy</a> and provide your express consent to be contacted by UtilityBenefits, its service providers, and marketing partners, and that your information may be shared with and used by such partners to contact you, via telephone calls and text messages, including through the use of an automatic telephone dialing system, artificial or prerecorded voice, and AI-generated voice, at the number you provided, even if your number is listed on any federal or state Do Not Call registry. You understand that these communications may include marketing messages. Consent is not a condition of purchase. Message and data rates may apply. Reply STOP to opt out.</span>
+        </label>
       </div>
-
-      <!-- Consent is given by submitting (no checkbox). -->
-      <input type="hidden" name="tcpa" id="tcpa" value="1" />
 
       <!-- ============ Prior-step values (filled by JS from sessionStorage) ============ -->
       <input type="hidden" name="first"  id="h_first" />
