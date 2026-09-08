@@ -318,9 +318,12 @@ module.exports = async function handler(req, res) {
   // Build redirect URL first — we always redirect, even on Caliber failure.
   // A/B test: funnel 4 (lp='qualify4') gets the NBA-style thank-you page at
   // /qualify/thank-you-4/; every other funnel keeps the control /qualify/thank-you/.
+  // Funnel 0 (lp='qualify0') is the 10DLC compliance funnel — a clone of funnel 4,
+  // so it shares thank-you-4. Sharing keeps the existing GTM triggers and conversion
+  // tracking untouched; the funnels stay separable in the CRM through the lp field.
   function thankYou(extra) {
     var base = '/qualify/thank-you/';
-    if (b.lp === 'qualify4') base = '/qualify/thank-you-4/';
+    if (b.lp === 'qualify4' || b.lp === 'qualify0') base = '/qualify/thank-you-4/';
     else if (b.lp === 'qualify5') base = '/qualify/thank-you-5/';  // lean phone-first variant
     let url = base + '?case=' + encodeURIComponent(caseNum)
       + '&zip=' + encodeURIComponent(b.zip || '')
