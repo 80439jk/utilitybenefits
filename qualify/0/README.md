@@ -76,8 +76,14 @@ The text on this page is the same as NBA `/apply/0/`, with the UB brand name:
 - It gives the message frequency: **up to 10 messages per month**.
 - It gives both keywords: **STOP** to stop, and **HELP** for help.
 
-The last two sentences are about **email** marketing. They are permitted to name
-partners, because they are not part of the SMS consent.
+The consent block is **SMS only**. It says nothing about email (owner's decision,
+9 Sep 2026). Before that date it ended with two sentences about email marketing
+that named "affiliated brands and marketing partners". A carrier agent reads the
+full block, not only the SMS sentence, thus that phrase was a risk even though it
+applied to email. Both sentences were removed together, because an unsubscribe
+promise with no email consent to attach to reads as an error.
+
+**No third party is named anywhere in this block.** Keep it that way.
 
 **Do not copy the text from another funnel to this page.** Do not copy this text
 to another funnel — the other funnels need their broader permission.
