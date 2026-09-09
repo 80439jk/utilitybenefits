@@ -22,7 +22,7 @@ hidden `tcpa=1` field — that records consent the user never gave. Only `/quali
 `required`; on the others the box is optional and does **not** gate the submit button, so an
 unchecked box still submits a lead with `consent.given: false` (do not SMS those leads).
 
-**`/qualify/0/` carries different consent copy on purpose.** Its text grants consent to **UtilityBenefits alone** and never permits sharing the number — carriers reject the "service providers, and marketing partners … may be shared with" wording used by `qualify/2`, `/4` and `/5`, which is why those are not the 10DLC funnel. It also carries the message-frequency disclosure and the HELP keyword, which the other funnels lack. It mirrors NBA `apply/0`. Never sync consent copy between `qualify/0` and the lead-gen funnels in either direction — see `qualify/0/README.md`.
+**`/qualify/0/` carries different consent copy on purpose.** Its text grants consent to **UtilityBenefits alone** and never permits sharing the number — carriers reject the "service providers, and marketing partners … may be shared with" wording used by `qualify/2`, `/4` and `/5`, which is why those are not the 10DLC funnel. It also carries the message-frequency disclosure and the HELP keyword, which the other funnels lack, and it is **SMS only** — it names no third party and makes no email claim. It mirrors NBA `apply/0`. Never sync consent copy between `qualify/0` and the lead-gen funnels in either direction — see `qualify/0/README.md`.
 
 GTM container: `GTM-WRGCMJLR`. Started-funnel phone: `(813) 820-4157`.
 
