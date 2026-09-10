@@ -31,6 +31,10 @@ Disallow: /qualify/thank-you/
 Disallow: /qualify/thank-you-v2/
 Disallow: /qualify/thank-you-v3/
 
+# Block /qualify/dni/ — DNI test clones of the /2/ and /5/ funnels.
+# Not a live funnel; never receives ads or main-site CTAs.
+Disallow: /qualify/dni/
+
 # Block /preview/ — internal homepage design previews
 Disallow: /preview/
 Disallow: /api/

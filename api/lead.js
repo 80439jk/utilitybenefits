@@ -321,10 +321,15 @@ module.exports = async function handler(req, res) {
   // Funnel 0 (lp='qualify0') is the 10DLC compliance funnel — a clone of funnel 4,
   // so it shares thank-you-4. Sharing keeps the existing GTM triggers and conversion
   // tracking untouched; the funnels stay separable in the CRM through the lp field.
+  // lp='qualify2dni'/'qualify5dni' are the DNI test clones under /qualify/dni/.
+  // They must land on their own thank-you clones so the thank-you DNI pool is
+  // exercised; the distinct lp is also how test leads are suppressed in the CRM.
   function thankYou(extra) {
     var base = '/qualify/thank-you/';
     if (b.lp === 'qualify4' || b.lp === 'qualify0') base = '/qualify/thank-you-4/';
     else if (b.lp === 'qualify5') base = '/qualify/thank-you-5/';  // lean phone-first variant
+    else if (b.lp === 'qualify2dni') base = '/qualify/dni/thank-you/2/';
+    else if (b.lp === 'qualify5dni') base = '/qualify/dni/thank-you/5/';
     let url = base + '?case=' + encodeURIComponent(caseNum)
       + '&zip=' + encodeURIComponent(b.zip || '')
       + '&state=' + encodeURIComponent(b.state || '')  // funnel 4 personalizes region from state (no zip collected)
