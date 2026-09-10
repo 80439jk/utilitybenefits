@@ -109,8 +109,8 @@ Tenant **Intercom Media LLC** `99f90502-f0ce-4d03-aa41-2e138d453731`.
 
 | Pool | Number | `reservation_seconds` | `default_number` |
 |---|---|---|---|
-| Funnel | `+18336130264` | 900 | `+18138204157` |
-| Thank You | `+18339370155` | 600 | `+18138204158` |
+| Funnel | `+18336130264` | 900 | `+18135550157` |
+| Thank You | `+18339370155` | 600 | `+18135550158` |
 
 Both pools: `exhausted_behavior = show_default`, `allowed_domains =
 utilitybenefits.com, www.utilitybenefits.com, *.utilitybenefits.com`.
@@ -196,9 +196,10 @@ stage's pool UUID. For reference, the rules that were followed:
    > The upstream dev instructions claim tagging the `<a>` preserves an inline
    > `<svg>` because the replacer targets the phone-number *text node*. That was
    > not true of either swap path until Sparrow PR #156; see the section above.
-2. Keep the hardcoded `(813) 820-4157` / `4158` text and `href` as the fallback —
+2. Keep the hardcoded `(813) 555-0157` / `0158` text and `href` as the fallback —
    it is what renders with JS off, when the pool is exhausted, and what crawlers
-   see. Do not hand-edit the `href`; the swapper rewrites it.
+   see. Do not hand-edit the `href`; the swapper rewrites it. These are
+   deliberately unroutable; see "Fallback numbers" below.
 3. Add one snippet per page in `<head>` after GTM, with the pool UUID for that
    stage:
 
@@ -241,35 +242,49 @@ on real traffic. Deploy `sparrow-dni` **first** (it owns `PoolStateDO`), then
 
 ## Follow-ups
 
-- **Fallback numbers are the live ones for now** (`+18138204157` funnel,
-  `+18138204158` thank-you). Swap to dedicated static test numbers once purchased,
-  so a fallback-path test call is distinguishable from live traffic.
-- **Google Forwarding Number is live and container-wide, but number-targeted.**
-  Confirmed by reading the published `GTM-WRGCMJLR` container on 2026-09-10.
-  Three call-conversion (`__awcc`) tags fire on **every** page (trigger is
-  `gtm.init` with no URL condition), including these clones:
+### Fallback numbers are deliberately unroutable
 
-  | Tag | `phone_conversion_number` | Stage |
-  |-----|---------------------------|-------|
-  | 6   | `(813) 820-4158`          | thank-you |
-  | 10  | `(813) 820-4157`          | funnel |
-  | 14  | `(813) 820-4146`          | popup |
+The fallback text and `href` are `(813) 555-0157` (funnel) and `(813) 555-0158`
+(thank-you), and both pools' `default_number` matches. They are **not** the live
+`4157` / `4158` lines, for two reasons.
 
-  `__awcc` only rewrites anchors whose text matches its configured number, so it
-  cannot touch a pool number such as `(833) 613-0264`. **The order of the two
-  swaps is what matters.** Edge Inject rewrites at the CDN before the HTML
-  reaches the browser, so GTM sees the pool number and finds nothing to swap.
+**They dodge Google Forwarding Number.** GFN is live and fires container-wide;
+see below. Its tags key off the *exact displayed number*, so a fallback that is
+not a GFN target cannot be hijacked.
 
-  Two cases still collide, both worth watching on the first call test:
-  1. **Pool exhausted / worker bypassed.** The page then renders its fallback,
-     which is exactly `(813) 820-4157` / `4158` — a GFN target. GFN swaps it and
-     the call is attributed to Google, not the pool.
-  2. **Popup (`(813) 820-4146`).** All 12 clone pages load `popup.js`, and tag 14
-     targets that number. The popup is not DNI-tagged, so GFN owns it as before.
-     Expected, but it means a popup call is not a DNI test call.
+**They cannot ring a stranger.** `555-0100` through `555-0199` is the NANP block
+reserved for fictional use, so it is unassignable. A genuinely random number
+would be someone's real line, and every one of these is inside a `tel:` anchor a
+tester may tap.
 
-  Removing GFN entirely is the documented end state (see the migration guide);
-  until then, verify the swap landed before trusting any test call.
+Consequence worth knowing: a fallback-path call **does not connect**. That is the
+intent — if the pool fails you want an obvious dead end, not a silent fallthrough
+to a live sales line that logs as organic. Buy dedicated routable 813 numbers
+before any test that needs the fallback to actually answer.
+
+### Google Forwarding Number is live and container-wide, but number-targeted
+
+Confirmed by reading the published `GTM-WRGCMJLR` container on 2026-09-10. Three
+call-conversion (`__awcc`) tags fire on **every** page (trigger is `gtm.init`
+with no URL condition), including these clones:
+
+| Tag | `phone_conversion_number` | Stage | On these pages? |
+|-----|---------------------------|-------|-----------------|
+| 6   | `(813) 820-4158`          | thank-you | no target present |
+| 10  | `(813) 820-4157`          | funnel    | no target present |
+| 14  | `(813) 820-4146`          | popup     | **yes, via `popup.js`** |
+
+`__awcc` only rewrites anchors whose text matches its configured number. Since
+the fallbacks moved to `555-01xx`, tags 6 and 10 have nothing to match on these
+pages — in either the swapped state or the pool-exhausted state. That closes the
+attribution hole that existed while the fallbacks were the live numbers.
+
+**Tag 14 still applies to the popup.** All 12 pages load `/qualify/popup.js`,
+which is *shared with the live funnels* and must not be edited for this test. Its
+`(813) 820-4146` line is not DNI-tagged, so GFN owns it exactly as before. A
+popup call is therefore not a DNI test call — dial from the page, not the popup.
+
+Removing GFN entirely is the documented end state (see the migration guide).
 
 ## Rollback
 
