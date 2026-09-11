@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WRGCMJLR');</script>
+<!-- End Google Tag Manager -->
+
+<!-- PostbackCalls DNI (funnel pool). Companion to server-side Edge Inject:
+     this snippet owns click tracking, session heartbeats, and number release. -->
+<script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js"
+        data-sparrow-pool="c7a9acee-ab84-41ea-9b55-2e387dc2a943" async></script>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Step 1: Basic information — UtilityBenefits</title>
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://www.googletagmanager.com" />
+<link rel="preconnect" href="https://cdn.trustedform.com" crossorigin />
+<link rel="dns-prefetch" href="https://api.trustedform.com" />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+<noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="stylesheet" href="/lp/_shared.css" />
+<link rel="stylesheet" href="/qualify/dni/5/_funnel.css?v=1" />
+<script defer src="/qualify/dni/5/_attribution.js"></script>
+<!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
+<script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRGCMJLR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<div class="lp-utility">
+  <div class="container row">
+    <span class="left"><span class="hrs-open"><strong>Live</strong> &mdash; agents available now</span><span class="hrs-closed">Call M-F 9:30am&ndash;6pm ET</span></span>
+    <span class="right"><a href="tel:+18135550157" data-sparrow-phone>(813) 555-0157</a></span>
+  </div>
+</div>
+
+<header class="lp-header">
+  <div class="container">
+    <a href="/" class="lp-logo"><span class="mark">UB</span> UtilityBenefits</a>
+    <a href="tel:+18135550157" class="phone" data-sparrow-phone>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+      (813) 555-0157
+    </a>
+  </div>
+</header>
+
+<main class="funnel-main">
+  <div class="container">
+    <form class="funnel-card step" id="funnel-form" method="get" action="/qualify/dni/5/step-2-zip/" novalidate>
+      <div class="step-meta">
+        <span>Step 1 of 4</span>
+      </div>
+      <div class="progress">
+        <span class="seg filled"></span>
+        <span class="seg"></span>
+        <span class="seg"></span>
+        <span class="seg"></span>
+      </div>
+
+      <h2>What&rsquo;s your date of birth?</h2>
+      <p class="step-sub">We keep your information private &mdash; this just helps with the application process.</p>
+
+      <div class="field">
+        <label for="dob">Date of birth</label>
+        <input type="text" inputmode="numeric" id="dob" name="dob" placeholder="MM / DD / YYYY" autocomplete="bday" maxlength="14" required />
+        <p class="v-error" id="dob-error" style="display:none;color:#c0392b;font-size:.8rem;margin:.4rem 0 0;line-height:1.3;"></p>
+      </div>
+
+      <div class="actions split">
+        <a href="/qualify/dni/5/" class="btn-back">&lsaquo; Back</a>
+        <button type="submit" class="btn-continue" id="cta">Continue &rarr;</button>
+      </div>
+
+      <p class="trust-copy"><span class="lock-ico" aria-hidden="true">🔒</span>Your data is safe and is only used to match you with our trusted&nbsp;providers.</p>
+    </form>
+
+    <div class="reviewed-by">
+      <span class="ub-mark">UB</span>
+      <span><strong>Reviewed by UtilityBenefits Editorial Team</strong> <span class="sep">|</span> Last reviewed May 2026 <span class="sep">|</span> Cites HHS, FCC, CMS</span>
+    </div>
+  </div>
+</main>
+
+<div class="lp-sticky-call" role="region" aria-label="Call now">
+  <div class="meta">Free &middot; no SSN needed</div>
+  <a href="tel:+18135550157" class="call" data-sparrow-phone>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
+    Call (813) 555-0157
+  </a>
+</div>
+
+<footer class="lp-footer">
+  <div class="container">
+    <p class="lp-tcpa">UtilityBenefits.com is an independent comparison and information service operated by UtilityBenefits Research LLC. We are not a government agency.</p>
+    <div class="copyright">
+      <span>&copy; 2026 UtilityBenefits Research LLC. All rights reserved.</span>
+      <span class="legal-links">
+        <a href="/legal/privacy/">Privacy</a>
+        <a href="/legal/terms/">Terms</a>
+        <a href="/legal/tcpa/">TCPA</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var dob = document.getElementById('dob');
+  var cta = document.getElementById('cta');
+  var err = document.getElementById('dob-error');
+  dob.value = sessionStorage.getItem('ub5d_dob') || '';
+
+  // DOB safety nets — mirrors NBA: require a real calendar date (round-trip
+  // rejects 02/30, 13/45, etc.) and an age between 18 and 110. Returns
+  // 'incomplete' before 8 digits, an error string when invalid, or null.
+  function dobProblem(val){
+    var digits = val.replace(/\D/g,'');
+    if (digits.length !== 8) return 'incomplete';
+    var m = parseInt(digits.slice(0,2),10),
+        d = parseInt(digits.slice(2,4),10),
+        y = parseInt(digits.slice(4,8),10);
+    var dt = new Date(y, m-1, d);
+    if (dt.getFullYear() !== y || dt.getMonth() !== m-1 || dt.getDate() !== d) {
+      return 'Please enter a valid date of birth.';
+    }
+    var today = new Date();
+    var age = today.getFullYear() - y;
+    var mDiff = today.getMonth() - (m-1);
+    if (mDiff < 0 || (mDiff === 0 && today.getDate() < d)) age--;
+    if (age < 18) return 'You must be 18 or older to apply.';
+    if (age > 110) return 'Please enter a valid date of birth.';
+    return null;
+  }
+
+  // NBA-style: button stays bright/active. Format as they type + clear the error
+  // once valid; only block + show red text on submit.
+  dob.addEventListener('input', function(){
+    var v = dob.value.replace(/\D/g,'').slice(0,8);
+    if (v.length >= 5) v = v.slice(0,2)+' / '+v.slice(2,4)+' / '+v.slice(4);
+    else if (v.length >= 3) v = v.slice(0,2)+' / '+v.slice(2);
+    dob.value = v;
+    if (!dobProblem(dob.value)) { err.style.display = 'none'; dob.classList.remove('invalid'); }
+  });
+
+  document.getElementById('funnel-form').addEventListener('submit', function(e){
+    var prob = dobProblem(dob.value);
+    if (prob) {
+      e.preventDefault();
+      err.textContent = (prob === 'incomplete') ? 'Please enter your date of birth.' : prob;
+      err.style.display = 'block';
+      dob.classList.add('invalid');
+      dob.focus();
+      return;
+    }
+    try { sessionStorage.setItem('ub5d_dob', dob.value); } catch(e2){}
+  });
+})();
+</script>
+
+<!-- TrustedForm -->
+<script type="text/javascript">
+(function(){
+  var tf = document.createElement('script');
+  tf.type = 'text/javascript'; tf.async = true;
+  tf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+    '://api.trustedform.com/trustedform.js?field=xxTrustedFormCertUrl&use_tagged_consent=true&l=' +
+    new Date().getTime() + Math.random();
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(tf, s);
+})();
+</script>
+<noscript><img src="https://api.trustedform.com/ns.gif" /></noscript>
+<!-- End TrustedForm -->
+
+<!-- Inactivity popup ("Before you go...") — dedicated call line -->
+<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=5';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
+</body>
+</html>
