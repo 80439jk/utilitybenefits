@@ -58,8 +58,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <main class="funnel-main">
   <div class="container">
     <!-- COMPLIANCE FUNNEL (qualify/0) — Step 3 of 3 (FINAL): Phone + TCPA, POSTs to /api/lead/.
-         Checkbox-free consent ("by clicking the button") mirrors NBA apply/3. Name/email are
-         carried as hidden fields from Step 2. See README.md -->
+         Real (optional) #tcpa consent checkbox; SMS-only, UtilityBenefits-only consent copy.
+         Name/email are carried as hidden fields from Step 2. See README.md -->
     <form class="funnel-card step compact" id="funnel-form" method="POST" action="/api/lead/" novalidate>
       <div class="step-meta">
         <span>Step 3 of 3</span>
@@ -87,7 +87,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="tcpa-box">
         <label for="tcpa">
           <input type="checkbox" id="tcpa" name="tcpa" value="1" />
-          <span id="tcpa-text">By checking this box, you confirm that this is your mobile number and that you are 18 years of age or older. You agree to the UtilityBenefits.com <a href="/legal/terms/">Terms of Use</a> and <a href="/legal/privacy/">Privacy Policy</a> and provide your express written consent to be contacted by UtilityBenefits and that your information may be used by UtilityBenefits to contact you, via telephone calls and text messages (including SMS and MMS), including through the use of an automatic telephone dialing system, artificial or prerecorded voice, and AI-generated voice, at the number you provided, even if your number is listed on any federal or state Do Not Call registry. Consent is not a condition of purchase. Message frequency varies (up to 10 messages per month). Message and data rates may apply. Reply STOP to opt out or HELP for help.</span>
+          <span id="tcpa-text">By checking this box, you confirm that this is your mobile number. You agree to the UtilityBenefits.com <a href="/legal/terms/">Terms of Use</a> and <a href="/legal/privacy/">Privacy Policy</a> and provide your express written consent to be contacted by UtilityBenefits and that your information may be used by UtilityBenefits to contact you, via telephone calls and text messages (including SMS and MMS), including through the use of an automatic telephone dialing system, artificial or prerecorded voice, and AI-generated voice, at the number you provided, even if your number is listed on any federal or state Do Not Call registry. Consent is not a condition of purchase. Message frequency varies (up to 10 messages per month). Message and data rates may apply. Reply STOP to opt out or HELP for help. By submitting your information, you agree to receive SMS text messages from UtilityBenefits about utility assistance programs and available benefits.</span>
         </label>
       </div>
 

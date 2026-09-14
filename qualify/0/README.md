@@ -49,13 +49,13 @@ user agreed. The user could not disagree.
 <div class="tcpa-box">
   <label for="tcpa">
     <input type="checkbox" id="tcpa" name="tcpa" value="1" />
-    <span id="tcpa-text">By checking this box and clicking the button below, you confirm…</span>
+    <span id="tcpa-text">By checking this box, you confirm that this is your mobile number…</span>
   </label>
 </div>
 ```
 
-The consent text now starts with "By checking this box and clicking the button
-below". This sentence agrees with the action that the user does.
+The consent text starts with "By checking this box". This sentence agrees with the
+action that the user does.
 
 ## Consent language — different from the other funnels
 
@@ -67,7 +67,18 @@ call, and that the telephone number **can be given to those partners**.
 A carrier does not accept that text for 10DLC. SMS consent must name **one
 sender**, and it must not permit the sale or transfer of the number.
 
-The text on this page is the same as NBA `/apply/0/`, with the UB brand name:
+The text on this page started as a copy of NBA `/apply/0/`, with the UB brand name.
+On 14 Sep 2026 (branch `ub-qualify0-tcpa-copy`) the owner made two changes. Thus the
+text is **not the same as NBA** now:
+
+- The age clause "and that you are 18 years of age or older" is removed. Step 1
+  still collects the date of birth.
+- A last sentence is added: "By submitting your information, you agree to receive
+  SMS text messages from UtilityBenefits about utility assistance programs and
+  available benefits." It is inside `#tcpa-text`, thus the consent audit records it.
+  The checkbox rules below do not change (owner's decision).
+
+The text has these properties:
 
 - Consent is to be contacted by **UtilityBenefits only**. The text does not name
   service providers or marketing partners, and the number is not shared.
