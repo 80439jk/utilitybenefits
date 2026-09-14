@@ -29,6 +29,24 @@ at `step-1-dob`). See `qualify/4/REDUCE-FUNNEL-README.md` for full context.
 
 ---
 
+## Added by the `ub-qualify0-tcpa-copy` branch (qualify/0 consent text, 2026-09-14)
+
+No files became orphans. Only the text in `qualify/0/step-3-phone-tcpa.html` changed.
+Items to examine later:
+
+- **NBA mirror is out of sync.** CLAUDE.md says `qualify/0` mirrors NBA `apply/0`. NBA
+  `apply/0/step-3-phone/index.html` still has "and that you are 18 years of age or older"
+  and does not have the new last SMS sentence. The owner chose "UB only". Decide if NBA
+  gets the same change, then update the "mirrors NBA apply/0" line in CLAUDE.md.
+- **"By submitting" vs. optional checkbox.** The new last sentence says consent is given
+  "by submitting". The checkbox is optional, thus a lead with a clear box records
+  `consent.given: false`. The owner kept the text as-is. Examine this with the 10DLC reviewer.
+- **Stale fallback text in `api/lead.js`.** If `consent_text` is empty, the server uses a
+  default text that names "partners" and "email". `qualify/0` always sends the text, thus
+  it does not use the default. Examine if other callers need it.
+
+---
+
 ## Likely orphaned (no inbound links found in the repo)
 
 | Path | Why it looks orphaned | Suggested action before removing |
