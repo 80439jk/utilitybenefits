@@ -303,19 +303,26 @@ A partial date of birth is never tagged — it is worse than none.
 Webhooks, postbacks and call flows see these tags immediately. **RTB buyer pings
 do not**, until the key is named on the pool's `settings.buyer_tag_allowlist`.
 That gate exists so an arbitrary landing-page param cannot leak into a buyer
-payload. Both test pools were set on 2026-09-17 to:
+payload. Both test pools were set on 2026-09-17 to all 14 captured keys:
 
 ```
-first_name, last_name, email, zip, state, dob, phone, intent, lp
+first_name, last_name, email, phone, zip, state, dob, intent, lp,
+citizen, addr, city, income, employ
 ```
 
 Buyers then reference them as `{{first_name}}`, `{{email}}` and so on. To change
 it, use the dashboard (DNI pool → Settings → buyer tag allowlist); keys are
 lowercased on save.
 
-Note `citizen`, `addr`, `city`, `income` and `employ` are captured but **not**
-allowlisted — they reach first-party surfaces only. Add them if a buyer needs
-them.
+The allowlist deliberately mirrors the capture list exactly — everything these
+pages collect is offered to buyers. Narrow it if a buyer should not receive a
+given field; the tag keeps flowing to first-party surfaces either way.
+
+Worth knowing before this pattern is copied to a **live** funnel: these keys
+carry PII (name, email, date of birth, street address). On the test clones that
+is the point. On a live funnel, the allowlist is the only thing standing between
+a form field and every bidding buyer, so it should be narrowed to what each
+buyer actually needs.
 
 ### Constraints
 
