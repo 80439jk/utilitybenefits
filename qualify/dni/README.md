@@ -60,10 +60,9 @@ that field before the first test submit.
 
 Everything else is a verbatim copy. These three are deliberate; do not "fix" them.
 
-1. **No Propel/PostbackX snippet.** `/qualify/2/` and `/qualify/5/` load
-   `PropelDirect.init()` on their landing pages with live `offerId`s. Cloning it
-   would inject synthetic clicks into live Propel offer reporting. Omitted from
-   both clone landings, with a comment in place of the block.
+1. **The Propel/PostbackX snippet reuses the LIVE `offerId`s** — a deliberate
+   call, see "Propel" below. Test clicks land in live Propel offer reporting and
+   must be filtered out there.
 2. **`_funnel.css` cache-bust restarts at `?v=1`.** Each clone has its own CSS
    copy; the versions are independent of the source funnels'.
 3. **`robots.txt` carries `Disallow: /qualify/dni/`** on top of the per-page
@@ -80,21 +79,51 @@ Everything else is a verbatim copy. These three are deliberate; do not "fix" the
   live funnels exactly.
 - **GTM (`GTM-WRGCMJLR`) + `<noscript>`, TrustedForm, and `noindex,nofollow`** on
   every page.
-- **The inactivity popup is untouched.** Every clone page loads
-  `/qualify/popup.js?v=5` exactly as its source does (lazy on funnel pages,
-  synchronous on thank-you), 30s inactivity.
+- **Popup trigger behavior is untouched.** Every clone page loads
+  `/qualify/popup.js` exactly as its source does (lazy on funnel pages,
+  synchronous on thank-you), 30s inactivity. Only the *number* differs — see
+  below.
 
-## `popup.js` must NOT be marked for DNI
+## `popup.js` is DNI-marked on these clones only
 
-`popup.js` uses its own dedicated line (`+18138204146`) so popup calls are
-attributable separately from page calls. It is deliberately **not** given
-`data-sparrow-phone`.
+`popup.js` is a **single shared file** loaded by the live funnels and these
+clones. It carries a path gate so the live funnels are provably unaffected:
 
-Server-side pool selection is per-page-path, but the popup appears on funnel
-*and* thank-you pages, so it cannot get its own pool that way. Marking it would
-swap it to whichever pool the page belongs to and silently destroy the
-popup/page attribution split. This is parked pending a decision (leave static,
-give it an explicit `data-sparrow-pool`, or fold it into the page pool).
+```js
+var IS_DNI = window.location.pathname.indexOf('/qualify/dni/') === 0;
+```
+
+| | Live funnels | `/qualify/dni/` clones |
+|---|---|---|
+| Popup number | `(813) 820-4146` (static) | mirrors the page's number |
+| `data-sparrow-phone` on the popup anchor | no | yes |
+| Google Forwarding Number tag 14 | owns it | nothing to match |
+
+**Why it mirrors the page instead of getting its own pool.** Server-side pool
+selection is per-path, but the popup appears on funnel *and* thank-you pages, so
+it cannot be given a pool of its own that way. On the clones it therefore folds
+into whichever pool the page belongs to — a popup call is a DNI test call, not a
+separately attributed one. On the live funnels the dedicated `4146` line still
+keeps popup calls separate, which is the split that actually earns its keep.
+
+**How the number gets there.** `readPageNumber()` reads the page's first `tel:`
+anchor, which Edge Inject has already rewritten server-side, so the popup opens
+on the pool number with no flash. The anchor is also tagged, so the snippet's
+MutationObserver re-swaps it if the session is assigned or rotated after the
+popup was built. Tagging the `<a>` (never the inner `<span>`) is what the href
+rewrite needs, and the rewriter edits only the matching text node, so the phone
+icon survives.
+
+Two failure modes are handled: a malformed or missing `tel:` anchor returns
+`null` and the popup keeps the static `4146` line rather than rendering a broken
+link, and a pool-exhausted page yields the page's `555-01xx` fallback, which is
+unroutable by design (see "Fallback numbers" below).
+
+`readPageNumber()` must run **before** the overlay is appended, or it matches the
+popup's own anchor instead of the page's.
+
+**Cache-bust is per-surface.** The clones are on `popup.js?v=6`; the 25 live
+pages stay on `?v=5`. Bump only the surface you changed.
 
 ## Live test resources (provisioned 2026-09-10)
 
@@ -240,7 +269,130 @@ The apex 307s to `www` from the Vercel origin, so a non-`www` pattern never fire
 on real traffic. Deploy `sparrow-dni` **first** (it owns `PoolStateDO`), then
 `edge-inject`.
 
+## Session enrichment (form data on the call)
+
+Added 2026-09-17. Form fields are attached to the **DNI call session**, so a
+buyer taking the call sees who they are talking to — not just the CRM lead.
+
+Two calls, both guarded with `if (window.Sparrow && Sparrow.…)` because the
+snippet loads `async`: a slow or blocked load must never break a form submit.
+
+**`Sparrow.enrich({...})` on step-4 submit** sends the complete set at once.
+**`Sparrow.setTag(k, v)` as fields are filled** is the one that earns its keep:
+a visitor who taps the sticky call button on step 2 never reaches step 4, and
+without the per-step tags their data would be lost. Tags persist in a
+pool-scoped `localStorage` key for 30 minutes and flush on `pagehide` and on
+phone tap, so a mid-form call still arrives with the data attached.
+
+| Page | Captured |
+|---|---|
+| `/2/` + `/5/` landing | `intent` (+ `state` on `/2/`) |
+| `/2/` step 1 | `dob` (only once valid), `citizen` |
+| `/2/` step 2 | `addr`, `city`, `zip` |
+| `/2/` step 3 | `income`, `employ` |
+| `/2/` step 4 | `first_name`, `last_name`, `email`, `phone` live; full `enrich()` on submit |
+| `/5/` step 1 | `dob` (only once valid) |
+| `/5/` step 2 | `zip` |
+| `/5/` step 3 | `phone` |
+| `/5/` step 4 | `first_name`, `last_name`, `email` live; full `enrich()` on submit |
+
+A partial date of birth is never tagged — it is worse than none.
+
+### Buyer visibility is a separate, deliberate gate
+
+Webhooks, postbacks and call flows see these tags immediately. **RTB buyer pings
+do not**, until the key is named on the pool's `settings.buyer_tag_allowlist`.
+That gate exists so an arbitrary landing-page param cannot leak into a buyer
+payload. Both test pools were set on 2026-09-17 to all 14 captured keys:
+
+```
+first_name, last_name, email, phone, zip, state, dob, intent, lp,
+citizen, addr, city, income, employ
+```
+
+Buyers then reference them as `{{first_name}}`, `{{email}}` and so on. To change
+it, use the dashboard (DNI pool → Settings → buyer tag allowlist); keys are
+lowercased on save.
+
+The allowlist deliberately mirrors the capture list exactly — everything these
+pages collect is offered to buyers. Narrow it if a buyer should not receive a
+given field; the tag keeps flowing to first-party surfaces either way.
+
+Worth knowing before this pattern is copied to a **live** funnel: these keys
+carry PII (name, email, date of birth, street address). On the test clones that
+is the point. On a live funnel, the allowlist is the only thing standing between
+a form field and every bidding buyer, so it should be narrowed to what each
+buyer actually needs.
+
+### Constraints
+
+**Reserved keys are silently dropped.** `RESERVED_TAG_KEYS`
+(`packages/shared/src/attribution-tags.ts`) belongs to the call itself:
+`caller`, `caller_id`, `caller_number`, `caller_raw`, `called`, `dialed_number`,
+`call_id`, `timestamp`, `campaign_id`, `tracking_number`, `publisher_id`,
+`ping_id`, `transaction_id`, `token`, `lead_id` and similar. They are stripped
+even if allowlisted. `phone` is fine; `caller_number` is not. The 14 keys sent
+here were checked against that set — no collisions.
+
+**Cap is 50 tags per session.** These pages send 14.
+
+### Verifying
+
+Load a funnel, fill a step, then in the console:
+
+```js
+Sparrow.getTags()
+```
+
+Then place a test call to the pool's number and confirm the tags appear on the
+call in the dashboard.
+
 ## Follow-ups
+
+### Propel/PostbackX reuses the live offer IDs — filter test clicks in reporting
+
+Added 2026-09-17 on the two clone **landings only** (never the step or thank-you
+pages), in `<head>` immediately after GTM, mirroring the live layout.
+
+| Page | `offerId` | Same as |
+|---|---|---|
+| `/qualify/dni/2/` | `394159cb-34ac-4044-868e-37c846855f08` | `/qualify/2/` |
+| `/qualify/dni/5/` | `cfe090d3-0159-402d-a346-dc29412f6aaa` | `/qualify/5/` |
+
+Shared: `trackingId: 21e14abbc56d45469deb8a`, `apiUrl:
+https://propel-lander-api.propelsys.workers.dev`.
+
+**These are the live offer IDs, chosen deliberately over creating test offers.**
+`direct-snippet.js` is not a passive beacon: `PropelDirect.init()` POSTs to
+`/api/direct/track`, which writes a real row to Propel's `clicks` table stamped
+with that `offer_id` and the campaign's `organization_id`
+(`workers/lander-api/src/direct-tracking.ts`). There is no test or sandbox flag
+in the payload or the schema. Every pageview of a clone landing is therefore a
+**real click on a live offer**, inflating its click count and depressing its CTR.
+
+**Exclude test clicks by path:**
+
+```sql
+WHERE landing_page_url NOT LIKE '%/qualify/dni/%'
+```
+
+`sanitizeLandingUrl()` keeps `origin + pathname` and strips everything except a
+known-safe param allowlist, so the `/qualify/dni/` path always survives into
+`landing_page_url`. That is the only thing distinguishing a test click from a
+real one — there is no flag to key on.
+
+Two mechanics were checked and are harmless: link rewriting only touches
+`a[data-propel-link]` (none on these pages, so internal step navigation is
+untouched), and form injection only adds a hidden `click_id` input, which
+`/api/lead/` ignores.
+
+Verified in jsdom on both clone landings: exactly one `/api/direct/track` POST
+per load with the correct `offer_id`, the tracked URL carrying `/qualify/dni/`,
+`tel:` anchors and `data-sparrow-*` markup untouched, and no link rewritten.
+
+If the pollution becomes a problem, swap in two new test `offerId`s from the same
+Propel org — that is the only change needed. See
+`qualify/PROPEL-TRACKING-README.md`.
 
 ### Fallback numbers are deliberately unroutable
 
@@ -272,17 +424,21 @@ with no URL condition), including these clones:
 |-----|---------------------------|-------|-----------------|
 | 6   | `(813) 820-4158`          | thank-you | no target present |
 | 10  | `(813) 820-4157`          | funnel    | no target present |
-| 14  | `(813) 820-4146`          | popup     | **yes, via `popup.js`** |
+| 14  | `(813) 820-4146`          | popup     | no target present (since `?v=6`) |
 
 `__awcc` only rewrites anchors whose text matches its configured number. Since
 the fallbacks moved to `555-01xx`, tags 6 and 10 have nothing to match on these
 pages — in either the swapped state or the pool-exhausted state. That closes the
 attribution hole that existed while the fallbacks were the live numbers.
 
-**Tag 14 still applies to the popup.** All 12 pages load `/qualify/popup.js`,
-which is *shared with the live funnels* and must not be edited for this test. Its
-`(813) 820-4146` line is not DNI-tagged, so GFN owns it exactly as before. A
-popup call is therefore not a DNI test call — dial from the page, not the popup.
+**Tag 14 stopped matching when the popup was DNI-marked.** The popup used to be
+the one remaining GFN target here, because it hardcoded `(813) 820-4146`. Now it
+mirrors the page number (a pool number, or the `555-01xx` fallback), so no tag
+has a target on these pages in any state. GFN is inert across the whole clone
+surface; a popup call is now a DNI test call like any other.
+
+On the **live** funnels tag 14 still owns `4146` exactly as before — the path
+gate means nothing there changed.
 
 Removing GFN entirely is the documented end state (see the migration guide).
 

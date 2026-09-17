@@ -224,6 +224,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (el) el.value = sessionStorage.getItem('ub2d_' + name) || '';
     if (el) el.addEventListener('input', function(){
       sessionStorage.setItem('ub2d_' + name, el.value);
+      // Capture as we go so a call placed from this step (before submit) still
+      // carries the contact fields. enrich() on submit sends the full set.
+      if (window.Sparrow && Sparrow.setTag) {
+        Sparrow.setTag(name === 'first' ? 'first_name' : name === 'last' ? 'last_name' : name, el.value);
+      }
       check();
     });
   });
@@ -241,6 +246,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     else if (v.length >= 1) v = '('+v;
     phone.value = v;
     sessionStorage.setItem('ub2d_phone', v);
+    if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('phone', v);
     check();
   });
 
@@ -292,6 +298,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Consent audit
     $('h_consent_timestamp').value = new Date().toISOString();
     $('h_consent_text').value = $('tcpa-text').textContent.replace(/\s+/g, ' ').trim();
+
+    // Attach the lead to the DNI call session so the data rides the call, not
+    // just the CRM lead. Guarded because the snippet is loaded async — a slow
+    // or blocked load must never break the form submit.
+    if (window.Sparrow && Sparrow.enrich) {
+      Sparrow.enrich({
+        first_name: first.value.trim(),
+        last_name:  last.value.trim(),
+        email:      email.value.trim(),
+        phone:      phone.value,
+        zip:        carry.h_zip,
+        state:      carry.h_state,
+        dob:        carry.h_dob,
+        citizen:    carry.h_citizen,
+        addr:       carry.h_addr,
+        city:       carry.h_city,
+        income:     carry.h_income,
+        employ:     carry.h_employ,
+        intent:     carry.h_intent,
+        lp:         'qualify2dni'
+      });
+    }
   });
 
   check();
@@ -313,6 +341,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End TrustedForm -->
 
 <!-- Inactivity popup ("Before you go...") — dedicated call line -->
-<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=5';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
+<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=6';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
 </body>
 </html>

@@ -155,7 +155,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (v.length >= 5) v = v.slice(0,2)+' / '+v.slice(2,4)+' / '+v.slice(4);
     else if (v.length >= 3) v = v.slice(0,2)+' / '+v.slice(2);
     dob.value = v;
-    if (!dobProblem(dob.value)) { err.style.display = 'none'; dob.classList.remove('invalid'); }
+    if (!dobProblem(dob.value)) {
+      err.style.display = 'none'; dob.classList.remove('invalid');
+      // Tag only once the DOB is valid — a partial date is worse than none.
+      if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('dob', dob.value);
+    }
   });
 
   document.getElementById('funnel-form').addEventListener('submit', function(e){
@@ -188,6 +192,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End TrustedForm -->
 
 <!-- Inactivity popup ("Before you go...") — dedicated call line -->
-<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=5';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
+<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=6';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
 </body>
 </html>
