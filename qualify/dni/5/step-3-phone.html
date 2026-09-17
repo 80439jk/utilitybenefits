@@ -151,6 +151,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     else if (v.length >= 1) v = '('+v;
     phone.value = v;
     sessionStorage.setItem('ub5d_phone', v);
+    // Capture as we go: a visitor who taps the sticky call button here never
+    // reaches step 4, so this is the only chance to attach their number.
+    if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('phone', v);
     if (!validatePhone(phone.value.replace(/\D/g,''))) { phoneErr.style.display = 'none'; phone.classList.remove('invalid'); }
   });
 

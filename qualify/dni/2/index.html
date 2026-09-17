@@ -299,6 +299,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       sessionStorage.setItem('ub2d_intent', intents);
       sessionStorage.setItem('ub2d_state', stateSel.value);
     } catch(e){}
+    // Capture as we go: a visitor who taps the sticky call button on a later
+    // step never reaches step 4, so tag these while we have them.
+    if (window.Sparrow && Sparrow.setTag) {
+      Sparrow.setTag('intent', intents);
+      if (stateSel.value) Sparrow.setTag('state', stateSel.value);
+    }
   });
 
   // On return to this landing (Back button, incl. bfcache restore): reset the

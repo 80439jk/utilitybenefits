@@ -139,6 +139,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     el.value = sessionStorage.getItem('ub2d_'+el.name) || '';
     el.addEventListener('input', function(){
       sessionStorage.setItem('ub2d_'+el.name, el.value);
+      // Capture as we go: a visitor who taps the sticky call button here never
+      // reaches step 4, so this is the only chance to attach these fields.
+      if (window.Sparrow && Sparrow.setTag) Sparrow.setTag(el.name, el.value);
       check();
     });
   });

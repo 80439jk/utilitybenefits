@@ -155,7 +155,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (v.length >= 5) v = v.slice(0,2)+' / '+v.slice(2,4)+' / '+v.slice(4);
     else if (v.length >= 3) v = v.slice(0,2)+' / '+v.slice(2);
     dob.value = v;
-    if (!dobProblem(dob.value)) { err.style.display = 'none'; dob.classList.remove('invalid'); }
+    if (!dobProblem(dob.value)) {
+      err.style.display = 'none'; dob.classList.remove('invalid');
+      // Tag only once the DOB is valid — a partial date is worse than none.
+      if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('dob', dob.value);
+    }
   });
 
   document.getElementById('funnel-form').addEventListener('submit', function(e){

@@ -175,6 +175,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     cta.disabled = !!(prob || !cit.value);
     if (prob && prob !== 'incomplete') { err.textContent = prob; err.style.display = 'block'; }
     else { err.style.display = 'none'; }
+    // Capture as we go: a visitor who taps the sticky call button here never
+    // reaches step 4. Tag DOB only once valid — a partial date is worse than
+    // none — but citizenship is a select, so any value is complete.
+    if (window.Sparrow && Sparrow.setTag) {
+      if (!prob) Sparrow.setTag('dob', dob.value);
+      if (cit.value) Sparrow.setTag('citizen', cit.value);
+    }
   }
 
   document.getElementById('funnel-form').addEventListener('submit', function(e){

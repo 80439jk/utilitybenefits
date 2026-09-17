@@ -269,6 +269,77 @@ The apex 307s to `www` from the Vercel origin, so a non-`www` pattern never fire
 on real traffic. Deploy `sparrow-dni` **first** (it owns `PoolStateDO`), then
 `edge-inject`.
 
+## Session enrichment (form data on the call)
+
+Added 2026-09-17. Form fields are attached to the **DNI call session**, so a
+buyer taking the call sees who they are talking to — not just the CRM lead.
+
+Two calls, both guarded with `if (window.Sparrow && Sparrow.…)` because the
+snippet loads `async`: a slow or blocked load must never break a form submit.
+
+**`Sparrow.enrich({...})` on step-4 submit** sends the complete set at once.
+**`Sparrow.setTag(k, v)` as fields are filled** is the one that earns its keep:
+a visitor who taps the sticky call button on step 2 never reaches step 4, and
+without the per-step tags their data would be lost. Tags persist in a
+pool-scoped `localStorage` key for 30 minutes and flush on `pagehide` and on
+phone tap, so a mid-form call still arrives with the data attached.
+
+| Page | Captured |
+|---|---|
+| `/2/` + `/5/` landing | `intent` (+ `state` on `/2/`) |
+| `/2/` step 1 | `dob` (only once valid), `citizen` |
+| `/2/` step 2 | `addr`, `city`, `zip` |
+| `/2/` step 3 | `income`, `employ` |
+| `/2/` step 4 | `first_name`, `last_name`, `email`, `phone` live; full `enrich()` on submit |
+| `/5/` step 1 | `dob` (only once valid) |
+| `/5/` step 2 | `zip` |
+| `/5/` step 3 | `phone` |
+| `/5/` step 4 | `first_name`, `last_name`, `email` live; full `enrich()` on submit |
+
+A partial date of birth is never tagged — it is worse than none.
+
+### Buyer visibility is a separate, deliberate gate
+
+Webhooks, postbacks and call flows see these tags immediately. **RTB buyer pings
+do not**, until the key is named on the pool's `settings.buyer_tag_allowlist`.
+That gate exists so an arbitrary landing-page param cannot leak into a buyer
+payload. Both test pools were set on 2026-09-17 to:
+
+```
+first_name, last_name, email, zip, state, dob, phone, intent, lp
+```
+
+Buyers then reference them as `{{first_name}}`, `{{email}}` and so on. To change
+it, use the dashboard (DNI pool → Settings → buyer tag allowlist); keys are
+lowercased on save.
+
+Note `citizen`, `addr`, `city`, `income` and `employ` are captured but **not**
+allowlisted — they reach first-party surfaces only. Add them if a buyer needs
+them.
+
+### Constraints
+
+**Reserved keys are silently dropped.** `RESERVED_TAG_KEYS`
+(`packages/shared/src/attribution-tags.ts`) belongs to the call itself:
+`caller`, `caller_id`, `caller_number`, `caller_raw`, `called`, `dialed_number`,
+`call_id`, `timestamp`, `campaign_id`, `tracking_number`, `publisher_id`,
+`ping_id`, `transaction_id`, `token`, `lead_id` and similar. They are stripped
+even if allowlisted. `phone` is fine; `caller_number` is not. The 14 keys sent
+here were checked against that set — no collisions.
+
+**Cap is 50 tags per session.** These pages send 14.
+
+### Verifying
+
+Load a funnel, fill a step, then in the console:
+
+```js
+Sparrow.getTags()
+```
+
+Then place a test call to the pool's number and confirm the tags appear on the
+call in the dashboard.
+
 ## Follow-ups
 
 ### Propel/PostbackX reuses the live offer IDs — filter test clicks in reporting

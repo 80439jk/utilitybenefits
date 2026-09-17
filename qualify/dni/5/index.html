@@ -274,6 +274,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       sessionStorage.setItem('ub5d_intent', selectedIntents().join(','));
       sessionStorage.setItem('ub5d_state', ''); // state not collected in this variant
     } catch(err){}
+    // Capture as we go: a visitor who taps the sticky call button on a later
+    // step never reaches step 4, so tag the intent while we have it.
+    if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('intent', selectedIntents().join(','));
   });
 
   // Re-hydrate on back/bfcache restore so prior picks stay checked.

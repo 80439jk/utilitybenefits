@@ -149,6 +149,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   [income, employ].forEach(function(el){
     el.addEventListener('change', function(){
       sessionStorage.setItem('ub2d_'+el.name, el.value);
+      // Capture as we go so an early call still carries these (see step 2).
+      if (window.Sparrow && Sparrow.setTag) Sparrow.setTag(el.name, el.value);
       check();
     });
   });

@@ -250,6 +250,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       sessionStorage.setItem('ub5d_' + name, el.value);
       var ok = (name === 'email') ? emailValid(el.value) : !!el.value.trim();
       if (ok) clearErr(el, errEl);
+      // Capture as we go so a call placed from this step (before submit) still
+      // carries the contact fields. enrich() on submit sends the full set.
+      if (window.Sparrow && Sparrow.setTag) {
+        Sparrow.setTag(name === 'first' ? 'first_name' : name === 'last' ? 'last_name' : name, el.value);
+      }
     });
   });
 
@@ -299,6 +304,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Consent audit
     $('h_consent_timestamp').value = new Date().toISOString();
     $('h_consent_text').value = $('tcpa-text').textContent.replace(/\s+/g, ' ').trim();
+
+    // Attach the lead to the DNI call session so the data rides the call, not
+    // just the CRM lead. Guarded because the snippet is loaded async — a slow
+    // or blocked load must never break the form submit.
+    if (window.Sparrow && Sparrow.enrich) {
+      Sparrow.enrich({
+        first_name: first.value.trim(),
+        last_name:  last.value.trim(),
+        email:      email.value.trim(),
+        phone:      sessionStorage.getItem('ub5d_phone') || '',
+        zip:        zip,
+        state:      zipToState(zip),
+        dob:        sessionStorage.getItem('ub5d_dob') || '',
+        intent:     sessionStorage.getItem('ub5d_intent') || '',
+        lp:         'qualify5dni'
+      });
+    }
   });
 })();
 </script>
