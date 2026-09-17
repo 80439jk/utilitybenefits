@@ -442,6 +442,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return String(v).trim();
   }
 
+  // PostbackX/Propel click_id. This page does not load _attribution.js (that
+  // would record a bogus first touch), so resolve it from the same sources:
+  // the funnel's attribution blob, the URL, then PropelDirect's own cookie
+  // (path=/, 30 days) and its localStorage backup.
+  function cookie(name){
+    var parts = ('; ' + document.cookie).split('; ' + name + '=');
+    return parts.length === 2 ? parts.pop().split(';').shift() : '';
+  }
+  function clickId(){
+    var v = '';
+    try { v = (JSON.parse(sessionStorage.getItem(PREFIX + 'attr') || '{}') || {}).click_id || ''; }
+    catch (e) {}
+    if (!v) v = params.get('click_id') || cookie('_propel_click_id') || '';
+    if (!v) { try { v = localStorage.getItem('_propel_click_id') || ''; } catch (e) {} }
+    return String(v).trim();
+  }
+
   function send(){
     if (!(window.Sparrow && Sparrow.enrich)) return false;
     var data = {
@@ -458,6 +475,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       city:       val('city'),
       income:     val('income'),
       employ:     val('employ'),
+      click_id:   clickId(),
       lp:         val('lp', 'lp') || DEFAULT_LP
     };
     // Never overwrite a value already on the session with an empty string.

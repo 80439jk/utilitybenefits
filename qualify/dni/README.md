@@ -297,6 +297,9 @@ phone tap, so a mid-form call still arrives with the data attached.
 | `/5/` step 4 | `first_name`, `last_name`, `email` live; full `enrich()` on submit |
 | `thank-you/2/` + `thank-you/5/` | full `enrich()` on load — **see below** |
 
+Both landings also tag `click_id` on submit, and it rides along in every
+`enrich()` call (see the PostbackX section below).
+
 A partial date of birth is never tagged — it is worse than none.
 
 ### The thank-you pages must enrich too — tags are per pool session
@@ -333,6 +336,44 @@ before init is safe — it persists and `init()` sends the tags.
 **Empty values are dropped before sending**, so a missing field never overwrites
 a good value already on the session. `lead_id` is deliberately not sent: it is a
 reserved key and would be stripped anyway.
+
+### PostbackX click_id — click-to-call attribution
+
+`click_id` ties a Propel/PostbackX click to the call it produced. It was being
+created but never reaching calls, for three compounding reasons, all now fixed:
+
+1. **It only existed on the entry page.** `PropelDirect` runs on the two clone
+   landings only, never on a step or thank-you page.
+2. **`_attribution.js` didn't carry it.** `click_id` was missing from
+   `CLICK_IDS`, so it was dropped as the visitor advanced.
+3. **The call lands on a different session anyway** — the thank-you pool. Same
+   root cause as the form data above.
+
+**How it is resolved.** `UBAttribution.clickId()` checks, in order:
+
+1. `sessionStorage` (`ub{2,5}d_attr`) — already resolved earlier in the funnel
+2. `?click_id=` — the redirect flow, present on the entry page immediately
+3. `_propel_click_id` cookie, then its `localStorage` backup — the direct flow
+
+It is resolved **lazily, not at page load**. On the direct flow `PropelDirect`
+creates the click with an async POST, so at the moment `_attribution.js` runs on
+the entry page the cookie does not exist yet. Resolving on demand (at form
+submit, and on the thank-you page) is what makes the direct flow work. Once
+found it is written back to `sessionStorage`, so the rest of the funnel no
+longer depends on the cookie.
+
+The cookie is `path=/` with a 30-day expiry, which is why the thank-you page can
+recover a `click_id` even on a direct hit. The thank-you pages deliberately do
+**not** load `_attribution.js` (that would record a bogus first touch); they
+resolve from the same sources inline.
+
+`click_id` is tagged on the landing at submit, sent in the step-4 `enrich()`,
+and sent again from the thank-you page. It is **not** a reserved key, and it has
+been added to both pools' `buyer_tag_allowlist` (now 15 keys), so it reaches
+buyer pings as well as webhooks and postbacks.
+
+Note `lead_id` **is** reserved and is stripped server-side, which is worth
+knowing since the thank-you URLs carry one. Do not rely on it as a tag.
 
 ### ZIP is coerced with `String()`
 
