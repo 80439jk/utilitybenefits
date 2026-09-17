@@ -314,10 +314,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         last_name:  last.value.trim(),
         email:      email.value.trim(),
         phone:      sessionStorage.getItem('ub5d_phone') || '',
-        zip:        zip,
+        zip:        String(zip),
         state:      zipToState(zip),
         dob:        sessionStorage.getItem('ub5d_dob') || '',
         intent:     sessionStorage.getItem('ub5d_intent') || '',
+        click_id:   (window.UBAttribution && UBAttribution.clickId()) || '',
         lp:         'qualify5dni'
       });
     }

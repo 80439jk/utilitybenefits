@@ -304,6 +304,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (window.Sparrow && Sparrow.setTag) {
       Sparrow.setTag('intent', intents);
       if (stateSel.value) Sparrow.setTag('state', stateSel.value);
+      // By submit time PropelDirect's click POST has returned, so the click_id
+      // is resolvable here even on the direct flow.
+      var cid = window.UBAttribution && UBAttribution.clickId();
+      if (cid) Sparrow.setTag('click_id', cid);
     }
   });
 

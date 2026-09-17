@@ -276,7 +276,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     } catch(err){}
     // Capture as we go: a visitor who taps the sticky call button on a later
     // step never reaches step 4, so tag the intent while we have it.
-    if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('intent', selectedIntents().join(','));
+    if (window.Sparrow && Sparrow.setTag) {
+      Sparrow.setTag('intent', selectedIntents().join(','));
+      // By submit time PropelDirect's click POST has returned, so the click_id
+      // is resolvable here even on the direct flow.
+      var cid = window.UBAttribution && UBAttribution.clickId();
+      if (cid) Sparrow.setTag('click_id', cid);
+    }
   });
 
   // Re-hydrate on back/bfcache restore so prior picks stay checked.

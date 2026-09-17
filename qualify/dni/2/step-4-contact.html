@@ -308,7 +308,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         last_name:  last.value.trim(),
         email:      email.value.trim(),
         phone:      phone.value,
-        zip:        carry.h_zip,
+        zip:        String(carry.h_zip),
         state:      carry.h_state,
         dob:        carry.h_dob,
         citizen:    carry.h_citizen,
@@ -317,6 +317,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         income:     carry.h_income,
         employ:     carry.h_employ,
         intent:     carry.h_intent,
+        click_id:   (window.UBAttribution && UBAttribution.clickId()) || '',
         lp:         'qualify2dni'
       });
     }

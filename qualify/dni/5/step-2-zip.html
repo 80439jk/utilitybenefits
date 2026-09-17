@@ -131,7 +131,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     zip.value = zip.value.replace(/\D/g,'').slice(0,5);
     sessionStorage.setItem('ub5d_zip', zip.value);
     // Capture as we go so an early call still carries the ZIP (see step 3).
-    if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('zip', zip.value);
+    // String() so a ZIP never reaches buyer macros as a number.
+    if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('zip', String(zip.value));
     if (/^\d{5}$/.test(zip.value)) { err.style.display = 'none'; zip.classList.remove('invalid'); }
   });
 

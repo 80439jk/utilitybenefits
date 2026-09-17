@@ -141,7 +141,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       sessionStorage.setItem('ub2d_'+el.name, el.value);
       // Capture as we go: a visitor who taps the sticky call button here never
       // reaches step 4, so this is the only chance to attach these fields.
-      if (window.Sparrow && Sparrow.setTag) Sparrow.setTag(el.name, el.value);
+      // String() so a ZIP never reaches buyer macros as a number.
+      if (window.Sparrow && Sparrow.setTag) Sparrow.setTag(el.name, String(el.value));
       check();
     });
   });
