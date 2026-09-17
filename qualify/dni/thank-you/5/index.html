@@ -385,6 +385,60 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   })();
 </script>
 
+<!-- Attach the lead to THIS page's DNI session.
+     The thank-you page runs on its own pool (26e71048), so the tags captured on
+     the funnel steps live on a different session and do not reach a call placed
+     from here. Most calls come from this page, so without this the buyer sees
+     no form data. -->
+<script>
+(function(){
+  var PREFIX = 'ub5d_';
+  var DEFAULT_LP = 'qualify5dni';
+
+  var params = new URLSearchParams(window.location.search);
+  function stored(key){
+    try { return sessionStorage.getItem(PREFIX + key) || ''; } catch(e){ return ''; }
+  }
+  // sessionStorage first (what the visitor actually typed), URL param as the
+  // fallback for a visitor who landed here directly. String() because a numeric
+  // ZIP would otherwise reach buyer macros as a number.
+  function val(key, param){
+    var v = stored(key) || (param ? params.get(param) : '') || '';
+    return String(v).trim();
+  }
+
+  function send(){
+    if (!(window.Sparrow && Sparrow.enrich)) return false;
+    var data = {
+      first_name: val('first'),
+      last_name:  val('last'),
+      email:      val('email'),
+      phone:      val('phone'),
+      zip:        val('zip', 'zip'),
+      state:      val('state', 'state'),
+      dob:        val('dob'),
+      intent:     val('intent'),
+      lp:         val('lp', 'lp') || DEFAULT_LP
+    };
+    // Never overwrite a value already on the session with an empty string.
+    // `lead_id` and `case` are deliberately not sent: lead_id is a reserved tag
+    // key and would be stripped server-side.
+    Object.keys(data).forEach(function(k){ if (!data[k]) delete data[k]; });
+    if (Object.keys(data).length) Sparrow.enrich(data);
+    return true;
+  }
+
+  // The snippet is loaded async, so it may not have defined window.Sparrow yet.
+  // There is no form interaction on this page to piggyback on, so poll briefly.
+  // enrich() before init is safe: it persists and init() sends the tags.
+  if (send()) return;
+  var tries = 0;
+  var timer = setInterval(function(){
+    if (send() || ++tries > 40) clearInterval(timer);
+  }, 250);
+})();
+</script>
+
 <!-- Inactivity popup ("Before you go...") — dedicated call line -->
 <script src="/qualify/popup.js?v=6"></script>
 </body>

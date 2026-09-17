@@ -295,8 +295,50 @@ phone tap, so a mid-form call still arrives with the data attached.
 | `/5/` step 2 | `zip` |
 | `/5/` step 3 | `phone` |
 | `/5/` step 4 | `first_name`, `last_name`, `email` live; full `enrich()` on submit |
+| `thank-you/2/` + `thank-you/5/` | full `enrich()` on load — **see below** |
 
 A partial date of birth is never tagged — it is worse than none.
+
+### The thank-you pages must enrich too — tags are per pool session
+
+This is not redundant with the step-4 `enrich()`. **Tags are stored per pool
+session, and the thank-you page runs on a different pool:**
+
+| Page | Pool |
+|---|---|
+| `/qualify/dni/{2,5}/*` (all steps) | `c7a9acee…` (funnel) |
+| `/qualify/dni/thank-you/{2,5}/` | `26e71048…` (thank-you) |
+
+A visitor gets **two separate sessions** on two different numbers. Form data
+tagged during the funnel lands on the funnel session. A call placed from the
+thank-you page arrives on the thank-you number, matches the thank-you session,
+and sees none of it.
+
+Observed live on 2026-09-17 (visitor `v_mu6154a3_kcpkuqn`, 19 seconds apart):
+
+- `21:16:36` funnel pool → `buyerTags: {dob, phone, intent, caller_zip}` ✅
+- `21:16:55` thank-you pool → `buyerTags: null`, and the call came in here ❌
+
+Since most calls come from the thank-you page, the fix is to enrich there as
+well. Both pages now do, reading `sessionStorage` first (what the visitor
+actually typed) and falling back to URL params for a direct hit.
+
+Two details that matter:
+
+**It polls for `window.Sparrow`.** Every other call site hangs off a form
+event, by which time the async snippet has loaded. The thank-you page has no
+form interaction, so it retries every 250 ms for 10 seconds. Calling `enrich()`
+before init is safe — it persists and `init()` sends the tags.
+
+**Empty values are dropped before sending**, so a missing field never overwrites
+a good value already on the session. `lead_id` is deliberately not sent: it is a
+reserved key and would be stripped anyway.
+
+### ZIP is coerced with `String()`
+
+A ZIP reached `customTags` as the number `80209` while `urlParams` held the
+string `"80209"`, which makes buyer macros inconsistent. Every ZIP is now passed
+through `String()` at each call site.
 
 ### Buyer visibility is a separate, deliberate gate
 
@@ -338,14 +380,29 @@ here were checked against that set — no collisions.
 
 ### Verifying
 
-Load a funnel, fill a step, then in the console:
+Load a funnel, **type into a field**, then in the console:
 
 ```js
 Sparrow.getTags()
 ```
 
-Then place a test call to the pool's number and confirm the tags appear on the
-call in the dashboard.
+`{}` on a freshly loaded page is correct — it returns what has been captured so
+far, and nothing has been entered yet. On the landings, `intent`/`state` are
+tagged on submit rather than on click, so they appear only after continuing.
+
+Then place a test call and confirm the tags appear on the call in the dashboard.
+Check the **thank-you** session as well, since that is where most calls land.
+
+If `Sparrow.getTags is not a function`, the browser is holding a cached copy of
+the snippet (`max-age=86400`). Hard-reload.
+
+### `matched_via: deferred_last_owner` is the weakest match
+
+It means no click and no caller-history match were found, so the matcher fell
+back to "most recent session that owned this number". It can be correct, but on
+a shared number under load it can attach the wrong visitor's data. A
+`matched_via: click` result is the one to aim for, and it requires the snippet
+(not just Edge Inject) to be live on the page the visitor calls from.
 
 ## Follow-ups
 
