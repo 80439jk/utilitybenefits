@@ -14,9 +14,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js"
         data-sparrow-pool="c7a9acee-ab84-41ea-9b55-2e387dc2a943" async></script>
 
-<!-- The Propel/PostbackX direct-link snippet on /qualify/5/ is intentionally NOT
-     cloned here: it carries a live offerId, so running it on a test page would
-     inject synthetic clicks into live Propel offer reporting. -->
+<!-- PostbackX / Propel Direct Link Tracking (test integration) -->
+<!-- Reuses the LIVE offerId from /qualify/5/ by decision. Clicks from this test
+     page therefore land in live Propel offer reporting; exclude them with
+     landing_page_url LIKE '%/qualify/dni/%' (the path survives the API's
+     sanitizeLandingUrl, which keeps origin + pathname). -->
+<script src="https://propel-lander-api.propelsys.workers.dev/direct-snippet.js"></script>
+<script>
+PropelDirect.init({
+  trackingId: '21e14abbc56d45469deb8a',
+  offerId: 'cfe090d3-0159-402d-a346-dc29412f6aaa',
+  apiUrl: 'https://propel-lander-api.propelsys.workers.dev',
+});
+</script>
+<!-- End PostbackX / Propel -->
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -293,6 +304,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End TrustedForm -->
 
 <!-- Inactivity popup ("Before you go...") — dedicated call line -->
-<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=5';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
+<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=6';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
 </body>
 </html>

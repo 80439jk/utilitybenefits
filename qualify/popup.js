@@ -33,6 +33,30 @@
   var PHONE_DISPLAY = '(813) 820-4146';
   var PHONE_TEL = 'tel:+18138204146'; // dedicated popup line (E.164)
 
+  // ---- DNI test clones only (/qualify/dni/) -------------------------------
+  // On the clone funnels the popup drops its dedicated line and mirrors the
+  // page's own number so a popup call is attributable to the DNI session.
+  // Live funnels are untouched: this gate is false everywhere else, so they
+  // keep the static (813) 820-4146 line and its Google Forwarding Number tag.
+  var IS_DNI = window.location.pathname.indexOf('/qualify/dni/') === 0;
+
+  // Read the page's current phone number off its first tel: anchor. On a
+  // clone this has already been rewritten by Edge Inject (server-side) or the
+  // DNI snippet, so the popup opens on the live pool number with no flash. It
+  // falls back to the page's hardcoded number when the pool is exhausted.
+  // Must run before the popup's own anchor is in the DOM or it reads itself.
+  function readPageNumber() {
+    var a = document.querySelector('a[href^="tel:"]');
+    if (!a) return null;
+    var digits = (a.getAttribute('href') || '').replace(/^tel:/, '').replace(/\D/g, '');
+    if (digits.length === 11 && digits.charAt(0) === '1') digits = digits.slice(1);
+    if (digits.length !== 10) return null;
+    return {
+      tel: 'tel:+1' + digits,
+      display: '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6)
+    };
+  }
+
   if (sessionStorage.getItem(SESSION_KEY)) return;
 
   var timer;
@@ -93,6 +117,25 @@
     var phoneIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.21 12 19.79 19.79 0 0 1 1.14 3.38 2 2 0 0 1 3.11 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
     var closeIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
+    // Resolve the popup's number. Read the page BEFORE the overlay is in the
+    // DOM, otherwise readPageNumber() can match the popup's own anchor.
+    var phoneTel = PHONE_TEL;
+    var phoneDisplay = PHONE_DISPLAY;
+    var dniAttr = '';
+    if (IS_DNI) {
+      var pageNumber = readPageNumber();
+      if (pageNumber) {
+        phoneTel = pageNumber.tel;
+        phoneDisplay = pageNumber.display;
+      }
+      // Hand the anchor to the DNI snippet. Its MutationObserver picks the
+      // popup up when it is appended, so the number stays correct if the
+      // session is assigned or rotated after the popup was built. Tagging the
+      // <a> (never the inner span) is what the swapper's href rewrite needs;
+      // it edits only the matching text node, so the icon survives.
+      dniAttr = ' data-sparrow-phone';
+    }
+
     // Case-number reassurance line — thank-you only.
     var caseNum = getCaseNumber();
     var refHtml = caseNum
@@ -119,9 +162,9 @@
           '</div>' +
           '<p class="ub-popup-text">Call now and speak with a specialist assigned to your area.</p>' +
           refHtml +
-          '<a href="' + PHONE_TEL + '" class="ub-popup-call-btn">' +
+          '<a href="' + phoneTel + '" class="ub-popup-call-btn"' + dniAttr + '>' +
             '<span class="ub-popup-call-btn__cta">Call Now</span>' +
-            '<span class="ub-popup-call-btn__phone-row">' + phoneIcon + '<span>' + PHONE_DISPLAY + '</span></span>' +
+            '<span class="ub-popup-call-btn__phone-row">' + phoneIcon + '<span>' + phoneDisplay + '</span></span>' +
           '</a>' +
         '</div>' +
       '</div>';
