@@ -15,13 +15,17 @@ shared `_funnel.css` / `_attribution.js`.
   live as a safety net for any ad that still points at it. Retirement candidate — see
   `ORPHANS-10DLC.md`.
 - `/qualify/3/` is inactive.
-- `/qualify/dni/2/` and `/qualify/dni/5/` (+ `/qualify/dni/thank-you/{2,5}/`) are the
-  **PostbackCalls DNI / Edge Inject copies** of the two live paid funnels. **Live swap is ON
-  (2026-09-23):** `vercel.json` 307-redirects `/qualify/2/` and `/qualify/5/` to them, so paid traffic
-  runs through the DNI pages. Keep ads and CTAs on `/qualify/2/` / `/qualify/5/` (never a
-  `/qualify/dni/` URL) so turning the swap off stays a one-file change. They submit real leads with
-  the prod `lp` (`qualify2` / `qualify5`) plus a hidden `dni=1` that only picks the thank-you page;
-  their sessionStorage keys (`ub2d_*` / `ub5d_*`) stay isolated. See `qualify/dni/README.md`.
+- **PostbackCalls DNI runs in place on `/qualify/2/` and `/qualify/5/` (since 2026-09-23).** The
+  DNI versions of both funnels are served at the live URLs, with their own thank-you pages
+  `/qualify/thank-you-2/` (new) and `/qualify/thank-you-5/`. The **pre-DNI** versions moved to
+  `/qualify/dni/2/`, `/qualify/dni/5/` and `/qualify/dni/thank-you/5/` for comparison. There is no
+  redirect. Go-live and rollback also need the Edge Inject worker routes for those four paths on
+  Cloudflare; see `qualify/dni/README.md` → "Live swap". Both versions submit real leads with the
+  prod `lp` (`qualify2` / `qualify5`) plus a hidden `dni` (`1` DNI, `0` pre-DNI) that only picks the
+  thank-you page. `/qualify/thank-you/` stays shared with `/3/`, `/4/` and `/lp/*`; never put DNI
+  markup on it. Never point ads or CTAs at a `/qualify/dni/` URL.
+- Started-funnel phone on the DNI pages is the pool number, with `(855) 617-2111` as fallback; the
+  `(813) 820-4157` line below now appears only on the pre-DNI pages and other funnels.
 
 **Consent is a real checkbox on every live funnel.** `/qualify/0/`, `/qualify/2/`, `/qualify/4/` and
 `/qualify/5/` each render the TCPA text as the label of an `#tcpa` checkbox. Never replace one with a
@@ -81,5 +85,8 @@ other and update both CLAUDE.md files. Canonical behavior:
   the on-page number — the number is inside the popup, so the caller always has it.
 - **Dedicated phone line:** popup uses its own `tel:` number (UB `+18138204146`) for clean call
   attribution — never reuse another stage's number here. Plain `tel:` anchor, no `onclick`.
+  **UB-only exception:** on pages that load the Sparrow DNI snippet (`script[data-sparrow-pool]`,
+  currently `/qualify/2/`, `/5/`, `/thank-you-2/`, `/thank-you-5/`) the popup mirrors the page's
+  pool number instead, so the call is attributed to the DNI session. See `qualify/dni/README.md`.
 - **Cache-busting:** `popup.js` is referenced with `?v=N`; bump `N` on every content change (CSS/JS
   are served `max-age=86400, stale-while-revalidate`, so a stale copy lingers ~1 day otherwise).

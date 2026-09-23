@@ -1,68 +1,89 @@
-# `/qualify/dni/` — DNI copies of the paid funnels
+# PostbackCalls DNI on `/qualify/2/` and `/qualify/5/` (in-place swap)
 
-Copies of the two **live paid** funnels running PostbackCalls DNI (dynamic
-number insertion + Edge Inject).
+> **Read this first.** Since 2026-09-23 the **DNI versions** of the two live
+> paid funnels are served **at the live URLs**. The **pre-DNI versions** moved
+> here, under `/qualify/dni/`, for comparison. Nothing redirects: ads keep
+> pointing at `/qualify/2/` and `/qualify/5/` and the address bar never changes.
+> Most of this file below the "Live swap" section was written when the DNI
+> pages lived under `/qualify/dni/`; where a path says `/qualify/dni/…`, read
+> it through the path map here.
 
-> **Live swap is ON.** `vercel.json` 307-redirects `/qualify/2/` →
-> `/qualify/dni/2/` and `/qualify/5/` → `/qualify/dni/5/`, so all paid traffic
-> now runs through these pages. See "Live swap" below for what that changes and
-> how to undo it. Still never point an ad or main-site CTA **directly** at a
-> `/qualify/dni/` URL: ads stay on `/qualify/2/` and `/qualify/5/`, so switching
-> back is a one-file change.
+## Where everything lives now
+
+| URL | Serves | Pool | `lp` / `dni` |
+|---|---|---|---|
+| `/qualify/2/` (+ 4 steps) | DNI funnel 2 | funnel `c7a9acee` | `qualify2` / `1` |
+| `/qualify/5/` (+ 4 steps) | DNI funnel 5 | funnel `c7a9acee` | `qualify5` / `1` |
+| `/qualify/thank-you-2/` | DNI thank-you for 2 (**new URL**) | thank-you `26e71048` | — |
+| `/qualify/thank-you-5/` | DNI thank-you for 5 | thank-you `26e71048` | — |
+| `/qualify/dni/2/` (+ 4 steps) | pre-DNI funnel 2 | none | `qualify2` / `0` |
+| `/qualify/dni/5/` (+ 4 steps) | pre-DNI funnel 5 | none | `qualify5` / `0` |
+| `/qualify/dni/thank-you/5/` | pre-DNI thank-you for 5 | none | — |
+| `/qualify/thank-you/` | **unchanged**, shared by `/3/`, `/4/`, `/lp/*` and pre-DNI 2 | none | — |
+
+`api/lead.js` `thankYou()`: `dni=1` → `/qualify/thank-you-2/` or `-5/`;
+`dni=0` + `qualify5` → `/qualify/dni/thank-you/5/`; everything else as before.
+
+**Why funnel 2 got a new thank-you URL.** `/qualify/thank-you/` is shared with
+`/qualify/3/`, `/qualify/4/` and all five `/lp/*` pages. Swapping it would have
+put DNI on those funnels too.
 
 ## Live swap (2026-09-23)
 
-**What it is.** Two temporary redirects in `vercel.json`:
+The swap has **two halves that must move together**:
 
-```json
-{ "source": "/qualify/2/", "destination": "/qualify/dni/2/", "permanent": false },
-{ "source": "/qualify/5/", "destination": "/qualify/dni/5/", "permanent": false }
-```
+1. **Site (this repo).** The files were exchanged with `git mv`, so history
+   follows each page. Internal links were rewritten both ways, and all
+   `_funnel.css`, `_attribution.js` and `popup.js` references got new `?v=`
+   values so no browser mixes a cached asset from the other version.
+2. **Edge Inject routes (Cloudflare).** Four worker routes on
+   `www.utilitybenefits.com`: `/qualify/2/*`, `/qualify/5/*`,
+   `/qualify/thank-you-2/*`, `/qualify/thank-you-5/*`. The existing
+   `/qualify/dni/*` route stays.
 
-Only the two **landing** URLs redirect. The live step pages and thank-you pages
-are untouched, and `/qualify/thank-you/` is also used by `/qualify/4/`, so it
-must never be redirected. The query string rides along, so `gclid`, UTMs and
-`click_id` survive the hop.
+`DNI_POOL_MAP` on `sparrow-edge-inject` already covers all six UB prefixes
+(applied 2026-09-23, worker version `06550e69`). It is harmless without the
+routes, so it never needs to change for go-live or rollback.
 
-**Why a redirect and not a rewrite or file swap.** A redirect changes the URL,
-so the visitor's browser is on a `/qualify/dni/` path. That is what the Edge
-Inject route (`www.utilitybenefits.com/qualify/dni/*`) and `DNI_POOL_MAP` key
-on, so nothing in Sparrow had to change. A rewrite would keep `/qualify/2/` in
-the address bar, and Cloudflare would never route it to the worker.
+**Why the routes are the switch.** The worker claims a pool number on every
+HTML request it is routed, whether or not the page has DNI markup. Routes
+without the DNI pages would burn pool numbers on pre-DNI pages. The DNI pages
+without routes still work: the client snippet assigns the number in the
+browser, just a moment later.
 
-**`permanent: false` (307) is load-bearing.** Browsers cache a 308/301
-indefinitely, so a permanent redirect would keep sending returning visitors to
-the DNI pages after a rollback.
+### Go live
 
-**Leads are real.** The step-4 forms now post the **same `lp` as the funnel they
-copy** (`qualify2` / `qualify5`), plus a hidden `dni=1`. `api/lead.js` uses
-`dni=1` only to choose the DNI thank-you page; it is not sent to Caliber. To tell
-DNI leads apart in the CRM, use `attribution.landing_page`, which is a
-`/qualify/dni/` URL for every one of them.
+1. Merge the PR. Wait for the Vercel production deploy to finish.
+2. Add the four worker routes (script `sparrow-edge-inject`, zone
+   `utilitybenefits.com`, **fail open**).
+3. Load `/qualify/2/` in a private window: the phone number should be a pool
+   number (833/844/866), not `820-4157`, before any JS runs (view source).
 
-**Fallback number.** When a pool is exhausted, or JS and Edge Inject both fail,
-the pages show `(855) 617-2111`, the UB Funnel line. Both pools'
-`default_number` is set to the same number, so the two paths agree.
+### Turn it off
 
-### Turning it off
+1. Delete the four worker routes. Takes effect in seconds.
+2. Vercel → Deployments → the deployment before the merge → **Instant
+   Rollback**.
 
-Fastest: in Vercel → Deployments, pick the deployment before the swap and choose
-**Instant Rollback**. Seconds, no git change.
+In the gap between the two steps visitors get the DNI pages with the number
+assigned in the browser, which is harmless.
 
-Permanent: delete the two redirect lines from `vercel.json` and deploy.
+### What changes while it is on
 
-Neither touches Sparrow or the pools, so switching back cannot break anything
-else. The `/qualify/dni/` pages keep working at their own URLs either way.
-
-### What changes for reporting while it is on
-
+- **Leads are real** and carry the prod `lp`. `dni` is not sent to Caliber;
+  DNI leads can be told apart by `attribution.landing_page` **not** containing
+  `/qualify/dni/` after 2026-09-23 (the pre-DNI pages now live there).
 - **Google Ads call conversions (GFN) stop on these funnels.** GTM tags 6, 10
-  and 14 only match `(813) 820-4158`, `4157` and `4146`, and none of those
-  appear on the DNI pages. Calls are counted in PostbackCalls instead.
-  Form-submit conversions are unaffected: the GTM `thank-you` / `step-1` triggers
-  match the DNI paths too.
-- **Propel clicks** now carry `/qualify/dni/` in `landing_page_url`. The old
-  "exclude `%/qualify/dni/%`" filter below would now drop **real** traffic.
+  and 14 only match `(813) 820-4158`, `4157` and `4146`, which are not on the DNI
+  pages. Calls are counted in PostbackCalls instead. Form-submit conversions are
+  unaffected: the GTM `thank-you` trigger matches `/qualify/thank-you-2/`.
+- **Fallback number** is `(855) 617-2111` on every DNI page and as both pools'
+  `default_number`. Calls connect but carry no per-visitor attribution.
+- **`popup.js`** now decides DNI by the presence of `script[data-sparrow-pool]`,
+  not the URL. Pages without the snippet (every other funnel, and the pre-DNI
+  pages) keep the static `4146` popup line.
+- **Propel** reporting: the "exclude `%/qualify/dni/%`" filter below now
+  excludes the **pre-DNI** pages, not test traffic.
 
 Source docs live in the sibling `sparrow` repo:
 
@@ -70,38 +91,27 @@ Source docs live in the sibling `sparrow` repo:
 - `docs/UTILITYBENEFITS-DNI-IMPLEMENTATION-NEXT-STEPS.md` — pools, numbers, sizing
 - `docs/UTILITYBENEFITS-EDGE-INJECT-MIGRATION.md` — Cloudflare DNS + Worker routes
 
-## Why a shared `/qualify/dni/` parent
+## How Edge Inject picks the pool
 
-Edge Inject picks a DNI pool by **URL path prefix** (`DNI_POOL_MAP`) and binds to
-a Cloudflare **zone route**. Putting both clones under one parent means a single
-narrow Worker route and a single pool map cover the whole test surface, and live
-`/qualify/2/` and `/qualify/5/` are provably outside it.
+Edge Inject picks a DNI pool by **URL path prefix** (`DNI_POOL_MAP`) and only
+runs on paths with a Cloudflare **zone route**. `resolvePoolFromMap` matches on
+path-segment boundaries and the longest prefix wins, so `/qualify/thank-you-2`
+is its own segment and never falls into `/qualify/2`, and `/qualify/2` never
+captures `/qualify/20`.
 
-The thank-you clones nest as a real path **segment** (`/qualify/dni/thank-you/2/`,
-not `thank-you-2`). `resolvePoolFromMap` matches on segment boundaries and longest
-prefix wins, so `/qualify/dni/thank-you` resolves to the thank-you pool and never
-falls back into the funnel pool.
-
-## Path map
-
-| Clone | Source | `lp` value |
-|---|---|---|
-| `/qualify/dni/2/` (+ 4 steps) | `/qualify/2/` | `qualify2` + `dni=1` |
-| `/qualify/dni/5/` (+ 4 steps) | `/qualify/5/` | `qualify5` + `dni=1` |
-| `/qualify/dni/thank-you/2/` | `/qualify/thank-you/` | — |
-| `/qualify/dni/thank-you/5/` | `/qualify/thank-you-5/` | — |
-
-`api/lead.js` routes `dni=1` to `/qualify/dni/thank-you/5/` when `lp=qualify5`
-and to `/qualify/dni/thank-you/2/` otherwise. The old test values `qualify2dni`
-/ `qualify5dni` still route there too, for any page a browser loaded before the
-swap.
+**Every routed UB path must be in the map.** An unmatched path falls back to
+the worker's `DNI_POOL_ID`, which belongs to a different tenant. The sparrow
+test `edge-inject-pool-map.test.ts` asserts every UB route pattern in
+`wrangler.toml` resolves.
 
 ## sessionStorage is isolated
 
-The clones must not share funnel state with the live funnels in the same browser,
-or a tester who runs the live funnel first carries values into the clone.
+The DNI and pre-DNI versions must not share funnel state in the same browser.
+The key prefixes travel with the pages, so the DNI pages at `/qualify/2/` and
+`/5/` use `ub2d_` / `ub5d_` and the pre-DNI pages at `/qualify/dni/` use
+`ub2_` / `ub5_`.
 
-| | Live | Clone |
+| | Pre-DNI | DNI |
 |---|---|---|
 | `/2/` step values | `ub2_*` | `ub2d_*` |
 | `/5/` step values | `ub5_*` | `ub5d_*` |
@@ -109,21 +119,21 @@ or a tester who runs the live funnel first carries values into the clone.
 
 ## Leads are real
 
-The clone forms POST to the **live** `/api/lead/`, which creates a **real Caliber
-CRM lead** with the same `lp` as the source funnel. Use obviously fake data when
-testing. DNI leads are identified by `attribution.landing_page` containing
-`/qualify/dni/`. Leads created before 2026-09-23 carry
-`extended.lp = qualify2dni | qualify5dni` instead.
+Both versions POST to the **live** `/api/lead/`, which creates a **real Caliber
+CRM lead** with the prod `lp`. Use obviously fake data when testing. See "What
+changes while it is on" above for telling the versions apart. DNI test leads
+created before 2026-09-23 carry `extended.lp = qualify2dni | qualify5dni`.
 
 ## Intentional differences from the source funnels
 
 Everything else is a verbatim copy. These three are deliberate; do not "fix" them.
 
-1. **The Propel/PostbackX snippet reuses the LIVE `offerId`s** — a deliberate
-   call, see "Propel" below. Test clicks land in live Propel offer reporting and
-   must be filtered out there.
-2. **`_funnel.css` cache-bust restarts at `?v=1`.** Each clone has its own CSS
-   copy; the versions are independent of the source funnels'.
+1. **The Propel/PostbackX snippet uses the LIVE `offerId`s** on both versions,
+   so all clicks land in the same offer reporting.
+2. **Asset cache-busts are per path.** Since the swap: `/qualify/2/` CSS `?v=5`,
+   `/qualify/5/` CSS `?v=8`, `_attribution.js?v=2` everywhere, `popup.js?v=7`
+   on every DNI and pre-DNI page. Each value is one never served at that path
+   before, so no browser can pair a page with the other version's cached file.
 3. **`robots.txt` carries `Disallow: /qualify/dni/`** on top of the per-page
    `noindex,nofollow` the clones inherit.
 
@@ -143,16 +153,16 @@ Everything else is a verbatim copy. These three are deliberate; do not "fix" the
   synchronous on thank-you), 30s inactivity. Only the *number* differs — see
   below.
 
-## `popup.js` is DNI-marked on these clones only
+## `popup.js` is DNI-marked on DNI pages only
 
-`popup.js` is a **single shared file** loaded by the live funnels and these
-clones. It carries a path gate so the live funnels are provably unaffected:
+`popup.js` is a **single shared file** loaded by every funnel. It gates on the
+Sparrow snippet, not the URL, because the DNI pages have moved between paths:
 
 ```js
-var IS_DNI = window.location.pathname.indexOf('/qualify/dni/') === 0;
+var IS_DNI = !!document.querySelector('script[data-sparrow-pool]');
 ```
 
-| | Live funnels | `/qualify/dni/` clones |
+| | Pages without the snippet | DNI pages |
 |---|---|---|
 | Popup number | `(813) 820-4146` (static) | mirrors the page's number |
 | `data-sparrow-phone` on the popup anchor | no | yes |

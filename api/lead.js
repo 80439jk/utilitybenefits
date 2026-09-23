@@ -321,21 +321,23 @@ module.exports = async function handler(req, res) {
   // Funnel 0 (lp='qualify0') is the 10DLC compliance funnel — a clone of funnel 4,
   // so it shares thank-you-4. Sharing keeps the existing GTM triggers and conversion
   // tracking untouched; the funnels stay separable in the CRM through the lp field.
-  // The DNI funnels under /qualify/dni/ send the same lp as the funnel they
-  // copy (qualify2 / qualify5) so their leads are treated as real, and mark
-  // themselves with dni=1 instead. That marker only picks the thank-you page:
-  // they must land on their own thank-you copies, which carry the thank-you
-  // DNI pool. It is not forwarded to the CRM; attribution.landing_page (a
-  // /qualify/dni/ URL) is what separates these leads there.
-  // 'qualify2dni'/'qualify5dni' are the earlier test-only lp values, still
-  // routed for any page loaded before the switch.
+  // /qualify/2/ and /qualify/5/ run PostbackCalls DNI. They send the normal lp
+  // (qualify2 / qualify5) plus dni=1, which only picks the thank-you page: they
+  // must land on their own thank-you pages, which carry the thank-you DNI pool.
+  // /qualify/thank-you/ is shared with /3/, /4/ and the /lp/ pages, so funnel
+  // 2 gets its own /qualify/thank-you-2/. dni is not forwarded to the CRM.
+  // The pre-DNI versions of /2/ and /5/ are kept at /qualify/dni/ for
+  // comparison and send dni=0, so /5/'s lands on its own pre-DNI thank-you.
+  // 'qualify2dni'/'qualify5dni' are older DNI lp values, still routed for any
+  // page loaded before the switch.
   function thankYou(extra) {
     var base = '/qualify/thank-you/';
     if (b.lp === 'qualify4' || b.lp === 'qualify0') base = '/qualify/thank-you-4/';
-    else if (b.dni === '1') base = b.lp === 'qualify5' ? '/qualify/dni/thank-you/5/' : '/qualify/dni/thank-you/2/';
+    else if (b.dni === '1') base = b.lp === 'qualify5' ? '/qualify/thank-you-5/' : '/qualify/thank-you-2/';
+    else if (b.dni === '0' && b.lp === 'qualify5') base = '/qualify/dni/thank-you/5/';
     else if (b.lp === 'qualify5') base = '/qualify/thank-you-5/';  // lean phone-first variant
-    else if (b.lp === 'qualify2dni') base = '/qualify/dni/thank-you/2/';
-    else if (b.lp === 'qualify5dni') base = '/qualify/dni/thank-you/5/';
+    else if (b.lp === 'qualify2dni') base = '/qualify/thank-you-2/';
+    else if (b.lp === 'qualify5dni') base = '/qualify/thank-you-5/';
     let url = base + '?case=' + encodeURIComponent(caseNum)
       + '&zip=' + encodeURIComponent(b.zip || '')
       + '&state=' + encodeURIComponent(b.state || '')  // funnel 4 personalizes region from state (no zip collected)

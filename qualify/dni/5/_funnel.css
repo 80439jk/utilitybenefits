@@ -1,5 +1,5 @@
 /* ============================================================
-   /qualify/dni/5/ — multi-step funnel
+   /qualify/dni/2/ — multi-step funnel
    Layered on top of /lp/_shared.css (Direction D tokens).
    CRO baseline applied (cro-audit branch).
    Spec: outputs/UtilityBenefits_CRO-Implementation-Spec.md
@@ -341,7 +341,7 @@ body:has(.funnel-main) .lp-sticky-call .call{padding:12px 20px;font-size:16px;fo
    Trust / context content sections (below the funnel card).
    Modeled in PURPOSE/STRUCTURE (not design) on the higher-
    converting model funnel. Rendered in UB's emerald/navy theme.
-   All class names are new + only loaded by /qualify/dni/5/ pages,
+   All class names are new + only loaded by /qualify/dni/2/ pages,
    so nothing existing is overridden. Single conversion path is
    preserved — lower CTAs scroll back to the state selector.
    ============================================================ */

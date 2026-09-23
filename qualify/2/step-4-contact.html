@@ -9,6 +9,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-WRGCMJLR');</script>
 <!-- End Google Tag Manager -->
 
+<!-- PostbackCalls DNI (funnel pool). Companion to server-side Edge Inject:
+     this snippet owns click tracking, session heartbeats, and number release. -->
+<script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js"
+        data-sparrow-pool="c7a9acee-ab84-41ea-9b55-2e387dc2a943" async></script>
+
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Step 4: Contact information — UtilityBenefits</title>
@@ -26,8 +31,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/lp/_shared.css" />
-<link rel="stylesheet" href="/qualify/2/_funnel.css?v=4" />
-<script defer src="/qualify/2/_attribution.js"></script>
+<link rel="stylesheet" href="/qualify/2/_funnel.css?v=5" />
+<script defer src="/qualify/2/_attribution.js?v=2"></script>
 <!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
 <script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
 </head>
@@ -41,16 +46,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="lp-utility">
   <div class="container row">
     <span class="left"><span class="hrs-open"><strong>Live</strong> &mdash; agents available now</span><span class="hrs-closed">Call M-F 9:30am&ndash;6pm ET</span></span>
-    <span class="right"><a href="tel:+18138204157">(813) 820-4157</a></span>
+    <span class="right"><a href="tel:+18556172111" data-sparrow-phone>(855) 617-2111</a></span>
   </div>
 </div>
 
 <header class="lp-header">
   <div class="container">
     <a href="/" class="lp-logo"><span class="mark">UB</span> UtilityBenefits</a>
-    <a href="tel:+18138204157" class="phone">
+    <a href="tel:+18556172111" class="phone" data-sparrow-phone>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
-      (813) 820-4157
+      (855) 617-2111
     </a>
   </div>
 </header>
@@ -145,6 +150,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <input type="hidden" name="consent_timestamp" id="h_consent_timestamp" />
       <input type="hidden" name="consent_text"      id="h_consent_text" />
       <input type="hidden" name="lp"  value="qualify2" />
+      <input type="hidden" name="dni" value="1" />
       <input type="hidden" name="v"   value="A" />
 
       <div class="actions split">
@@ -165,9 +171,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="lp-sticky-call" role="region" aria-label="Call now">
   <div class="meta">Or call directly</div>
-  <a href="tel:+18138204157" class="call">
+  <a href="tel:+18556172111" class="call" data-sparrow-phone>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
-    Call (813) 820-4157
+    Call (855) 617-2111
   </a>
 </div>
 
@@ -216,9 +222,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Re-hydrate this step's editable fields from sessionStorage
   ['first','last','email','phone'].forEach(function(name){
     var el = $(name);
-    if (el) el.value = sessionStorage.getItem('ub2_' + name) || '';
+    if (el) el.value = sessionStorage.getItem('ub2d_' + name) || '';
     if (el) el.addEventListener('input', function(){
-      sessionStorage.setItem('ub2_' + name, el.value);
+      sessionStorage.setItem('ub2d_' + name, el.value);
+      // Capture as we go so a call placed from this step (before submit) still
+      // carries the contact fields. enrich() on submit sends the full set.
+      if (window.Sparrow && Sparrow.setTag) {
+        Sparrow.setTag(name === 'first' ? 'first_name' : name === 'last' ? 'last_name' : name, el.value);
+      }
       check();
     });
   });
@@ -235,7 +246,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     else if (v.length >= 4) v = '('+v.slice(0,3)+') '+v.slice(3);
     else if (v.length >= 1) v = '('+v;
     phone.value = v;
-    sessionStorage.setItem('ub2_phone', v);
+    sessionStorage.setItem('ub2d_phone', v);
+    if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('phone', v);
     check();
   });
 
@@ -261,15 +273,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     // Prior-step values
     var carry = {
-      h_intent:  sessionStorage.getItem('ub2_intent')   || '',
-      h_state:   sessionStorage.getItem('ub2_state')    || '',
-      h_dob:     sessionStorage.getItem('ub2_dob')      || '',
-      h_citizen: sessionStorage.getItem('ub2_citizen')  || '',
-      h_addr:    sessionStorage.getItem('ub2_addr')     || '',
-      h_city:    sessionStorage.getItem('ub2_city')     || '',
-      h_zip:     sessionStorage.getItem('ub2_zip')      || '',
-      h_income:  sessionStorage.getItem('ub2_income')   || '',
-      h_employ:  sessionStorage.getItem('ub2_employ')   || ''
+      h_intent:  sessionStorage.getItem('ub2d_intent')   || '',
+      h_state:   sessionStorage.getItem('ub2d_state')    || '',
+      h_dob:     sessionStorage.getItem('ub2d_dob')      || '',
+      h_citizen: sessionStorage.getItem('ub2d_citizen')  || '',
+      h_addr:    sessionStorage.getItem('ub2d_addr')     || '',
+      h_city:    sessionStorage.getItem('ub2d_city')     || '',
+      h_zip:     sessionStorage.getItem('ub2d_zip')      || '',
+      h_income:  sessionStorage.getItem('ub2d_income')   || '',
+      h_employ:  sessionStorage.getItem('ub2d_employ')   || ''
     };
     Object.keys(carry).forEach(function(id){ $(id).value = carry[id]; });
 
@@ -287,6 +299,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Consent audit
     $('h_consent_timestamp').value = new Date().toISOString();
     $('h_consent_text').value = $('tcpa-text').textContent.replace(/\s+/g, ' ').trim();
+
+    // Attach the lead to the DNI call session so the data rides the call, not
+    // just the CRM lead. Guarded because the snippet is loaded async — a slow
+    // or blocked load must never break the form submit.
+    if (window.Sparrow && Sparrow.enrich) {
+      Sparrow.enrich({
+        first_name: first.value.trim(),
+        last_name:  last.value.trim(),
+        email:      email.value.trim(),
+        phone:      phone.value,
+        zip:        String(carry.h_zip),
+        state:      carry.h_state,
+        dob:        carry.h_dob,
+        citizen:    carry.h_citizen,
+        addr:       carry.h_addr,
+        city:       carry.h_city,
+        income:     carry.h_income,
+        employ:     carry.h_employ,
+        intent:     carry.h_intent,
+        click_id:   (window.UBAttribution && UBAttribution.clickId()) || '',
+        lp:         'qualify2'
+      });
+    }
   });
 
   check();
@@ -308,6 +343,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End TrustedForm -->
 
 <!-- Inactivity popup ("Before you go...") — dedicated call line -->
-<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=5';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
+<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=7';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
 </body>
 </html>
