@@ -9,6 +9,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-WRGCMJLR');</script>
 <!-- End Google Tag Manager -->
 
+<!-- PostbackCalls DNI (funnel pool). Companion to server-side Edge Inject:
+     this snippet owns click tracking, session heartbeats, and number release. -->
+<script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js"
+        data-sparrow-pool="c7a9acee-ab84-41ea-9b55-2e387dc2a943" async></script>
+
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Step 2: Your address — UtilityBenefits</title>
@@ -26,8 +31,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/lp/_shared.css" />
-<link rel="stylesheet" href="/qualify/5/_funnel.css?v=7" />
-<script defer src="/qualify/5/_attribution.js"></script>
+<link rel="stylesheet" href="/qualify/5/_funnel.css?v=8" />
+<script defer src="/qualify/5/_attribution.js?v=2"></script>
 <!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
 <script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
 </head>
@@ -41,16 +46,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="lp-utility">
   <div class="container row">
     <span class="left"><span class="hrs-open"><strong>Live</strong> &mdash; agents available now</span><span class="hrs-closed">Call M-F 9:30am&ndash;6pm ET</span></span>
-    <span class="right"><a href="tel:+18138204157">(813) 820-4157</a></span>
+    <span class="right"><a href="tel:+18556172111" data-sparrow-phone>(855) 617-2111</a></span>
   </div>
 </div>
 
 <header class="lp-header">
   <div class="container">
     <a href="/" class="lp-logo"><span class="mark">UB</span> UtilityBenefits</a>
-    <a href="tel:+18138204157" class="phone">
+    <a href="tel:+18556172111" class="phone" data-sparrow-phone>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
-      (813) 820-4157
+      (855) 617-2111
     </a>
   </div>
 </header>
@@ -94,9 +99,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="lp-sticky-call" role="region" aria-label="Call now">
   <div class="meta">Free &middot; no SSN needed</div>
-  <a href="tel:+18138204157" class="call">
+  <a href="tel:+18556172111" class="call" data-sparrow-phone>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.045 15.045 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2.001 2.001 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07.53 8.54 7.36 15.36 15.89 15.89 1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98z"/></svg>
-    Call (813) 820-4157
+    Call (855) 617-2111
   </a>
 </div>
 
@@ -118,13 +123,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 (function(){
   var zip = document.getElementById('zip');
   var err = document.getElementById('zip-error');
-  zip.value = sessionStorage.getItem('ub5_zip') || '';
+  zip.value = sessionStorage.getItem('ub5d_zip') || '';
 
   // NBA-style: button stays bright/active. Clear error once valid; block + show
   // red text only on submit.
   zip.addEventListener('input', function(){
     zip.value = zip.value.replace(/\D/g,'').slice(0,5);
-    sessionStorage.setItem('ub5_zip', zip.value);
+    sessionStorage.setItem('ub5d_zip', zip.value);
+    // Capture as we go so an early call still carries the ZIP (see step 3).
+    // String() so a ZIP never reaches buyer macros as a number.
+    if (window.Sparrow && Sparrow.setTag) Sparrow.setTag('zip', String(zip.value));
     if (/^\d{5}$/.test(zip.value)) { err.style.display = 'none'; zip.classList.remove('invalid'); }
   });
 
@@ -136,7 +144,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       zip.focus();
       return;
     }
-    try { sessionStorage.setItem('ub5_zip', zip.value); } catch(e2){}
+    try { sessionStorage.setItem('ub5d_zip', zip.value); } catch(e2){}
   });
 })();
 </script>
@@ -156,6 +164,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End TrustedForm -->
 
 <!-- Inactivity popup ("Before you go...") — dedicated call line -->
-<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=5';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
+<script>/* lazy-load inactivity popup off the critical path */(function(){function l(){var s=document.createElement('script');s.src='/qualify/popup.js?v=7';s.async=true;document.body.appendChild(s);}if('requestIdleCallback' in window){requestIdleCallback(l,{timeout:4000});}else{window.addEventListener('load',function(){setTimeout(l,1200);});}})();</script>
 </body>
 </html>
