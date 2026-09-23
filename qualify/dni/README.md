@@ -367,8 +367,13 @@ recover a `click_id` even on a direct hit. The thank-you pages deliberately do
 **not** load `_attribution.js` (that would record a bogus first touch); they
 resolve from the same sources inline.
 
-`click_id` is tagged on the landing at submit, sent in the step-4 `enrich()`,
-and sent again from the thank-you page. It is **not** a reserved key, and it has
+`click_id` is tagged onto the DNI session **as soon as it resolves, on every
+funnel page**: `_attribution.js` polls for up to 30 seconds until both the
+`click_id` and `window.Sparrow` exist, then calls `Sparrow.setTag('click_id')`.
+Before this it was tagged only at the landing submit, so a visitor who tapped the
+number on the landing never had it on their session (4 of 10 calls without a
+`click_id` on 2026-09-23). It is also still tagged at the landing submit, sent in
+the step-4 `enrich()`, and sent again from the thank-you page. It is **not** a reserved key, and it has
 been added to both pools' `buyer_tag_allowlist` (now 15 keys), so it reaches
 buyer pings as well as webhooks and postbacks.
 

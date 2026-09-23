@@ -81,6 +81,26 @@
     return v;
   }
 
+  // Tag the PostbackX click_id onto the DNI session as soon as it resolves, on
+  // every page. Waiting for the landing form submit lost it for visitors who
+  // tapped the number first, and re-tagging on each step recovers it if the
+  // session was replaced mid-funnel. Polls because the Sparrow snippet loads
+  // async and, on the direct flow, PropelDirect writes the cookie only once its
+  // POST returns.
+  (function tagClickId(){
+    var tries = 0;
+    var timer = setInterval(function(){
+      var cid = clickId();
+      var ready = window.Sparrow && window.Sparrow.setTag;
+      if (cid && ready) {
+        window.Sparrow.setTag('click_id', cid);
+        clearInterval(timer);
+      } else if (++tries >= 120) {
+        clearInterval(timer);
+      }
+    }, 250);
+  })();
+
   window.UBAttribution = {
     getAll: function(){
       var d = load();
