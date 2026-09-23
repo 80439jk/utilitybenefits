@@ -33,15 +33,12 @@
   var PHONE_DISPLAY = '(813) 820-4146';
   var PHONE_TEL = 'tel:+18138204146'; // dedicated popup line (E.164)
 
-  // ---- DNI pages only -----------------------------------------------------
-  // On DNI pages the popup drops its dedicated line and mirrors the page's own
-  // number so a popup call is attributable to the DNI session. Every other
-  // page keeps the static (813) 820-4146 line and its Google Forwarding Number
-  // tag.
-  // Keyed on the Sparrow snippet tag rather than the URL, because DNI pages
-  // have moved between paths (/qualify/dni/ and the live /qualify/2/, /5/);
-  // the snippet is present exactly on the pages that have a DNI pool.
-  var IS_DNI = !!document.querySelector('script[data-sparrow-pool]');
+  // ---- DNI test clones only (/qualify/dni/) -------------------------------
+  // On the clone funnels the popup drops its dedicated line and mirrors the
+  // page's own number so a popup call is attributable to the DNI session.
+  // Live funnels are untouched: this gate is false everywhere else, so they
+  // keep the static (813) 820-4146 line and its Google Forwarding Number tag.
+  var IS_DNI = window.location.pathname.indexOf('/qualify/dni/') === 0;
 
   // Read the page's current phone number off its first tel: anchor. On a
   // clone this has already been rewritten by Edge Inject (server-side) or the
