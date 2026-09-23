@@ -1,12 +1,68 @@
-# `/qualify/dni/` — DNI test clones
+# `/qualify/dni/` — DNI copies of the paid funnels
 
-Isolated copies of the two **live paid** funnels, built so PostbackCalls DNI
-(dynamic number insertion + Edge Inject) can be tested end-to-end without
-touching live paid traffic.
+Copies of the two **live paid** funnels running PostbackCalls DNI (dynamic
+number insertion + Edge Inject).
 
-> **This is a test surface. Never point an ad, a main-site CTA, or a shared link
-> at any URL under `/qualify/dni/`.** Paid traffic belongs on `/qualify/2/` and
-> `/qualify/5/`; organic CTAs belong on `/qualify/0/`.
+> **Live swap is ON.** `vercel.json` 307-redirects `/qualify/2/` →
+> `/qualify/dni/2/` and `/qualify/5/` → `/qualify/dni/5/`, so all paid traffic
+> now runs through these pages. See "Live swap" below for what that changes and
+> how to undo it. Still never point an ad or main-site CTA **directly** at a
+> `/qualify/dni/` URL: ads stay on `/qualify/2/` and `/qualify/5/`, so switching
+> back is a one-file change.
+
+## Live swap (2026-09-23)
+
+**What it is.** Two temporary redirects in `vercel.json`:
+
+```json
+{ "source": "/qualify/2/", "destination": "/qualify/dni/2/", "permanent": false },
+{ "source": "/qualify/5/", "destination": "/qualify/dni/5/", "permanent": false }
+```
+
+Only the two **landing** URLs redirect. The live step pages and thank-you pages
+are untouched, and `/qualify/thank-you/` is also used by `/qualify/4/`, so it
+must never be redirected. The query string rides along, so `gclid`, UTMs and
+`click_id` survive the hop.
+
+**Why a redirect and not a rewrite or file swap.** A redirect changes the URL,
+so the visitor's browser is on a `/qualify/dni/` path. That is what the Edge
+Inject route (`www.utilitybenefits.com/qualify/dni/*`) and `DNI_POOL_MAP` key
+on, so nothing in Sparrow had to change. A rewrite would keep `/qualify/2/` in
+the address bar, and Cloudflare would never route it to the worker.
+
+**`permanent: false` (307) is load-bearing.** Browsers cache a 308/301
+indefinitely, so a permanent redirect would keep sending returning visitors to
+the DNI pages after a rollback.
+
+**Leads are real.** The step-4 forms now post the **same `lp` as the funnel they
+copy** (`qualify2` / `qualify5`), plus a hidden `dni=1`. `api/lead.js` uses
+`dni=1` only to choose the DNI thank-you page; it is not sent to Caliber. To tell
+DNI leads apart in the CRM, use `attribution.landing_page`, which is a
+`/qualify/dni/` URL for every one of them.
+
+**Fallback number.** When a pool is exhausted, or JS and Edge Inject both fail,
+the pages show `(855) 617-2111`, the UB Funnel line. Both pools'
+`default_number` is set to the same number, so the two paths agree.
+
+### Turning it off
+
+Fastest: in Vercel → Deployments, pick the deployment before the swap and choose
+**Instant Rollback**. Seconds, no git change.
+
+Permanent: delete the two redirect lines from `vercel.json` and deploy.
+
+Neither touches Sparrow or the pools, so switching back cannot break anything
+else. The `/qualify/dni/` pages keep working at their own URLs either way.
+
+### What changes for reporting while it is on
+
+- **Google Ads call conversions (GFN) stop on these funnels.** GTM tags 6, 10
+  and 14 only match `(813) 820-4158`, `4157` and `4146`, and none of those
+  appear on the DNI pages. Calls are counted in PostbackCalls instead.
+  Form-submit conversions are unaffected: the GTM `thank-you` / `step-1` triggers
+  match the DNI paths too.
+- **Propel clicks** now carry `/qualify/dni/` in `landing_page_url`. The old
+  "exclude `%/qualify/dni/%`" filter below would now drop **real** traffic.
 
 Source docs live in the sibling `sparrow` repo:
 
@@ -30,13 +86,15 @@ falls back into the funnel pool.
 
 | Clone | Source | `lp` value |
 |---|---|---|
-| `/qualify/dni/2/` (+ 4 steps) | `/qualify/2/` | `qualify2dni` |
-| `/qualify/dni/5/` (+ 4 steps) | `/qualify/5/` | `qualify5dni` |
+| `/qualify/dni/2/` (+ 4 steps) | `/qualify/2/` | `qualify2` + `dni=1` |
+| `/qualify/dni/5/` (+ 4 steps) | `/qualify/5/` | `qualify5` + `dni=1` |
 | `/qualify/dni/thank-you/2/` | `/qualify/thank-you/` | — |
 | `/qualify/dni/thank-you/5/` | `/qualify/thank-you-5/` | — |
 
-`api/lead.js` routes `qualify2dni` → `/qualify/dni/thank-you/2/` and `qualify5dni`
-→ `/qualify/dni/thank-you/5/`.
+`api/lead.js` routes `dni=1` to `/qualify/dni/thank-you/5/` when `lp=qualify5`
+and to `/qualify/dni/thank-you/2/` otherwise. The old test values `qualify2dni`
+/ `qualify5dni` still route there too, for any page a browser loaded before the
+swap.
 
 ## sessionStorage is isolated
 
@@ -52,9 +110,10 @@ or a tester who runs the live funnel first carries values into the clone.
 ## Leads are real
 
 The clone forms POST to the **live** `/api/lead/`, which creates a **real Caliber
-CRM lead**. Use obviously fake data. Test leads are identified by
-`extended.lp = qualify2dni | qualify5dni` — confirm the CRM suppression filter on
-that field before the first test submit.
+CRM lead** with the same `lp` as the source funnel. Use obviously fake data when
+testing. DNI leads are identified by `attribution.landing_page` containing
+`/qualify/dni/`. Leads created before 2026-09-23 carry
+`extended.lp = qualify2dni | qualify5dni` instead.
 
 ## Intentional differences from the source funnels
 
@@ -468,11 +527,14 @@ with that `offer_id` and the campaign's `organization_id`
 in the payload or the schema. Every pageview of a clone landing is therefore a
 **real click on a live offer**, inflating its click count and depressing its CTR.
 
-**Exclude test clicks by path:**
+**Exclude test clicks by path (only for clicks before 2026-09-23):**
 
 ```sql
 WHERE landing_page_url NOT LIKE '%/qualify/dni/%'
 ```
+
+Since the live swap, real paid clicks also land on `/qualify/dni/`, so apply
+this filter only to clicks before the swap date or it drops real traffic.
 
 `sanitizeLandingUrl()` keeps `origin + pathname` and strips everything except a
 known-safe param allowlist, so the `/qualify/dni/` path always survives into
@@ -492,10 +554,15 @@ If the pollution becomes a problem, swap in two new test `offerId`s from the sam
 Propel org — that is the only change needed. See
 `qualify/PROPEL-TRACKING-README.md`.
 
-### Fallback numbers are deliberately unroutable
+### Fallback numbers (history — superseded 2026-09-23)
 
-The fallback text and `href` are `(813) 555-0157` (funnel) and `(813) 555-0158`
-(thank-you), and both pools' `default_number` matches. They are **not** the live
+> **Superseded.** For the live swap the fallback is now `(855) 617-2111` on every
+> page and as both pools' `default_number`; see "Live swap" above. It is still
+> not a GFN target, so the first reason below still holds. The second no longer
+> applies: a fallback call now connects, which is what live traffic needs.
+
+The fallback text and `href` were `(813) 555-0157` (funnel) and `(813) 555-0158`
+(thank-you), and both pools' `default_number` matched. They were **not** the live
 `4157` / `4158` lines, for two reasons.
 
 **They dodge Google Forwarding Number.** GFN is live and fires container-wide;
@@ -542,5 +609,9 @@ Removing GFN entirely is the documented end state (see the migration guide).
 
 ## Rollback
 
-Delete `qualify/dni/`, revert the two `thankYou()` lines in `api/lead.js` and the
-`robots.txt` block. No live funnel file is modified by this work at any point.
+To stop sending paid traffic here, see "Turning it off" under "Live swap". The
+live funnel files themselves were never modified.
+
+To remove the DNI pages entirely: remove the swap redirects first, then delete
+`qualify/dni/`, the DNI branches in `thankYou()` in `api/lead.js`, and the
+`robots.txt` block.

@@ -15,11 +15,13 @@ shared `_funnel.css` / `_attribution.js`.
   live as a safety net for any ad that still points at it. Retirement candidate — see
   `ORPHANS-10DLC.md`.
 - `/qualify/3/` is inactive.
-- `/qualify/dni/2/` and `/qualify/dni/5/` (+ `/qualify/dni/thank-you/{2,5}/`) are **test clones** of
-  the two live paid funnels, used to trial PostbackCalls DNI / Edge Inject. **Never point ads or
-  main-site CTAs at them.** They submit real CRM leads tagged `lp=qualify2dni` / `qualify5dni`, and
-  their sessionStorage keys (`ub2d_*` / `ub5d_*`) are isolated from the live funnels on purpose. See
-  `qualify/dni/README.md`.
+- `/qualify/dni/2/` and `/qualify/dni/5/` (+ `/qualify/dni/thank-you/{2,5}/`) are the
+  **PostbackCalls DNI / Edge Inject copies** of the two live paid funnels. **Live swap is ON
+  (2026-09-23):** `vercel.json` 307-redirects `/qualify/2/` and `/qualify/5/` to them, so paid traffic
+  runs through the DNI pages. Keep ads and CTAs on `/qualify/2/` / `/qualify/5/` (never a
+  `/qualify/dni/` URL) so turning the swap off stays a one-file change. They submit real leads with
+  the prod `lp` (`qualify2` / `qualify5`) plus a hidden `dni=1` that only picks the thank-you page;
+  their sessionStorage keys (`ub2d_*` / `ub5d_*`) stay isolated. See `qualify/dni/README.md`.
 
 **Consent is a real checkbox on every live funnel.** `/qualify/0/`, `/qualify/2/`, `/qualify/4/` and
 `/qualify/5/` each render the TCPA text as the label of an `#tcpa` checkbox. Never replace one with a

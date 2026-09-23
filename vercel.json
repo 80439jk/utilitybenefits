@@ -41,6 +41,8 @@
     { "source": "/liheap/:state/", "destination": "/electricity/assistance/liheap/:state/", "permanent": true },
     { "source": "/lifeline/", "destination": "/internet/assistance/lifeline/", "permanent": true },
     { "source": "/free-government-phone/", "destination": "/cellphone/assistance/free-government-phone/", "permanent": true },
+    { "source": "/qualify/2/", "destination": "/qualify/dni/2/", "permanent": false },
+    { "source": "/qualify/5/", "destination": "/qualify/dni/5/", "permanent": false },
     { "source": "/qualify/submit", "destination": "/qualify/thank-you/", "permanent": false },
     { "source": "/qualify/submit/", "destination": "/qualify/thank-you/", "permanent": false }
   ],
