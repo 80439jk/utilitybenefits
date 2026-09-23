@@ -424,22 +424,27 @@ created but never reaching calls, for three compounding reasons, all now fixed:
 2. `?click_id=` — the redirect flow, present on the entry page immediately
 3. `_propel_click_id` cookie, then its `localStorage` backup — the direct flow
 
-It is resolved **lazily, not at page load**. On the direct flow `PropelDirect`
-creates the click with an async POST, so at the moment `_attribution.js` runs on
-the entry page the cookie does not exist yet. Resolving on demand (at form
-submit, and on the thank-you page) is what makes the direct flow work. Once
-found it is written back to `sessionStorage`, so the rest of the funnel no
-longer depends on the cookie.
+It is resolved **lazily**. On the direct flow `PropelDirect` creates the click
+with an async POST, so at the moment `_attribution.js` runs on the entry page
+the cookie does not exist yet. The funnel scripts try immediately and watch
+for up to 30 seconds, re-checking on pagehide and visibility changes. They
+send it with `Sparrow.enrich({ click_id })` as soon as both the ID and the
+snippet exist. This avoids the 500ms `setTag()` debounce on a normal page
+load; pagehide is only a best-effort re-check, not a delivery guarantee.
+Once found it is written back to `sessionStorage`, so the rest of the funnel
+does not depend on the cookie surviving.
 
 The cookie is `path=/` with a 30-day expiry, which is why the thank-you page can
 recover a `click_id` even on a direct hit. The thank-you pages deliberately do
 **not** load `_attribution.js` (that would record a bogus first touch); they
-resolve from the same sources inline.
+resolve from the same sources inline. Their form-data `enrich()` fires once,
+but a separate 30-second watch sends the `click_id` if it arrives afterward.
+If the ID is included in the form-data send, the watch skips the duplicate.
 
 `click_id` is tagged onto the DNI session **as soon as it resolves, on every
 funnel page**: `qualify/2/_attribution.js` and `qualify/5/_attribution.js` poll
 for up to 30 seconds until both the `click_id` and `window.Sparrow` exist, then
-call `Sparrow.setTag('click_id')`. Before this it was tagged only at the landing
+call `Sparrow.enrich({ click_id })`. Before this it was tagged only at the landing
 submit, so a visitor who tapped the number on the landing never had it on their
 session (4 of 10 calls without a `click_id` on 2026-09-23). It is also still
 tagged at the landing submit, sent in the step-4 `enrich()`, and sent again from

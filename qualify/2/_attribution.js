@@ -81,25 +81,19 @@
     return v;
   }
 
-  // Tag the PostbackX click_id onto the DNI session as soon as it resolves, on
-  // every page. Waiting for the landing form submit lost it for visitors who
-  // tapped the number first, and re-tagging on each step recovers it if the
-  // session was replaced mid-funnel. Polls because the Sparrow snippet loads
-  // async and, on the direct flow, PropelDirect writes the cookie only once its
-  // POST returns.
-  (function tagClickId(){
-    var tries = 0;
-    var timer = setInterval(function(){
-      var cid = clickId();
-      var ready = window.Sparrow && window.Sparrow.setTag;
-      if (cid && ready) {
-        window.Sparrow.setTag('click_id', cid);
-        clearInterval(timer);
-      } else if (++tries >= 120) {
-        clearInterval(timer);
-      }
-    }, 250);
-  })();
+  // The snippet loads async and PropelDirect can write the cookie after its
+  // POST returns. Flush the click_id as soon as both it and Sparrow exist,
+  // without waiting for a form submit or the setTag debounce.
+  var clickIdSent = false;
+  function sendClickId(){
+    if (clickIdSent) return true;
+    if (!(window.Sparrow && window.Sparrow.enrich)) return false;
+    var cid = clickId();
+    if (!cid) return false;
+    window.Sparrow.enrich({ click_id: cid });
+    clickIdSent = true;
+    return true;
+  }
 
   window.UBAttribution = {
     getAll: function(){
@@ -109,6 +103,16 @@
       return d;
     },
     get: function(k){ return k === 'click_id' ? clickId() : (load()[k] || ''); },
-    clickId: clickId
+    clickId: clickId,
+    sendClickId: sendClickId
   };
+
+  sendClickId();
+  var watchStartedAt = Date.now();
+  var watch = setInterval(function(){
+    if (sendClickId() || Date.now() - watchStartedAt > 30000) clearInterval(watch);
+  }, 250);
+  // A dialer can background the page; these are best-effort re-checks.
+  window.addEventListener('pagehide', sendClickId);
+  document.addEventListener('visibilitychange', sendClickId);
 })();

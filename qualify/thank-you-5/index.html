@@ -424,8 +424,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return String(v).trim();
   }
 
+  var clickIdSent = false;
   function send(){
     if (!(window.Sparrow && Sparrow.enrich)) return false;
+    var cid = clickId();
     var data = {
       first_name: val('first'),
       last_name:  val('last'),
@@ -435,7 +437,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       state:      val('state', 'state'),
       dob:        val('dob'),
       intent:     val('intent'),
-      click_id:   clickId(),
+      click_id:   cid,
       lp:         val('lp', 'lp') || DEFAULT_LP
     };
     // Never overwrite a value already on the session with an empty string.
@@ -443,17 +445,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // key and would be stripped server-side.
     Object.keys(data).forEach(function(k){ if (!data[k]) delete data[k]; });
     if (Object.keys(data).length) Sparrow.enrich(data);
+    if (cid) clickIdSent = true;
     return true;
   }
 
   // The snippet is loaded async, so it may not have defined window.Sparrow yet.
   // There is no form interaction on this page to piggyback on, so poll briefly.
   // enrich() before init is safe: it persists and init() sends the tags.
-  if (send()) return;
-  var tries = 0;
-  var timer = setInterval(function(){
-    if (send() || ++tries > 40) clearInterval(timer);
+  if (!send()) {
+    var tries = 0;
+    var timer = setInterval(function(){
+      if (send() || ++tries > 40) clearInterval(timer);
+    }, 250);
+  }
+
+  // The form-data send above can finish before a direct-flow click_id arrives.
+  // Keep a separate bounded watch so that later value reaches this pool too.
+  function sendClickId(){
+    if (clickIdSent) return true;
+    if (!(window.Sparrow && Sparrow.enrich)) return false;
+    var cid = clickId();
+    if (!cid) return false;
+    Sparrow.enrich({ click_id: cid });
+    clickIdSent = true;
+    return true;
+  }
+  sendClickId();
+  var clickWatchStartedAt = Date.now();
+  var clickWatch = setInterval(function(){
+    if (sendClickId() || Date.now() - clickWatchStartedAt > 30000) clearInterval(clickWatch);
   }, 250);
+  window.addEventListener('pagehide', sendClickId);
 })();
 </script>
 
