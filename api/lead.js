@@ -423,6 +423,26 @@ module.exports = async function handler(req, res) {
     console.error('caliber-error', { error: errMsg, x_request_id: reqId, case: caseNum });
   }
 
+  // Only an accepted lead from a live paid funnel is a form_submit. A
+  // thank-you redirect alone is not success (validation/CRM failures also
+  // redirect). Keep the PostbackX ID separate from other providers' click IDs.
+  if (statusCode >= 200 && statusCode < 300 && leadId &&
+      b.dni === '1' && (b.lp === 'qualify2' || b.lp === 'qualify5') &&
+      typeof b.postbackx_click_id === 'string' && b.postbackx_click_id.trim()) {
+    try {
+      const postback = await fetch('https://postbacks.postbackx.com/postback?click_id=' +
+        encodeURIComponent(b.postbackx_click_id.trim()) + '&event_name=form_submit', {
+        method: 'GET',
+        signal: AbortSignal.timeout(2000)
+      });
+      if (!postback.ok) console.warn('postbackx-form-submit-failed', { status: postback.status });
+    } catch (err) {
+      // Tracking must never prevent the accepted lead's thank-you redirect.
+      // No automatic retries: the receiver may already have counted it.
+      console.warn('postbackx-form-submit-failed');
+    }
+  }
+
   // Debug mode: gated by LEAD_DEBUG_SECRET env var + matching x-debug-secret
   // header. Returns the full Caliber response inline instead of redirecting,
   // for smoke-testing the integration end-to-end. The redirect path (normal
