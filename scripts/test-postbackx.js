@@ -298,8 +298,7 @@ test('CRM retry success produces just one form_submit postback', async () => {
 });
 
 const ENRICHMENT_ENV = {
-  POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY: 'enr_' + 'a'.repeat(64),
-  POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY: 'enr_' + 'b'.repeat(64)
+  POSTBACKCALLS_ENRICHMENT_KEY: 'enr_' + 'a'.repeat(64)
 };
 function deposits(api) {
   return api.requests.filter(r => r.url.startsWith('https://api.postbackcalls.com/api/enrich/'));
@@ -313,7 +312,7 @@ function depositTags(request) {
 }
 
 for (const variant of ['2', '5']) {
-  test(`funnel ${variant}: submit deposits approved form fields and PBX ID in both campaigns`, async () => {
+  test(`funnel ${variant}: submit deposits approved form fields and PBX ID only in the 10DLC campaign`, async () => {
     const api = apiSandbox({ env: ENRICHMENT_ENV });
     await api.run({
       lp: `qualify${variant}`, first: ' Jane ', last: ' Doe ', phone: '(813) 820-4157',
@@ -326,11 +325,10 @@ for (const variant of ['2', '5']) {
       gclid: 'do-not-forward', arbitrary_field: 'do-not-forward'
     });
     const requests = deposits(api);
-    assert.equal(requests.length, 2);
-    assert.equal(api.requests.length, 4);
+    assert.equal(requests.length, 1);
+    assert.equal(api.requests.length, 3);
     assert.deepEqual(requests.map(r => r.url), [
-      'https://api.postbackcalls.com/api/enrich/' + ENRICHMENT_ENV.POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY,
-      'https://api.postbackcalls.com/api/enrich/' + ENRICHMENT_ENV.POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY
+      'https://api.postbackcalls.com/api/enrich/' + ENRICHMENT_ENV.POSTBACKCALLS_ENRICHMENT_KEY
     ]);
     for (const request of requests) {
       assert.equal(new URL(request.url).search, '');
@@ -362,8 +360,8 @@ for (const variant of ['2', '5']) {
 test('missing PBX ID does not discard enrichment or substitute another click ID', async () => {
   const api = apiSandbox({ env: ENRICHMENT_ENV });
   await api.run({ postbackx_click_id: '', gclid: 'google-id', click_id: 'untrusted-other-id' });
-  assert.equal(deposits(api).length, 2);
-  assert.equal(api.requests.length, 3);
+  assert.equal(deposits(api).length, 1);
+  assert.equal(api.requests.length, 2);
   assert(!('click_id' in depositTags(deposits(api)[0])));
 });
 
@@ -386,39 +384,52 @@ test('omits blanks, non-scalar values, and overlong tags without truncating iden
 test('accepts normalized E.164 phone input that already includes the country code', async () => {
   const api = apiSandbox({ env: ENRICHMENT_ENV });
   await api.run({ phone: '+1 (813) 820-4157' });
-  assert.equal(deposits(api).length, 2);
+  assert.equal(deposits(api).length, 1);
   depositTags(deposits(api)[0]);
   assert.equal(JSON.parse(api.requests[0].init.body).contact.phone, '+18138204157');
 });
 
-for (const scope of ['FUNNEL', 'THANK_YOU']) {
-  test(`only the configured ${scope} campaign receives a deposit`, async () => {
-    const keyName = `POSTBACKCALLS_${scope}_ENRICHMENT_KEY`;
-    const api = apiSandbox({ env: { [keyName]: '  ' + ENRICHMENT_ENV[keyName] + '  ' } });
-    await api.run();
-    assert.equal(deposits(api).length, 1);
-    assert(deposits(api)[0].url.endsWith(ENRICHMENT_ENV[keyName]));
-  });
-}
-
-test('deduplicates an accidentally repeated campaign key', async () => {
+test('normalizes whitespace around the single 10DLC campaign key', async () => {
   const api = apiSandbox({ env: {
-    POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY: ENRICHMENT_ENV.POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY,
-    POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY: ENRICHMENT_ENV.POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY
+    POSTBACKCALLS_ENRICHMENT_KEY: '  ' + ENRICHMENT_ENV.POSTBACKCALLS_ENRICHMENT_KEY + '  '
   } });
   await api.run();
   assert.equal(deposits(api).length, 1);
+  assert(deposits(api)[0].url.endsWith(ENRICHMENT_ENV.POSTBACKCALLS_ENRICHMENT_KEY));
 });
 
-test('missing or malformed configuration never sends or logs campaign credentials', async () => {
-  const api = apiSandbox({ env: { POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY: 'private-invalid-key' } });
+test('legacy funnel/thank-you keys cannot cause additional campaign deposits', async () => {
+  const api = apiSandbox({ env: {
+    ...ENRICHMENT_ENV,
+    POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY: 'enr_' + 'b'.repeat(64),
+    POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY: 'enr_' + 'c'.repeat(64)
+  } });
+  await api.run();
+  assert.equal(deposits(api).length, 1);
+  assert(deposits(api)[0].url.endsWith(ENRICHMENT_ENV.POSTBACKCALLS_ENRICHMENT_KEY));
+});
+
+test('legacy keys without the 10DLC key do not send enrichment', async () => {
+  const api = apiSandbox({ env: {
+    POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY: 'enr_' + 'b'.repeat(64),
+    POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY: 'enr_' + 'c'.repeat(64)
+  } });
   await api.run();
   assert.equal(deposits(api).length, 0);
   assert.equal(api.requests.length, 2);
-  assert(!JSON.stringify(api.warnings).includes('private-invalid-key'));
-  assert(api.warnings.some(w => w[1]?.reason === 'invalid_configuration'));
   assert(api.warnings.some(w => w[1]?.reason === 'not_configured'));
 });
+
+for (const [key, reason] of [['', 'not_configured'], ['private-invalid-key', 'invalid_configuration']]) {
+  test(`${reason} 10DLC key never sends or logs campaign credentials`, async () => {
+    const api = apiSandbox({ env: { POSTBACKCALLS_ENRICHMENT_KEY: key } });
+    await api.run();
+    assert.equal(deposits(api).length, 0);
+    assert.equal(api.requests.length, 2);
+    assert(!JSON.stringify(api.warnings).includes('private-invalid-key'));
+    assert(api.warnings.some(w => w[1]?.reason === reason));
+  });
+}
 
 for (const [label, options, body] of [
   ['invalid phone', {}, { phone: '123' }],
@@ -441,11 +452,11 @@ for (const [label, options, body] of [
   });
 }
 
-test('CRM retry success produces one deposit per configured campaign', async () => {
+test('CRM retry success produces exactly one 10DLC deposit', async () => {
   const api = apiSandbox({ env: ENRICHMENT_ENV, crmRetry: true });
   await api.run();
-  assert.equal(deposits(api).length, 2);
-  assert.equal(api.requests.length, 5);
+  assert.equal(deposits(api).length, 1);
+  assert.equal(api.requests.length, 4);
 });
 
 for (const [label, options] of [
@@ -459,11 +470,11 @@ for (const [label, options] of [
   test(`enrichment ${label} never blocks redirect or exposes data in its logs`, async () => {
     const api = apiSandbox({ env: ENRICHMENT_ENV, ...options });
     await api.run();
-    assert.equal(deposits(api).length, 2);
+    assert.equal(deposits(api).length, 1);
     assert.equal(api.response.statusCode, 302);
     assert(api.response.location.includes('lead_id=mock-lead'));
     const warnings = api.warnings.filter(w => w[0] === 'postbackcalls-enrichment-failed');
-    assert.equal(warnings.length, 2);
+    assert.equal(warnings.length, 1);
     const text = JSON.stringify(warnings);
     for (const secret of [...Object.values(ENRICHMENT_ENV), '8138204157', 'test@example.com', 'api+/&id', 'private-error', 'private-response']) {
       assert(!text.includes(secret));
@@ -471,23 +482,10 @@ for (const [label, options] of [
   });
 }
 
-test('one failed campaign does not prevent the other campaign from receiving enrichment', async () => {
-  const api = apiSandbox({
-    env: ENRICHMENT_ENV,
-    onEnrichment(url) {
-      if (url.endsWith(ENRICHMENT_ENV.POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY)) throw new Error('private-campaign-error');
-    }
-  });
-  await api.run();
-  assert.equal(deposits(api).length, 2);
-  assert.equal(api.warnings.filter(w => w[0] === 'postbackcalls-enrichment-failed').length, 1);
-  assert.equal(api.response.statusCode, 302);
-});
-
 test('PostbackX failure does not prevent caller enrichment', async () => {
   const api = apiSandbox({ env: ENRICHMENT_ENV, postbackThrows: true });
   await api.run();
-  assert.equal(deposits(api).length, 2);
+  assert.equal(deposits(api).length, 1);
   assert.equal(api.response.statusCode, 302);
 });
 
@@ -498,10 +496,10 @@ test('stalled enrichment requests abort within the two-second deadline', async (
   const guard = setTimeout(() => {}, 4000);
   try {
     await api.run();
-    assert.equal(deposits(api).length, 2);
+    assert.equal(deposits(api).length, 1);
     assert(deposits(api).every(r => r.init.signal.aborted));
     assert.equal(api.response.statusCode, 302);
-    assert.equal(api.warnings.filter(w => w[0] === 'postbackcalls-enrichment-failed').length, 2);
+    assert.equal(api.warnings.filter(w => w[0] === 'postbackcalls-enrichment-failed').length, 1);
   } finally {
     clearTimeout(guard);
   }
@@ -514,8 +512,8 @@ test('all submit tracking runs concurrently and finishes before redirect', async
   const completion = api.run();
   // Advance only mocked microtasks, with no network or wall-clock waiting.
   for (let n = 0; n < 10; n++) await Promise.resolve();
-  assert.equal(api.requests.length, 4);
-  assert.equal(releases.length, 3);
+  assert.equal(api.requests.length, 3);
+  assert.equal(releases.length, 2);
   assert.equal(api.response.location, undefined);
   for (const release of releases) release();
   await completion;

@@ -27,10 +27,10 @@ Both use `https://postbacks.postbackx.com/postback` with URL-encoded `click_id`
 and `event_name=form_start` or `event_name=form_submit`. No postback is sent
 without a PostbackX ID. No form values or personal contact details are included.
 
-On an accepted submit, the handler also sends separate, server-side
-[PostbackCalls caller-enrichment deposits](POSTBACKCALLS-README.md) when campaign
-keys are configured. Those JSON requests carry approved form fields and the
-same PostbackX `click_id`; they are not PostbackX conversion postbacks.
+On an accepted submit, the handler also sends a separate, server-side
+[PostbackCalls caller-enrichment deposit](POSTBACKCALLS-README.md) when the
+10DLC campaign key is configured. That JSON request carries approved form
+fields and the same PostbackX `click_id`; it is not a PostbackX conversion postback.
 
 ## Checks
 

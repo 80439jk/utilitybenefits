@@ -9,8 +9,7 @@
  *   CALIBER_HMAC_SECRET   HMAC signing secret (from Caliber Partner Guide)
  *   CALIBER_ANON_KEY      Supabase anon key   (sent as `apikey` header)
  *   CALIBER_ENDPOINT      (optional) override the default ingest URL
- *   POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY    UB Funnel campaign enrichment key
- *   POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY UB Thank You Page enrichment key
+ *   POSTBACKCALLS_ENRICHMENT_KEY  Dedicated 10DLC campaign enrichment key
  *
  * On any failure the user still gets redirected to the thank-you page so
  * the call-back experience isn't broken; the failure is logged for ops.
@@ -257,45 +256,37 @@ function callerEnrichmentPayload(b, payload) {
 }
 
 async function sendCallerEnrichment(data) {
-  // Deposits are campaign-scoped. The landing/steps and thank-you pages use
-  // different campaigns, so prepare both configured scopes for a future call.
-  const scopes = [
-    ['funnel', process.env.POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY],
-    ['thank_you', process.env.POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY]
-  ];
-  const sentKeys = new Set();
-  await Promise.allSettled(scopes.map(async function([scope, configuredKey]){
-    const key = typeof configuredKey === 'string' ? configuredKey.trim() : '';
-    if (!/^enr_[a-f0-9]{64}$/.test(key)) {
-      console.warn('postbackcalls-enrichment-skipped', {
-        scope: scope, reason: key ? 'invalid_configuration' : 'not_configured'
-      });
+  // Both live forms deposit only into the configured 10DLC campaign.
+  // Its key, not the page's DNI pool or lp value, selects the destination.
+  const configuredKey = process.env.POSTBACKCALLS_ENRICHMENT_KEY;
+  const key = typeof configuredKey === 'string' ? configuredKey.trim() : '';
+  if (!/^enr_[a-f0-9]{64}$/.test(key)) {
+    console.warn('postbackcalls-enrichment-skipped', {
+      reason: key ? 'invalid_configuration' : 'not_configured'
+    });
+    return;
+  }
+  try {
+    const response = await fetch('https://api.postbackcalls.com/api/enrich/' + key, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      redirect: 'error',
+      cache: 'no-store',
+      signal: AbortSignal.timeout(2000)
+    });
+    if (!response.ok) {
+      console.warn('postbackcalls-enrichment-failed', { status: response.status });
       return;
     }
-    if (sentKeys.has(key)) return;
-    sentKeys.add(key);
-    try {
-      const response = await fetch('https://api.postbackcalls.com/api/enrich/' + key, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-        redirect: 'error',
-        cache: 'no-store',
-        signal: AbortSignal.timeout(2000)
-      });
-      if (!response.ok) {
-        console.warn('postbackcalls-enrichment-failed', { scope: scope, status: response.status });
-        return;
-      }
-      const result = await response.json();
-      if (!result || result.ok !== true) {
-        console.warn('postbackcalls-enrichment-failed', { scope: scope, reason: 'not_accepted' });
-      }
-    } catch (err) {
-      // Never log the exception: fetch errors can include credentials or PII.
-      console.warn('postbackcalls-enrichment-failed', { scope: scope, reason: 'request_failed' });
+    const result = await response.json();
+    if (!result || result.ok !== true) {
+      console.warn('postbackcalls-enrichment-failed', { reason: 'not_accepted' });
     }
-  }));
+  } catch (err) {
+    // Never log the exception: fetch errors can include credentials or PII.
+    console.warn('postbackcalls-enrichment-failed', { reason: 'request_failed' });
+  }
 }
 
 async function sendFormSubmitPostback(clickId) {
@@ -525,8 +516,8 @@ module.exports = async function handler(req, res) {
   }
 
   // Deposit before the thank-you page exposes its call button. Enrichment and
-  // the PBX postback run concurrently, each bounded to two seconds, so adding
-  // another campaign does not add serial delay. A failure never blocks redirect.
+  // the PBX postback run concurrently, each bounded to two seconds, so the
+  // 10DLC deposit does not add serial delay. A failure never blocks redirect.
   if (statusCode >= 200 && statusCode < 300 && leadId &&
       b.dni === '1' && (b.lp === 'qualify2' || b.lp === 'qualify5')) {
     await Promise.allSettled([
