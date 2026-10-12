@@ -9,6 +9,8 @@
  *   CALIBER_HMAC_SECRET   HMAC signing secret (from Caliber Partner Guide)
  *   CALIBER_ANON_KEY      Supabase anon key   (sent as `apikey` header)
  *   CALIBER_ENDPOINT      (optional) override the default ingest URL
+ *   POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY    UB Funnel campaign enrichment key
+ *   POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY UB Thank You Page enrichment key
  *
  * On any failure the user still gets redirected to the thank-you page so
  * the call-back experience isn't broken; the failure is logged for ops.
@@ -133,7 +135,8 @@ function normalizeDob(v) {
 
 function normalizePhone(v) {
   if (!v) return null;
-  const d = String(v).replace(/[^0-9]/g, '');
+  let d = String(v).replace(/[^0-9]/g, '');
+  if (d.length === 11 && d[0] === '1') d = d.slice(1);
   if (d.length !== 10) return null;
   return '+1' + d;
 }
@@ -210,6 +213,104 @@ function pruneEmpty(obj) {
 function maskCaseHash(s) {
   if (!s) return '';
   return String(s).slice(0, 4) + '…';
+}
+
+// -------------------------- Submit tracking ---------------------------- //
+function callerEnrichmentPayload(b, payload) {
+  // Match the existing DNI tag names. These 20 approved scalar fields are the
+  // entire allowlist; never spread the form, CRM response, or attribution blob.
+  const candidates = {
+    click_id: b.postbackx_click_id,
+    first_name: payload.contact.first_name,
+    last_name: payload.contact.last_name,
+    email: payload.contact.email,
+    phone: payload.contact.phone,
+    zip: payload.contact.zip,
+    state: payload.contact.state,
+    dob: payload.extended.date_of_birth,
+    citizen: b.citizen,
+    addr: payload.extended.address_line_1,
+    city: payload.extended.city,
+    income: b.income,
+    employ: b.employ,
+    intent: b.intent,
+    lp: b.lp,
+    tcpa_consent: payload.consent.given,
+    consent_timestamp: payload.consent.timestamp,
+    trusted_form: payload.consent.trustedform_cert_url,
+    jornaya_lead_id: payload.consent.jornaya_leadid,
+    case_number: payload.extended.case_number
+  };
+  const tags = {};
+  Object.keys(candidates).forEach(function(k){
+    const v = candidates[k];
+    if (typeof v === 'boolean') tags[k] = v;
+    else if (typeof v === 'string' && v.trim() && v.trim().length <= 255) {
+      // Omit overlong values instead of silently corrupting IDs/cert URLs.
+      tags[k] = v.trim();
+    }
+  });
+  return Object.assign({
+    callerid: payload.contact.phone,
+    source: 'utilitybenefits_form'
+  }, tags);
+}
+
+async function sendCallerEnrichment(data) {
+  // Deposits are campaign-scoped. The landing/steps and thank-you pages use
+  // different campaigns, so prepare both configured scopes for a future call.
+  const scopes = [
+    ['funnel', process.env.POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY],
+    ['thank_you', process.env.POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY]
+  ];
+  const sentKeys = new Set();
+  await Promise.allSettled(scopes.map(async function([scope, configuredKey]){
+    const key = typeof configuredKey === 'string' ? configuredKey.trim() : '';
+    if (!/^enr_[a-f0-9]{64}$/.test(key)) {
+      console.warn('postbackcalls-enrichment-skipped', {
+        scope: scope, reason: key ? 'invalid_configuration' : 'not_configured'
+      });
+      return;
+    }
+    if (sentKeys.has(key)) return;
+    sentKeys.add(key);
+    try {
+      const response = await fetch('https://api.postbackcalls.com/api/enrich/' + key, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        redirect: 'error',
+        cache: 'no-store',
+        signal: AbortSignal.timeout(2000)
+      });
+      if (!response.ok) {
+        console.warn('postbackcalls-enrichment-failed', { scope: scope, status: response.status });
+        return;
+      }
+      const result = await response.json();
+      if (!result || result.ok !== true) {
+        console.warn('postbackcalls-enrichment-failed', { scope: scope, reason: 'not_accepted' });
+      }
+    } catch (err) {
+      // Never log the exception: fetch errors can include credentials or PII.
+      console.warn('postbackcalls-enrichment-failed', { scope: scope, reason: 'request_failed' });
+    }
+  }));
+}
+
+async function sendFormSubmitPostback(clickId) {
+  if (typeof clickId !== 'string' || !clickId.trim()) return;
+  try {
+    const postback = await fetch('https://postbacks.postbackx.com/postback?click_id=' +
+      encodeURIComponent(clickId.trim()) + '&event_name=form_submit', {
+      method: 'GET',
+      signal: AbortSignal.timeout(2000)
+    });
+    if (!postback.ok) console.warn('postbackx-form-submit-failed', { status: postback.status });
+  } catch (err) {
+    // No automatic retries: the receiver may already have counted it.
+    console.warn('postbackx-form-submit-failed');
+  }
 }
 
 // ------------------------------- Handler ------------------------------- //
@@ -423,24 +524,15 @@ module.exports = async function handler(req, res) {
     console.error('caliber-error', { error: errMsg, x_request_id: reqId, case: caseNum });
   }
 
-  // Only an accepted lead from a live paid funnel is a form_submit. A
-  // thank-you redirect alone is not success (validation/CRM failures also
-  // redirect). Keep the PostbackX ID separate from other providers' click IDs.
+  // Deposit before the thank-you page exposes its call button. Enrichment and
+  // the PBX postback run concurrently, each bounded to two seconds, so adding
+  // another campaign does not add serial delay. A failure never blocks redirect.
   if (statusCode >= 200 && statusCode < 300 && leadId &&
-      b.dni === '1' && (b.lp === 'qualify2' || b.lp === 'qualify5') &&
-      typeof b.postbackx_click_id === 'string' && b.postbackx_click_id.trim()) {
-    try {
-      const postback = await fetch('https://postbacks.postbackx.com/postback?click_id=' +
-        encodeURIComponent(b.postbackx_click_id.trim()) + '&event_name=form_submit', {
-        method: 'GET',
-        signal: AbortSignal.timeout(2000)
-      });
-      if (!postback.ok) console.warn('postbackx-form-submit-failed', { status: postback.status });
-    } catch (err) {
-      // Tracking must never prevent the accepted lead's thank-you redirect.
-      // No automatic retries: the receiver may already have counted it.
-      console.warn('postbackx-form-submit-failed');
-    }
+      b.dni === '1' && (b.lp === 'qualify2' || b.lp === 'qualify5')) {
+    await Promise.allSettled([
+      sendFormSubmitPostback(b.postbackx_click_id),
+      sendCallerEnrichment(callerEnrichmentPayload(b, payload))
+    ]);
   }
 
   // Debug mode: gated by LEAD_DEBUG_SECRET env var + matching x-debug-secret
