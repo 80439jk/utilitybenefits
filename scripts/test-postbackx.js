@@ -192,16 +192,37 @@ test('comparison funnels and pages without forms never track starts', () => {
 
 function apiSandbox(options = {}) {
   const requests = [];
+  const warnings = [];
   const response = { statusCode: 200, headers: {} };
   const context = vm.createContext({
     module: { exports: {} },
     require,
-    process: { env: options.noEnv ? {} : { CALIBER_HMAC_SECRET: 'mock-secret', CALIBER_ANON_KEY: 'mock-key' } },
-    console: { log() {}, warn() {}, error() {} },
+    process: { env: options.noEnv ? {} : {
+      CALIBER_HMAC_SECRET: 'mock-secret', CALIBER_ANON_KEY: 'mock-key', ...options.env
+    } },
+    console: { log() {}, warn(...args) { warnings.push(args); }, error() {} },
     AbortSignal,
     async fetch(url, init) {
       requests.push({ url, init });
+      if (url.startsWith('https://api.postbackcalls.com/api/enrich/')) {
+        if (options.onEnrichment) await options.onEnrichment(url, init);
+        if (options.enrichmentTimeout) {
+          await new Promise((resolve, reject) => {
+            init.signal.addEventListener('abort', () => reject(init.signal.reason), { once: true });
+          });
+        }
+        if (options.enrichmentThrows) throw new Error('private-error-with-key-and-lead-data');
+        return {
+          ok: !options.enrichmentStatus || options.enrichmentStatus < 400,
+          status: options.enrichmentStatus || 200,
+          async json() {
+            if (options.enrichmentMalformed) throw new SyntaxError('private-response');
+            return { ok: options.enrichmentOk === undefined ? true : options.enrichmentOk };
+          }
+        };
+      }
       if (url.startsWith('https://postbacks.postbackx.com/')) {
+        if (options.onPostback) await options.onPostback(url, init);
         if (options.postbackThrows) throw new Error('mock network failure');
         return { ok: options.postbackStatus ? options.postbackStatus < 400 : true, status: options.postbackStatus || 200 };
       }
@@ -218,7 +239,7 @@ function apiSandbox(options = {}) {
     redirect(code, url) { response.statusCode = code; response.location = url; return this; }
   };
   return {
-    requests, response,
+    requests, response, warnings,
     run(body = {}, method = 'POST') {
       return context.module.exports({
         method, headers: {}, body: {
@@ -274,6 +295,236 @@ test('CRM retry success produces just one form_submit postback', async () => {
   await api.run();
   assert.equal(api.requests.length, 3);
   checkRequest(api.requests[2], 'form_submit', 'api+/&id');
+});
+
+const ENRICHMENT_ENV = {
+  POSTBACKCALLS_ENRICHMENT_KEY: 'enr_' + 'a'.repeat(64)
+};
+function deposits(api) {
+  return api.requests.filter(r => r.url.startsWith('https://api.postbackcalls.com/api/enrich/'));
+}
+function depositTags(request) {
+  const payload = JSON.parse(request.init.body);
+  const { callerid, source, ...tags } = payload;
+  assert.equal(callerid, '+18138204157');
+  assert.equal(source, 'utilitybenefits_form');
+  return tags;
+}
+
+for (const variant of ['2', '5']) {
+  test(`funnel ${variant}: submit deposits approved form fields and PBX ID only in the 10DLC campaign`, async () => {
+    const api = apiSandbox({ env: ENRICHMENT_ENV });
+    await api.run({
+      lp: `qualify${variant}`, first: ' Jane ', last: ' Doe ', phone: '(813) 820-4157',
+      zip: '01234', state: 'Florida', dob: '12/25/1980', citizen: 'U.S. citizen',
+      addr: '123 Example St', city: 'Example City', income: 'Under $20,000',
+      employ: 'Employed', intent: 'energy,internet_phone', tcpa: variant === '2' ? '1' : undefined,
+      consent_timestamp: '2026-10-12T12:00:00.000Z',
+      xxTrustedFormCertUrl: 'https://cert.example.test/certificate',
+      leadid_token: 'test-jornaya-id', postbackx_click_id: ' pbx+/&id ',
+      gclid: 'do-not-forward', arbitrary_field: 'do-not-forward'
+    });
+    const requests = deposits(api);
+    assert.equal(requests.length, 1);
+    assert.equal(api.requests.length, 3);
+    assert.deepEqual(requests.map(r => r.url), [
+      'https://api.postbackcalls.com/api/enrich/' + ENRICHMENT_ENV.POSTBACKCALLS_ENRICHMENT_KEY
+    ]);
+    for (const request of requests) {
+      assert.equal(new URL(request.url).search, '');
+      assert.equal(request.init.method, 'POST');
+      assert.equal(request.init.headers['Content-Type'], 'application/json');
+      assert.equal(request.init.redirect, 'error');
+      assert.equal(request.init.cache, 'no-store');
+      assert(request.init.signal);
+      const tags = depositTags(request);
+      assert.equal(Object.keys(tags).length, 20);
+      assert.deepEqual(tags, {
+        click_id: 'pbx+/&id', first_name: 'Jane', last_name: 'Doe', email: 'test@example.com',
+        phone: '+18138204157', zip: '01234', state: 'FL', dob: '1980-12-25',
+        citizen: 'U.S. citizen', addr: '123 Example St', city: 'Example City',
+        income: 'Under $20,000', employ: 'Employed', intent: 'energy,internet_phone',
+        lp: `qualify${variant}`, tcpa_consent: variant === '2',
+        consent_timestamp: '2026-10-12T12:00:00.000Z',
+        trusted_form: 'https://cert.example.test/certificate',
+        jornaya_lead_id: 'test-jornaya-id', case_number: tags.case_number
+      });
+      assert(/^UB-2026-\d{7}$/.test(tags.case_number));
+    }
+    assert.equal(api.response.statusCode, 302);
+    assert(api.response.location.startsWith(`/qualify/thank-you-${variant}/`));
+    assert(!api.requests[0].init.body.includes('postbackx_click_id'));
+  });
+}
+
+test('missing PBX ID does not discard enrichment or substitute another click ID', async () => {
+  const api = apiSandbox({ env: ENRICHMENT_ENV });
+  await api.run({ postbackx_click_id: '', gclid: 'google-id', click_id: 'untrusted-other-id' });
+  assert.equal(deposits(api).length, 1);
+  assert.equal(api.requests.length, 2);
+  assert(!('click_id' in depositTags(deposits(api)[0])));
+});
+
+test('omits blanks, non-scalar values, and overlong tags without truncating identifiers', async () => {
+  const api = apiSandbox({ env: ENRICHMENT_ENV });
+  await api.run({
+    citizen: ' ', zip: ['not-a-scalar'], addr: 'x'.repeat(256), city: { invalid: true },
+    income: '', employ: null, dob: 'invalid', postbackx_click_id: 'c'.repeat(256),
+    xxTrustedFormCertUrl: 'https://cert.example.test/' + 'x'.repeat(255),
+    leadid_token: { invalid: true }, intent: 'x'.repeat(255), tcpa: '0'
+  });
+  const tags = depositTags(deposits(api)[0]);
+  for (const key of ['citizen', 'zip', 'addr', 'city', 'income', 'employ', 'dob', 'click_id', 'trusted_form', 'jornaya_lead_id']) {
+    assert(!(key in tags), key);
+  }
+  assert.equal(tags.intent.length, 255);
+  assert.equal(tags.tcpa_consent, false);
+});
+
+test('accepts normalized E.164 phone input that already includes the country code', async () => {
+  const api = apiSandbox({ env: ENRICHMENT_ENV });
+  await api.run({ phone: '+1 (813) 820-4157' });
+  assert.equal(deposits(api).length, 1);
+  depositTags(deposits(api)[0]);
+  assert.equal(JSON.parse(api.requests[0].init.body).contact.phone, '+18138204157');
+});
+
+test('normalizes whitespace around the single 10DLC campaign key', async () => {
+  const api = apiSandbox({ env: {
+    POSTBACKCALLS_ENRICHMENT_KEY: '  ' + ENRICHMENT_ENV.POSTBACKCALLS_ENRICHMENT_KEY + '  '
+  } });
+  await api.run();
+  assert.equal(deposits(api).length, 1);
+  assert(deposits(api)[0].url.endsWith(ENRICHMENT_ENV.POSTBACKCALLS_ENRICHMENT_KEY));
+});
+
+test('legacy funnel/thank-you keys cannot cause additional campaign deposits', async () => {
+  const api = apiSandbox({ env: {
+    ...ENRICHMENT_ENV,
+    POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY: 'enr_' + 'b'.repeat(64),
+    POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY: 'enr_' + 'c'.repeat(64)
+  } });
+  await api.run();
+  assert.equal(deposits(api).length, 1);
+  assert(deposits(api)[0].url.endsWith(ENRICHMENT_ENV.POSTBACKCALLS_ENRICHMENT_KEY));
+});
+
+test('legacy keys without the 10DLC key do not send enrichment', async () => {
+  const api = apiSandbox({ env: {
+    POSTBACKCALLS_FUNNEL_ENRICHMENT_KEY: 'enr_' + 'b'.repeat(64),
+    POSTBACKCALLS_THANK_YOU_ENRICHMENT_KEY: 'enr_' + 'c'.repeat(64)
+  } });
+  await api.run();
+  assert.equal(deposits(api).length, 0);
+  assert.equal(api.requests.length, 2);
+  assert(api.warnings.some(w => w[1]?.reason === 'not_configured'));
+});
+
+for (const [key, reason] of [['', 'not_configured'], ['private-invalid-key', 'invalid_configuration']]) {
+  test(`${reason} 10DLC key never sends or logs campaign credentials`, async () => {
+    const api = apiSandbox({ env: { POSTBACKCALLS_ENRICHMENT_KEY: key } });
+    await api.run();
+    assert.equal(deposits(api).length, 0);
+    assert.equal(api.requests.length, 2);
+    assert(!JSON.stringify(api.warnings).includes('private-invalid-key'));
+    assert(api.warnings.some(w => w[1]?.reason === reason));
+  });
+}
+
+for (const [label, options, body] of [
+  ['invalid phone', {}, { phone: '123' }],
+  ['invalid email', {}, { email: 'invalid' }],
+  ['missing CRM configuration', { noEnv: true }, {}],
+  ['CRM rejects lead', { crmStatus: 400 }, {}],
+  ['CRM fails twice', { crmStatus: 500 }, {}],
+  ['CRM throws', { crmThrows: true }, {}],
+  ['CRM omits lead ID', { noLeadId: true }, {}],
+  ['comparison funnel', {}, { dni: '0' }],
+  ['compliance funnel', {}, { lp: 'qualify0' }],
+  ['inactive funnel', {}, { lp: 'qualify3' }],
+  ['safety-net funnel', {}, { lp: 'qualify4' }]
+]) {
+  test(`does not enrich ${label}`, async () => {
+    const api = apiSandbox({ env: ENRICHMENT_ENV, ...options });
+    await api.run(body);
+    assert.equal(deposits(api).length, 0);
+    assert.equal(api.response.statusCode, 302);
+  });
+}
+
+test('CRM retry success produces exactly one 10DLC deposit', async () => {
+  const api = apiSandbox({ env: ENRICHMENT_ENV, crmRetry: true });
+  await api.run();
+  assert.equal(deposits(api).length, 1);
+  assert.equal(api.requests.length, 4);
+});
+
+for (const [label, options] of [
+  ['network failure', { enrichmentThrows: true }],
+  ['HTTP rejection', { enrichmentStatus: 401 }],
+  ['rate limit', { enrichmentStatus: 429 }],
+  ['HTTP 200 with ok:false', { enrichmentOk: false }],
+  ['HTTP 200 with string ok', { enrichmentOk: 'true' }],
+  ['malformed JSON', { enrichmentMalformed: true }]
+]) {
+  test(`enrichment ${label} never blocks redirect or exposes data in its logs`, async () => {
+    const api = apiSandbox({ env: ENRICHMENT_ENV, ...options });
+    await api.run();
+    assert.equal(deposits(api).length, 1);
+    assert.equal(api.response.statusCode, 302);
+    assert(api.response.location.includes('lead_id=mock-lead'));
+    const warnings = api.warnings.filter(w => w[0] === 'postbackcalls-enrichment-failed');
+    assert.equal(warnings.length, 1);
+    const text = JSON.stringify(warnings);
+    for (const secret of [...Object.values(ENRICHMENT_ENV), '8138204157', 'test@example.com', 'api+/&id', 'private-error', 'private-response']) {
+      assert(!text.includes(secret));
+    }
+  });
+}
+
+test('PostbackX failure does not prevent caller enrichment', async () => {
+  const api = apiSandbox({ env: ENRICHMENT_ENV, postbackThrows: true });
+  await api.run();
+  assert.equal(deposits(api).length, 1);
+  assert.equal(api.response.statusCode, 302);
+});
+
+test('stalled enrichment requests abort within the two-second deadline', async () => {
+  const api = apiSandbox({ env: ENRICHMENT_ENV, enrichmentTimeout: true });
+  // AbortSignal.timeout uses an unref'd timer. Keep this offline test alive
+  // long enough to observe cancellation, without making any real requests.
+  const guard = setTimeout(() => {}, 4000);
+  try {
+    await api.run();
+    assert.equal(deposits(api).length, 1);
+    assert(deposits(api).every(r => r.init.signal.aborted));
+    assert.equal(api.response.statusCode, 302);
+    assert.equal(api.warnings.filter(w => w[0] === 'postbackcalls-enrichment-failed').length, 1);
+  } finally {
+    clearTimeout(guard);
+  }
+});
+
+test('all submit tracking runs concurrently and finishes before redirect', async () => {
+  const releases = [];
+  const hold = () => new Promise(resolve => releases.push(resolve));
+  const api = apiSandbox({ env: ENRICHMENT_ENV, onPostback: hold, onEnrichment: hold });
+  const completion = api.run();
+  // Advance only mocked microtasks, with no network or wall-clock waiting.
+  for (let n = 0; n < 10; n++) await Promise.resolve();
+  assert.equal(api.requests.length, 3);
+  assert.equal(releases.length, 2);
+  assert.equal(api.response.location, undefined);
+  for (const release of releases) release();
+  await completion;
+  assert.equal(api.response.statusCode, 302);
+});
+
+test('non-POST requests never enrich even when credentials are configured', async () => {
+  const api = apiSandbox({ env: ENRICHMENT_ENV });
+  await api.run({}, 'GET');
+  assert.equal(api.requests.length, 0);
+  assert.equal(api.response.statusCode, 405);
 });
 
 for (const options of [{ postbackThrows: true }, { postbackStatus: 500 }]) {
