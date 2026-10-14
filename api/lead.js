@@ -250,8 +250,7 @@ function callerEnrichmentPayload(b, payload) {
     }
   });
   return Object.assign({
-    callerid: payload.contact.phone,
-    source: 'utilitybenefits_form'
+    callerid: payload.contact.phone
   }, tags);
 }
 

@@ -307,7 +307,7 @@ function depositTags(request) {
   const payload = JSON.parse(request.init.body);
   const { callerid, source, ...tags } = payload;
   assert.equal(callerid, '+18138204157');
-  assert.equal(source, 'utilitybenefits_form');
+  assert.equal(source ?? 'api', 'api');
   return tags;
 }
 
