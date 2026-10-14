@@ -38,7 +38,8 @@ credentials, caller numbers, form fields, or arbitrary response/error text.
 
 ## Data contract
 
-`callerid` is the normalized lead phone and `source` is `utilitybenefits_form`.
+`callerid` is the normalized lead phone. `source` is omitted so the enrichment
+API uses its supported default, `api`; it is not a custom form-origin label.
 Neither consumes a tag slot. These are the only allowed tags (maximum 20):
 
 ```text
