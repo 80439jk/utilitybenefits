@@ -145,7 +145,7 @@ Everything else is a verbatim copy. These three are deliberate; do not "fix" the
    so all clicks land in the same offer reporting.
 2. **Asset cache-busts are per path.** Since the swap: `/qualify/2/` CSS `?v=5`,
    `/qualify/5/` CSS `?v=8`, `_attribution.js?v=2` on the pre-DNI pages and
-   `?v=5` on the live `/qualify/2/` and `/5/` (2026-10-21), `popup.js?v=7`
+   `?v=6` on the live `/qualify/2/` and `/5/` (2026-10-21), `popup.js?v=7`
    on every DNI and pre-DNI page. Each value is one never served at that path
    before, so no browser can pair a page with the other version's cached file.
 3. **`robots.txt` carries `Disallow: /qualify/dni/`** on top of the per-page
@@ -437,7 +437,21 @@ created but never reaching calls, for three compounding reasons, all now fixed:
 
 1. `sessionStorage` (`ub{2,5}d_attr`) — already resolved earlier in the funnel
 2. `?click_id=` — the redirect flow, present on the entry page immediately
-3. `_propel_click_id` cookie, then its `localStorage` backup — the direct flow
+3. `PropelDirect.clickId` — the landing page's own resolved click
+4. `_propel_click_id` cookie — the direct flow, or Edge Inject once it creates
+   clicks (`qualify/EDGE-CLICK-IMPLEMENTATION-PLAN.md`)
+5. its `localStorage` backup
+
+**A cookie from an earlier ad is never used (2026-10-21).** The landing records
+this visit's ad key in `attr_key`, using the same rule as PropelDirect's
+`getAttributionKey()`: `axon:…`, else `google:<gclid|gbraid|wbraid>`. The cookie
+is used only when `_propel_attribution_key` matches it. On a mismatch,
+PropelDirect is creating a new click for the new ad, and the old id would pay
+the wrong ad. `localStorage` carries no key, so it is used only when the visit
+has no ad key. A new ad in the same tab also clears the pinned `click_id`. The
+thank-you pages apply the same check. Before this fix, a returning visitor from
+a new ad sent the **old** click to Sparrow and the lead. The e2e scenario
+`newad` covers this case.
 
 It is resolved **lazily**. On the direct flow `PropelDirect` creates the click
 with an async POST, so at the moment `_attribution.js` runs on the entry page

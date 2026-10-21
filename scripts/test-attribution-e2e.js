@@ -39,7 +39,10 @@ const POOL_NUMBERS = {
   [FUNNEL_POOL]: { number: '+18335550101', formatted: '(833) 555-0101' },
   [TY_POOL]:     { number: '+18335550202', formatted: '(833) 555-0202' },
 };
-const CLICK_ID = '0b5c8e1a-5f3e-4c1e-9d7a-2f6b9c3e4a10';
+const CLICK_ID = '0b5c8e1a-5f3e-4c1e-9d7a-2f6b9c3e4a10';     // what PropelDirect creates
+const OLD_CLICK_ID = '9d1f2e3c-0000-4000-8000-00000000a0a0'; // a previous ad's click
+const EDGE_CLICK_ID = 'e0e0e0e0-1111-4222-8333-444444444444'; // set by Edge Inject (UB-9)
+const GCLID = 'TESTGCLID';
 const SPARROW_JS = 'https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js';
 const PROPEL_JS = 'https://propel-lander-api.propelsys.workers.dev/direct-snippet.js';
 
@@ -180,6 +183,10 @@ async function run(name, cfg, deps) {
 
   const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
   const context = await browser.newContext();
+  if (cfg.cookies) {
+    // Raw values, exactly as PropelDirect writes them (no URL encoding).
+    await context.addCookies(Object.entries(cfg.cookies).map(([name, value]) => ({ name, value, url: base })));
+  }
   if (cfg.noLocalStorage) {
     await context.addInitScript(() => {
       Object.defineProperty(window, 'localStorage', {
@@ -189,7 +196,7 @@ async function run(name, cfg, deps) {
     });
   }
   const external = [];
-  let trackFulfilledAt = 0;
+  let trackFulfilledAt = 0, trackCalls = 0;
   await context.route('**/*', async route => {
     const req = route.request();
     const u = new URL(req.url());
@@ -218,6 +225,7 @@ async function run(name, cfg, deps) {
       if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: {
         'access-control-allow-origin': '*', 'access-control-allow-headers': 'content-type' } });
       if (u.pathname === '/api/direct/track') {
+        trackCalls++;
         await sleep(cfg.propelDelayMs || 0);
         trackFulfilledAt = Date.now();
         return json(200, { click_id: CLICK_ID });
@@ -228,6 +236,7 @@ async function run(name, cfg, deps) {
     return route.abort();      // GTM, TrustedForm, fonts, anything else
   });
 
+  const want = cfg.expectClickId || CLICK_ID;
   const page = await context.newPage();
   const errors = [], upstream = [];
   page.on('pageerror', e => {
@@ -245,7 +254,7 @@ async function run(name, cfg, deps) {
   page.on('request', r => { if (r.url().includes('/qualify/2/step-1-dob-citizen/') && !step1At) step1At = Date.now(); });
 
   // Landing: linger like a visitor, then pick a state (auto-advance).
-  await page.goto(base + '/qualify/2/?utm_source=test&gclid=TESTGCLID');
+  await page.goto(base + '/qualify/2/?utm_source=test&gclid=' + GCLID);
   await sleep(cfg.lingerMs);
   await page.selectOption('#state', 'Florida');
   await page.waitForURL(/step-1-dob-citizen/, { timeout: 8000 });
@@ -280,14 +289,15 @@ async function run(name, cfg, deps) {
   const held = await page.evaluate(() => window.Sparrow && Sparrow.getFormattedNumber());
 
   function acked(pool) {
-    return sparrow.log.some(e => e.kind === 'validate' && e.pool === pool && e.valid && e.tags.click_id === CLICK_ID)
-      || sparrow.log.some(e => e.kind === 'session' && e.pool === pool && e.tags.click_id === CLICK_ID);
+    return sparrow.log.some(e => e.kind === 'validate' && e.pool === pool && e.valid && e.tags.click_id === want)
+      || sparrow.log.some(e => e.kind === 'session' && e.pool === pool && e.tags.click_id === want);
   }
 
   const tyText = (await page.textContent('#ty-call-cta')).replace(/\s+/g, ' ').trim();
   const ty = [...sparrow.sessions.values()].filter(s => s.pool_id === TY_POOL);
   const funnel = [...sparrow.sessions.values()].filter(s => s.pool_id === FUNNEL_POOL);
   const emptyWrites = sparrow.log.filter(e => e.tags && e.tags.click_id === '');
+  const wrongWrites = sparrow.log.filter(e => e.tags && e.tags.click_id && e.tags.click_id !== want);
   const forced500 = sparrow.log.filter(e => e.status === 500).length;
 
   await browser.close();
@@ -295,9 +305,14 @@ async function run(name, cfg, deps) {
 
   assert.equal(errors.length, 0, 'page errors: ' + errors.join(' | '));
   assert.equal(state.leads.length, 1, 'exactly one (stubbed) lead submit');
-  assert.equal(state.leads[0].postbackx_click_id, CLICK_ID, 'lead carries click_id');
-  assert.ok(ty.some(s => s.tags.click_id === CLICK_ID), 'Thank You session holds click_id');
-  assert.ok(funnel.some(s => s.tags.click_id === CLICK_ID), 'a Funnel session holds click_id');
+  assert.equal(state.leads[0].postbackx_click_id, want, 'lead carries the expected click_id');
+  assert.ok(ty.some(s => s.tags.click_id === want), 'Thank You session holds click_id');
+  assert.ok(funnel.some(s => s.tags.click_id === want), 'a Funnel session holds click_id');
+  assert.equal(wrongWrites.length, 0, 'no other click_id ever reached Sparrow: '
+    + [...new Set(wrongWrites.map(e => e.tags.click_id))].join(', '));
+  if (cfg.expectTrackCalls !== undefined) {
+    assert.equal(trackCalls, cfg.expectTrackCalls, 'PropelDirect click-creation calls');
+  }
   assert.equal(held, POOL_NUMBERS[TY_POOL].formatted, 'Thank You session holds the pool number');
   if (!shown) {
     // Session holds the pool number but the DOM was never swapped: the
@@ -317,13 +332,22 @@ async function run(name, cfg, deps) {
   console.log('  thank-you CTA: ' + tyText);
   console.log('  funnel sessions: ' + funnel.length + ' (with click_id: ' + funnel.filter(s => s.tags.click_id).length
     + '), thank-you sessions: ' + ty.length + ', forced 500s: ' + forced500
-    + ', validate not-found: ' + sparrow.log.filter(e => e.valid === false && e.status === 200).length);
+    + ', validate not-found: ' + sparrow.log.filter(e => e.valid === false && e.status === 200).length
+    + ', PropelDirect creates: ' + trackCalls);
   console.log('  external hosts (all stubbed/aborted): ' + blockedHosts.join(', '));
 }
 
 const SCENARIOS = {
   baseline: { lingerMs: 800, propelDelayMs: 0 },
   hostile:  { lingerMs: 2000, propelDelayMs: 3000, failFirstValidate: true, noLocalStorage: true, edgePreload: true },
+  // Returning visitor from a NEW ad: the cookie belongs to the previous ad, so
+  // PropelDirect creates a new click; the old one must never be used.
+  newad:    { lingerMs: 1500, propelDelayMs: 1000, expectTrackCalls: 1,
+              cookies: { _propel_click_id: OLD_CLICK_ID, _propel_attribution_key: 'google:OLDGCLID' } },
+  // Edge-created click (EDGE-CLICK-IMPLEMENTATION-PLAN / UB-9): cookie + key for
+  // this gclid already set by the HTML response, so PropelDirect must reuse it.
+  edgeclick: { lingerMs: 800, expectTrackCalls: 0, expectClickId: EDGE_CLICK_ID,
+              cookies: { _propel_click_id: EDGE_CLICK_ID, _propel_attribution_key: 'google:' + GCLID } },
 };
 
 (async () => {

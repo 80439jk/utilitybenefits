@@ -450,13 +450,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var parts = ('; ' + document.cookie).split('; ' + name + '=');
     return parts.length === 2 ? parts.pop().split(';').shift() : '';
   }
+  // The cookie is used only when its _propel_attribution_key matches the ad
+  // click the funnel recorded (attr_key); otherwise it is a previous ad's
+  // click. localStorage carries no key, so it is used only without one.
   function clickId(){
-    var v = '';
-    try { v = (JSON.parse(sessionStorage.getItem(PREFIX + 'attr') || '{}') || {}).click_id || ''; }
-    catch (e) {}
-    if (!v) v = params.get('click_id') || cookie('_propel_click_id') || '';
-    if (!v) { try { v = localStorage.getItem('_propel_click_id') || ''; } catch (e) {} }
-    return String(v).trim();
+    var v = '', key = '';
+    try {
+      var a = JSON.parse(sessionStorage.getItem(PREFIX + 'attr') || '{}') || {};
+      v = a.click_id || ''; key = a.attr_key || '';
+    } catch (e) {}
+    if (!v) v = params.get('click_id') || '';
+    if (!v) {
+      var c = cookie('_propel_click_id'), ck = cookie('_propel_attribution_key');
+      try { ck = decodeURIComponent(ck); } catch (e) {}
+      if (c && (!key || ck === key)) v = c;
+    }
+    if (!v && !key) { try { v = localStorage.getItem('_propel_click_id') || ''; } catch (e) {} }
+    return String(v || '').trim();
   }
 
   // Acknowledged send (qualify/ATTRIBUTION-FIX-PLAN.md, UB-2). Done only when

@@ -30,6 +30,20 @@
   var params = new URLSearchParams(window.location.search);
   var firstTouch = !stored.click_timestamp;
 
+  // PostbackX attribution key of THIS ad click. Same rule as PropelDirect's
+  // getAttributionKey(): axon:<aleid|alart|axwrt|axon_event_id|event_id>, else
+  // google:<gclid|gbraid|wbraid>, else ''. A _propel_click_id cookie belongs to
+  // this visit only if its _propel_attribution_key matches; otherwise it is the
+  // previous ad's click and PropelDirect is about to create a new one.
+  function attrKey(p){
+    var a = p.get('aleid') || p.get('alart') || p.get('axwrt') ||
+            p.get('axon_event_id') || p.get('event_id');
+    if (a) return 'axon:' + a;
+    var g = p.get('gclid') || p.get('gbraid') || p.get('wbraid');
+    return g ? 'google:' + g : '';
+  }
+  var urlKey = attrKey(params);
+
   if (firstTouch) {
     var d = {};
     CLICK_IDS.concat(UTMS).forEach(function (k) {
@@ -40,6 +54,7 @@
     d.referrer = document.referrer || '';
     d.landing_page = window.location.href;
     d.user_agent = navigator.userAgent || '';
+    if (urlKey) d.attr_key = urlKey;
     save(d);
   } else {
     // Mid-funnel: still capture any new params (some redirect chains append late)
@@ -48,6 +63,12 @@
       var v = params.get(k);
       if (v && !stored[k]) { stored[k] = v; changed = true; }
     });
+    // Same tab, new ad click: the pinned click_id belongs to the old ad.
+    if (urlKey && urlKey !== stored.attr_key) {
+      stored.attr_key = urlKey;
+      delete stored.click_id;
+      changed = true;
+    }
     if (changed) save(stored);
   }
 
@@ -58,9 +79,14 @@
   // exist yet when this file runs. Sources, in order of trust:
   //   1. sessionStorage  — already resolved earlier in this funnel
   //   2. ?click_id=      — redirect flow, present on the entry page immediately
-  //   3. _propel_click_id cookie / localStorage — direct flow, written by
-  //      PropelDirect once its POST returns. Cookie is path=/ and lasts 30 days,
-  //      so it is readable from every step and the thank-you page.
+  //   3. PropelDirect.clickId — the landing page's own resolved click (new,
+  //      reused, or edge-created; see EDGE-CLICK-IMPLEMENTATION-PLAN.md)
+  //   4. _propel_click_id cookie — direct flow or Edge Inject. Cookie is path=/
+  //      and lasts 30 days, so it is readable from every step and the thank-you
+  //      page. Used only when its _propel_attribution_key matches this visit's
+  //      ad click (attr_key); a mismatch is a previous ad's click.
+  //   5. localStorage backup — only when this visit has no ad attribution key,
+  //      since it carries no key to check.
   // Once found it is written back to sessionStorage so the rest of the funnel
   // does not depend on the cookie surviving.
   function cookie(name){
@@ -71,9 +97,17 @@
     var d = load();
     if (d.click_id) return d.click_id;
 
-    var v = new URLSearchParams(window.location.search).get('click_id') ||
-            cookie('_propel_click_id') || '';
-    if (!v) { try { v = localStorage.getItem('_propel_click_id') || ''; } catch (e) {} }
+    var key = d.attr_key || '';
+    var v = new URLSearchParams(window.location.search).get('click_id') || '';
+    if (!v) { try { v = (window.PropelDirect && window.PropelDirect.clickId) || ''; } catch (e) {} }
+    if (!v) {
+      var c = cookie('_propel_click_id');
+      var ck = cookie('_propel_attribution_key');
+      try { ck = decodeURIComponent(ck); } catch (e) {}
+      if (c && (!key || ck === key)) v = c;
+    }
+    if (!v && !key) { try { v = localStorage.getItem('_propel_click_id') || ''; } catch (e) {} }
+    v = String(v || '').trim();
     if (!v) return '';
 
     d.click_id = v;
