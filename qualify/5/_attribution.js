@@ -84,15 +84,47 @@
   // The snippet loads async and PropelDirect can write the cookie after its
   // POST returns. Flush the click_id as soon as both it and Sparrow exist,
   // without waiting for a form submit or the setTag debounce.
-  var clickIdSent = false;
+  //
+  // Done only when Sparrow ACKNOWLEDGES the write: enrich(tags, cb) calls back
+  // with an error when /v2/session/validate rejects or the fetch fails, and we
+  // retry with backoff. Before init, enrich() calls back null without sending
+  // anything ("init() sends them"), and for an edge-injected session init only
+  // fires one unchecked beacon. So a pre-session call just stores the tag and
+  // the acknowledged send waits until Sparrow has a session id.
+  // See qualify/ATTRIBUTION-FIX-PLAN.md (UB-1).
+  var clickIdSent = false, inFlight = false, attempt = 0, retryTimer = null;
+  var primedCid = '', MAX_ATTEMPTS = 20;
+  function hasSession(){
+    var S = window.Sparrow;
+    // Older snippets without getSessionId: fall back to "initialised".
+    if (!S || typeof S.getSessionId !== 'function') return true;
+    try { return !!S.getSessionId(); } catch (e) { return false; }
+  }
   function sendClickId(){
-    if (clickIdSent) return true;
+    if (clickIdSent || inFlight || retryTimer) return clickIdSent;
+    if (attempt >= MAX_ATTEMPTS) return false;
     if (!(window.Sparrow && window.Sparrow.enrich)) return false;
     var cid = clickId();
     if (!cid) return false;
-    window.Sparrow.enrich({ click_id: cid });
-    clickIdSent = true;
-    return true;
+    if (!hasSession()) {
+      // No session to write to yet: store it so init() carries it, once.
+      if (primedCid !== cid) { primedCid = cid; window.Sparrow.enrich({ click_id: cid }); }
+      return false;
+    }
+    inFlight = true;
+    try {
+      window.Sparrow.enrich({ click_id: cid }, function(err){
+        inFlight = false;
+        if (!err) { clickIdSent = true; return; }
+        attempt++;
+        if (attempt >= MAX_ATTEMPTS) return;
+        retryTimer = setTimeout(function(){ retryTimer = null; sendClickId(); },
+                                Math.min(30000, 1000 * Math.pow(2, attempt)));
+      });
+    } catch (e) {
+      inFlight = false;
+    }
+    return false;
   }
 
   window.UBAttribution = {
@@ -107,10 +139,12 @@
     sendClickId: sendClickId
   };
 
+  // Watch for the page's lifetime (not just 30 s): the click, the snippet or
+  // the session can each arrive late. Stops on acknowledgement or when the
+  // retry budget is spent.
   sendClickId();
-  var watchStartedAt = Date.now();
   var watch = setInterval(function(){
-    if (sendClickId() || Date.now() - watchStartedAt > 30000) clearInterval(watch);
+    if (sendClickId() || attempt >= MAX_ATTEMPTS) clearInterval(watch);
   }, 250);
   // A dialer can background the page; these are best-effort re-checks.
   window.addEventListener('pagehide', sendClickId);

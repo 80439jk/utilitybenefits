@@ -78,7 +78,20 @@ assigned in the browser, which is harmless.
   pages. Calls are counted in PostbackCalls instead. Form-submit conversions are
   unaffected: the GTM `thank-you` trigger matches `/qualify/thank-you-2/`.
 - **Fallback number** is `(855) 617-2111` on every DNI page and as both pools'
-  `default_number`. Calls connect but carry no per-visitor attribution.
+  `default_number`. It is **routable**: a fallback call connects, but it carries
+  no session and no PostbackX `click_id`, and Funnel and Thank You fallbacks
+  look the same. It shows when the edge cannot claim a number (pool full, DO
+  timeout, rate limit) or the snippet never assigns one. Separate per-stage
+  fallbacks are pending an owner decision (plan UB-5).
+- **Current pools (2026-10-20):** `UB - Funnel` 20 active numbers, `UB - Thank
+  You` 6, both with a **180 s** reservation and `exhausted_behavior =
+  show_default`. The Thank You pool was full for 14 minutes on 2026-10-20 and
+  sent post-submit callers to 855. About 21 % of Funnel and 11 % of Thank You
+  sessions that day were bot user agents (Google-Read-Aloud, AdsBot, …), each
+  holding a number; the Sparrow plan (EI-1) stops edge claims for them.
+- **Attribution fix plan (2026-10-21):** see
+  [`qualify/ATTRIBUTION-FIX-PLAN.md`](../ATTRIBUTION-FIX-PLAN.md) and the
+  Sparrow / PostbackX companions it links.
 - **`popup.js`** now decides DNI by the presence of `script[data-sparrow-pool]`,
   not the URL. Pages without the snippet (every other funnel, and the pre-DNI
   pages) keep the static `4146` popup line.
@@ -131,7 +144,8 @@ Everything else is a verbatim copy. These three are deliberate; do not "fix" the
 1. **The Propel/PostbackX snippet uses the LIVE `offerId`s** on both versions,
    so all clicks land in the same offer reporting.
 2. **Asset cache-busts are per path.** Since the swap: `/qualify/2/` CSS `?v=5`,
-   `/qualify/5/` CSS `?v=8`, `_attribution.js?v=2` everywhere, `popup.js?v=7`
+   `/qualify/5/` CSS `?v=8`, `_attribution.js?v=2` on the pre-DNI pages and
+   `?v=5` on the live `/qualify/2/` and `/5/` (2026-10-21), `popup.js?v=7`
    on every DNI and pre-DNI page. Each value is one never served at that path
    before, so no browser can pair a page with the other version's cached file.
 3. **`robots.txt` carries `Disallow: /qualify/dni/`** on top of the per-page
@@ -185,8 +199,9 @@ icon survives.
 
 Two failure modes are handled: a malformed or missing `tel:` anchor returns
 `null` and the popup keeps the static `4146` line rather than rendering a broken
-link, and a pool-exhausted page yields the page's `555-01xx` fallback, which is
-unroutable by design (see "Fallback numbers" below).
+link, and a pool-exhausted page yields the page's fallback, now the routable
+`(855) 617-2111` (the old `555-01xx` fallbacks were unroutable; see "Fallback
+numbers" below).
 
 `readPageNumber()` must run **before** the overlay is appended, or it matches the
 popup's own anchor instead of the page's.
@@ -427,28 +442,38 @@ created but never reaching calls, for three compounding reasons, all now fixed:
 It is resolved **lazily**. On the direct flow `PropelDirect` creates the click
 with an async POST, so at the moment `_attribution.js` runs on the entry page
 the cookie does not exist yet. The funnel scripts try immediately and watch
-for up to 30 seconds, re-checking on pagehide and visibility changes. They
-send it with `Sparrow.enrich({ click_id })` as soon as both the ID and the
-snippet exist. This avoids the 500ms `setTag()` debounce on a normal page
-load; pagehide is only a best-effort re-check, not a delivery guarantee.
+for the **whole page lifetime**, re-checking on pagehide and visibility changes.
+They send it with `Sparrow.enrich({ click_id }, cb)` once the ID exists and the
+snippet has a session, and count it as sent **only when the callback reports no
+error** (the snippet calls back with an error when `/v2/session/validate`
+rejects or the fetch fails). A failure retries with exponential backoff (2 s,
+4 s, … capped at 30 s, 20 attempts). Before the snippet has a session the tag
+is only stored, so `init()` carries it; that path also depends on Sparrow SN-1
+for edge-injected sessions. This avoids the 500ms `setTag()` debounce on a
+normal page load; pagehide is only a best-effort re-check, not a delivery
+guarantee. (Until 2026-10-21 the watch stopped after 30 s and marked the ID sent
+as soon as `enrich()` was called, acknowledged or not.)
 Once found it is written back to `sessionStorage`, so the rest of the funnel
 does not depend on the cookie surviving.
 
 The cookie is `path=/` with a 30-day expiry, which is why the thank-you page can
 recover a `click_id` even on a direct hit. The thank-you pages deliberately do
 **not** load `_attribution.js` (that would record a bogus first touch); they
-resolve from the same sources inline. Their form-data `enrich()` fires once,
-but a separate 30-second watch sends the `click_id` if it arrives afterward.
-If the ID is included in the form-data send, the watch skips the duplicate.
+resolve from the same sources inline. They use the same acknowledged send: the
+form data (plus `click_id` when known) is retried until Sparrow acknowledges it,
+and a `click_id` that arrives after the form data was acknowledged triggers one
+more acknowledged send.
 
 `click_id` is tagged onto the DNI session **as soon as it resolves, on every
 funnel page**: `qualify/2/_attribution.js` and `qualify/5/_attribution.js` poll
-for up to 30 seconds until both the `click_id` and `window.Sparrow` exist, then
-call `Sparrow.enrich({ click_id })`. Before this it was tagged only at the landing
+until both the `click_id` and a Sparrow session exist, then call
+`Sparrow.enrich({ click_id }, cb)` and retry until acknowledged. Before this it was tagged only at the landing
 submit, so a visitor who tapped the number on the landing never had it on their
 session (4 of 10 calls without a `click_id` on 2026-09-23). It is also still
-tagged at the landing submit, sent in the step-4 `enrich()`, and sent again from
-the thank-you page. The pre-DNI copies under `/qualify/dni/` load no Sparrow
+tagged at the landing submit, sent in the step-4 `enrich()` (only when
+non-empty, so a blank never overwrites a stored click), and sent again from the
+thank-you page. The `/qualify/2/` landing auto-advance waits up to 1.5 s from
+the state pick for PropelDirect to write the click before submitting. The pre-DNI copies under `/qualify/dni/` load no Sparrow
 snippet, so they do not carry the poll. It is **not** a reserved key, and it has
 been added to both pools' `buyer_tag_allowlist` (now 15 keys), so it reaches
 buyer pings as well as webhooks and postbacks.
