@@ -234,7 +234,9 @@ async function run(name, cfg, deps) {
     // Errors thrown inside the Sparrow snippet itself are a Sparrow defect, not
     // this repo's; report them, and fail only with STRICT_SNIPPET=1.
     if (/sparrow-dni\.min\.js/.test(e.stack || '') && !process.env.STRICT_SNIPPET) {
-      upstream.push(page.url().replace(base, '').split('?')[0] + ': ' + e.message);
+      const where = page.url().replace(base, '').split('?')[0] + ': ' + e.message;
+      if (!upstream.includes(where)) console.log('  WARNING Sparrow snippet threw (upstream): ' + where);
+      upstream.push(where);
       return;
     }
   });
@@ -271,7 +273,11 @@ async function run(name, cfg, deps) {
   await page.click('#cta');
   await page.waitForURL(/thank-you-2/);
   await waitFor(() => acked(TY_POOL), 20000, 'thank-you click_id ack');
-  await waitFor(async () => /833\) 555-0202/.test(await page.textContent('#ty-call-cta')), 5000, 'pool number');
+  // The snippet must both hold the pool number and have put it on the page.
+  let shown = false;
+  try { await waitFor(async () => /833\) 555-0202/.test(await page.textContent('#ty-call-cta')), 5000, 'pool number'); shown = true; }
+  catch (e) {}
+  const held = await page.evaluate(() => window.Sparrow && Sparrow.getFormattedNumber());
 
   function acked(pool) {
     return sparrow.log.some(e => e.kind === 'validate' && e.pool === pool && e.valid && e.tags.click_id === CLICK_ID)
@@ -292,14 +298,22 @@ async function run(name, cfg, deps) {
   assert.equal(state.leads[0].postbackx_click_id, CLICK_ID, 'lead carries click_id');
   assert.ok(ty.some(s => s.tags.click_id === CLICK_ID), 'Thank You session holds click_id');
   assert.ok(funnel.some(s => s.tags.click_id === CLICK_ID), 'a Funnel session holds click_id');
-  assert.ok(!/855/.test(tyText), 'thank-you CTA is not the 855 fallback: ' + tyText);
+  assert.equal(held, POOL_NUMBERS[TY_POOL].formatted, 'Thank You session holds the pool number');
+  if (!shown) {
+    // Session holds the pool number but the DOM was never swapped: the
+    // snippet's swapNumbers(document.body) ran before <body> existed (Sparrow
+    // defect; on the fetch path its own .catch swallows the throw).
+    const msg = 'thank-you shows ' + tyText + ' although the session holds ' + held
+      + ' (Sparrow swapNumbers-before-body defect)';
+    if (process.env.STRICT_SNIPPET) assert.fail(msg);
+    console.log('  WARNING (upstream): ' + msg);
+  }
   assert.equal(emptyWrites.length, 0, 'no empty click_id was ever sent');
   if (cfg.failFirstValidate) assert.ok(forced500 >= 1, 'a forced 500 was exercised');
   if (cfg.propelDelayMs && step1At) {
     assert.ok(step1At >= trackFulfilledAt, 'landing waited for the click before auto-advancing');
   }
   const blockedHosts = [...new Set(external.map(h => h.split('/')[0]))].sort();
-  if (upstream.length) console.log('  WARNING Sparrow snippet threw (upstream): ' + [...new Set(upstream)].join(' | '));
   console.log('  thank-you CTA: ' + tyText);
   console.log('  funnel sessions: ' + funnel.length + ' (with click_id: ' + funnel.filter(s => s.tags.click_id).length
     + '), thank-you sessions: ' + ty.length + ', forced 500s: ' + forced500

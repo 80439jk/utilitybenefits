@@ -185,7 +185,17 @@ the Sparrow fallback decision. UB-6, UB-8 next.
   path that sends edge-session tags. That could explain the "no tags / no
   heartbeat" edge sessions. `state.session` is set before the throw, so the
   acknowledged `enrich()` from UB-1 still lands the `click_id` (the `hostile`
-  scenario proves this). Fix in
+  scenario proves this).
+  A second effect: on a fresh fetch the snippet's own `.catch` swallows the
+  same throw, so the page keeps showing `(855) 617-2111` even though the
+  session holds a pool number. Reproduced on the Vercel preview of this branch
+  **and of `main`**: the thank-you page still shows 855 while
+  `Sparrow.getFormattedNumber()` returns the pool number. On production the
+  edge writes the number server-side, so this only matters when the edge falls
+  back (Thank You pool full, DO timeout). In that case the client snippet is
+  the only swap, and it fails. That would make some of the "855 dial right
+  after submit" calls a snippet bug, not just pool size. The e2e test warns on
+  this and fails on it under `STRICT_SNIPPET=1`. Fix in
   `apps/dni/src/routes/snippet.ts` `handleSession`: defer to `DOMContentLoaded`
   when `document.body` is null. The e2e test reports it as a warning; run it
   with `STRICT_SNIPPET=1` to fail on it.
