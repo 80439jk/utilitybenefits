@@ -11,7 +11,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <!-- PostbackCalls DNI (thank-you pool). Companion to server-side Edge Inject:
      this snippet owns click tracking, session heartbeats, and number release. -->
-<script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js"
+<script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js?v=ub-attribution-b323eee1"
         data-sparrow-pool="26e71048-a73c-45c2-bc9f-9b05f824dd39" async></script>
 
 <meta charset="utf-8" />
@@ -415,18 +415,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var parts = ('; ' + document.cookie).split('; ' + name + '=');
     return parts.length === 2 ? parts.pop().split(';').shift() : '';
   }
+  // The cookie is used only when its _propel_attribution_key matches the ad
+  // click the funnel recorded (attr_key); otherwise it is a previous ad's
+  // click. localStorage carries no key, so it is used only without one.
   function clickId(){
-    var v = '';
-    try { v = (JSON.parse(sessionStorage.getItem(PREFIX + 'attr') || '{}') || {}).click_id || ''; }
-    catch (e) {}
-    if (!v) v = params.get('click_id') || cookie('_propel_click_id') || '';
-    if (!v) { try { v = localStorage.getItem('_propel_click_id') || ''; } catch (e) {} }
-    return String(v).trim();
+    var v = '', key = '';
+    try {
+      var a = JSON.parse(sessionStorage.getItem(PREFIX + 'attr') || '{}') || {};
+      v = a.click_id || ''; key = a.attr_key || '';
+    } catch (e) {}
+    if (!v) v = params.get('click_id') || '';
+    if (!v) {
+      var c = cookie('_propel_click_id'), ck = cookie('_propel_attribution_key');
+      try { ck = decodeURIComponent(ck); } catch (e) {}
+      if (c && (!key || ck === key)) v = c;
+    }
+    if (!v && !key) { try { v = localStorage.getItem('_propel_click_id') || ''; } catch (e) {} }
+    return String(v || '').trim();
   }
 
-  var clickIdSent = false;
-  function send(){
-    if (!(window.Sparrow && Sparrow.enrich)) return false;
+  // Acknowledged send (qualify/ATTRIBUTION-FIX-PLAN.md, UB-2). Done only when
+  // Sparrow.enrich(data, cb) calls back without an error, i.e. the session
+  // write was committed; a rejected validate or failed fetch retries with
+  // backoff. Before the snippet has a session, enrich() calls back null without
+  // sending ("init() sends them"), so that call only stores the tags and the
+  // acknowledged send waits for a session id. The form data and the click_id
+  // are both needed: a click_id that arrives after the form data was
+  // acknowledged triggers one more acknowledged send.
+  var formAcked = false, ackedCid = '', inFlight = false, attempt = 0;
+  var retryTimer = null, primedKey = '', MAX_ATTEMPTS = 20;
+  function hasSession(){
+    // Older snippets without getSessionId: fall back to "initialised".
+    if (typeof Sparrow.getSessionId !== 'function') return true;
+    try { return !!Sparrow.getSessionId(); } catch (e) { return false; }
+  }
+  function payload(){
     var cid = clickId();
     var data = {
       first_name: val('first'),
@@ -444,38 +467,47 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // `lead_id` and `case` are deliberately not sent: lead_id is a reserved tag
     // key and would be stripped server-side.
     Object.keys(data).forEach(function(k){ if (!data[k]) delete data[k]; });
-    if (Object.keys(data).length) Sparrow.enrich(data);
-    if (cid) clickIdSent = true;
-    return true;
+    return data;
   }
-
-  // The snippet is loaded async, so it may not have defined window.Sparrow yet.
-  // There is no form interaction on this page to piggyback on, so poll briefly.
-  // enrich() before init is safe: it persists and init() sends the tags.
-  if (!send()) {
-    var tries = 0;
-    var timer = setInterval(function(){
-      if (send() || ++tries > 40) clearInterval(timer);
-    }, 250);
-  }
-
-  // The form-data send above can finish before a direct-flow click_id arrives.
-  // Keep a separate bounded watch so that later value reaches this pool too.
-  function sendClickId(){
-    if (clickIdSent) return true;
+  function done(){ return formAcked && !!ackedCid; }
+  function send(){
+    if (done() || inFlight || retryTimer || attempt >= MAX_ATTEMPTS) return done();
     if (!(window.Sparrow && Sparrow.enrich)) return false;
-    var cid = clickId();
-    if (!cid) return false;
-    Sparrow.enrich({ click_id: cid });
-    clickIdSent = true;
-    return true;
+    var data = payload();
+    var cid = data.click_id || '';
+    if (!Object.keys(data).length) return false;
+    if (formAcked && (!cid || cid === ackedCid)) return false; // nothing new
+    if (!hasSession()) {
+      var key = JSON.stringify(data);
+      if (primedKey !== key) { primedKey = key; Sparrow.enrich(data); }
+      return false;
+    }
+    inFlight = true;
+    try {
+      Sparrow.enrich(data, function(err){
+        inFlight = false;
+        if (!err) { formAcked = true; if (cid) ackedCid = cid; return; }
+        attempt++;
+        if (attempt >= MAX_ATTEMPTS) return;
+        retryTimer = setTimeout(function(){ retryTimer = null; send(); },
+                                Math.min(30000, 1000 * Math.pow(2, attempt)));
+      });
+    } catch (e) {
+      inFlight = false;
+    }
+    return false;
   }
-  sendClickId();
-  var clickWatchStartedAt = Date.now();
-  var clickWatch = setInterval(function(){
-    if (sendClickId() || Date.now() - clickWatchStartedAt > 30000) clearInterval(clickWatch);
+
+  // The snippet is loaded async, so it may not have defined window.Sparrow yet,
+  // and a direct-flow click_id can arrive after the page loads. There is no
+  // form interaction on this page to piggyback on, so watch for the page's
+  // lifetime until both are acknowledged or the retry budget is spent.
+  send();
+  var watch = setInterval(function(){
+    if (send() || attempt >= MAX_ATTEMPTS) clearInterval(watch);
   }, 250);
-  window.addEventListener('pagehide', sendClickId);
+  window.addEventListener('pagehide', send);
+  document.addEventListener('visibilitychange', send);
 })();
 </script>
 

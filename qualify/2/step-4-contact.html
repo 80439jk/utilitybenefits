@@ -11,7 +11,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <!-- PostbackCalls DNI (funnel pool). Companion to server-side Edge Inject:
      this snippet owns click tracking, session heartbeats, and number release. -->
-<script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js"
+<script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js?v=ub-attribution-b323eee1"
         data-sparrow-pool="c7a9acee-ab84-41ea-9b55-2e387dc2a943" async></script>
 
 <meta charset="utf-8" />
@@ -32,7 +32,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/lp/_shared.css" />
 <link rel="stylesheet" href="/qualify/2/_funnel.css?v=5" />
-<script defer src="/qualify/2/_attribution.js?v=4"></script>
+<script defer src="/qualify/2/_attribution.js?v=6"></script>
 <script defer src="/qualify/_postbackx.js?v=1"></script>
 <!-- oh-hours: business-hours (Mon-Fri 9:30a-6p ET) open/closed toggle; sets html.oh-closed before paint -->
 <script>(function(){try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());var wd,h,m;p.forEach(function(x){if(x.type==='weekday')wd=x.value;else if(x.type==='hour')h=+x.value;else if(x.type==='minute')m=+x.value;});h=h%24;var mins=h*60+m;var days={Mon:1,Tue:1,Wed:1,Thu:1,Fri:1};var f=/[?&]oh=(open|closed)/.exec(location.search);var open=f?f[1]==='open':(days[wd]&&mins>=570&&mins<1080);if(!open)document.documentElement.className=(document.documentElement.className+' oh-closed').trim();}catch(e){}})();</script>
@@ -306,8 +306,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Attach the lead to the DNI call session so the data rides the call, not
     // just the CRM lead. Guarded because the snippet is loaded async — a slow
     // or blocked load must never break the form submit.
+    // Empty keys are dropped so a blank value (e.g. a click_id PropelDirect has
+    // not written yet) never overwrites one already on the session
+    // (qualify/ATTRIBUTION-FIX-PLAN.md, UB-3). _attribution.js keeps resending
+    // the click_id on the thank-you hand-off and later steps.
     if (window.Sparrow && Sparrow.enrich) {
-      Sparrow.enrich({
+      var d = {
         first_name: first.value.trim(),
         last_name:  last.value.trim(),
         email:      email.value.trim(),
@@ -323,7 +327,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         intent:     carry.h_intent,
         click_id:   (window.UBAttribution && UBAttribution.clickId()) || '',
         lp:         'qualify2'
-      });
+      };
+      Object.keys(d).forEach(function(k){ if (!d[k]) delete d[k]; });
+      Sparrow.enrich(d);
     }
   });
 
