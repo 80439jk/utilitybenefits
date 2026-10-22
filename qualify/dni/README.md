@@ -317,7 +317,7 @@ stage's pool UUID. For reference, the rules that were followed:
    stage:
 
    ```html
-   <script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js"
+   <script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js?v=ub-attribution-b323eee1"
            data-sparrow-pool="TEST_FUNNEL_POOL_UUID" async></script>
    ```
 
@@ -329,7 +329,10 @@ stage's pool UUID. For reference, the rules that were followed:
 
 `data-sparrow-*` attribute names and the `sparrow-dni` script URL are a hard
 contract with the backend. The `sparrow-` prefix is legacy internal naming;
-renaming it silently disables number swapping.
+renaming it silently disables number swapping. The `?v=` query is only a
+browser cache key (the Worker ignores it): bump it on every page together when
+a Sparrow snippet fix must reach returning visitors before their cached copy
+expires (see `ATTRIBUTION-FIX-PLAN.md`).
 
 Do **not** use `data-sparrow-auto-detect` — it regex-scans the page and will
 mangle the `UB-2026-…` case number on the thank-you pages.

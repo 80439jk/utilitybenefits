@@ -149,7 +149,7 @@ the Sparrow fallback decision. UB-6, UB-8 next.
 
 ## Implementation notes (2026-10-21)
 
-- **UB-1** `qualify/{2,5}/_attribution.js` (`?v=5` on all 10 pages). Same as
+- **UB-1** `qualify/{2,5}/_attribution.js` (`?v=6` on all 10 pages). Same as
   the sketch above, plus two guards. (1) An acknowledged send is attempted only
   once `Sparrow.getSessionId()` is set. Before that, `enrich()` calls back
   `null` without sending, which the sketch would count as success. Until then
@@ -199,3 +199,16 @@ the Sparrow fallback decision. UB-6, UB-8 next.
   `apps/dni/src/routes/snippet.ts` `handleSession`: defer to `DOMContentLoaded`
   when `document.body` is null. The e2e test reports it as a warning; run it
   with `STRICT_SNIPPET=1` to fail on it.
+- **Versioned Sparrow snippet (release gate):** the fix above is in Sparrow
+  `b323eee1` (combined PR #429). The snippet is cached
+  `max-age=86400, s-maxage=604800` and the Worker ignores the query string, so
+  all 12 DNI pages (`/qualify/2/` + 4 steps, `/qualify/5/` + 4 steps,
+  `/qualify/thank-you-2/`, `/qualify/thank-you-5/`) load
+  `sparrow-dni.min.js?v=ub-attribution-b323eee1`. A shared-cache purge cannot
+  replace a visitor's browser copy; the new URL does. Bump `v` on the next
+  snippet change that must reach visitors at once. Ship this only after
+  `sparrow-dni` serves the corrected bytes on that URL.
+  Checked 2026-10-22: with the `b323eee1` snippet bytes
+  (`SPARROW_SNIPPET=<file>`), `STRICT_SNIPPET=1` passes all four e2e
+  scenarios; with the currently served snippet `hostile` still fails on the
+  `swapNumbers` throw.
