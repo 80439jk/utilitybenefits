@@ -204,7 +204,7 @@ the Sparrow fallback decision. UB-6, UB-8 next.
   `max-age=86400, s-maxage=604800` and the Worker ignores the query string, so
   all 12 DNI pages (`/qualify/2/` + 4 steps, `/qualify/5/` + 4 steps,
   `/qualify/thank-you-2/`, `/qualify/thank-you-5/`) load
-  `sparrow-dni.min.js?v=ub-attribution-b323eee1`. A shared-cache purge cannot
+  `sparrow-dni.min.js?v=dni-lifecycle-20261022`. A shared-cache purge cannot
   replace a visitor's browser copy; the new URL does. Bump `v` on the next
   snippet change that must reach visitors at once. Ship this only after
   `sparrow-dni` serves the corrected bytes on that URL.
@@ -212,3 +212,9 @@ the Sparrow fallback decision. UB-6, UB-8 next.
   (`SPARROW_SNIPPET=<file>`), `STRICT_SNIPPET=1` passes all four e2e
   scenarios; with the currently served snippet `hostile` still fails on the
   `swapNumbers` throw.
+- **Session lifecycle rollout (2026-10-22):** the new snippet URL above is
+  reserved for Sparrow's invalid-session recovery and expiry-aware renewal fix.
+  Merge these markup changes only after the corrected DNI Worker is deployed
+  and that exact URL serves the reviewed bytes. Verify all 12 production pages
+  after the Git-connected Vercel deployment. This does not enable edge click
+  creation or repair historical financial settlement.

@@ -317,7 +317,7 @@ stage's pool UUID. For reference, the rules that were followed:
    stage:
 
    ```html
-   <script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js?v=ub-attribution-b323eee1"
+   <script src="https://sparrow-dni.propelsys.workers.dev/dni/sparrow-dni.min.js?v=dni-lifecycle-20261022"
            data-sparrow-pool="TEST_FUNNEL_POOL_UUID" async></script>
    ```
 
